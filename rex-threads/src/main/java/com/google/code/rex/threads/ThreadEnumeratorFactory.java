@@ -4,6 +4,12 @@ import com.google.code.rex.ResourceEnumerator;
 import com.google.code.rex.ResourceEnumeratorFactory;
 
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
+    private final ThreadInspector threadInspector;
+    
+    public ThreadEnumeratorFactory() {
+        this.threadInspector = new ThreadInspector();
+    }
+    
     public ResourceEnumerator createEnumerator() {
         ThreadGroup rootThreadGroup = Thread.currentThread().getThreadGroup();
         ThreadGroup parent;
@@ -21,6 +27,6 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
                 break;
             }
         }
-        return new ThreadEnumerator(threads, threadCount);
+        return new ThreadEnumerator(threads, threadCount, threadInspector);
     }
 }
