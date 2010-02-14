@@ -1,4 +1,4 @@
-package inspector;
+package com.google.code.rex;
 
 public interface ServerProfile {
     /**

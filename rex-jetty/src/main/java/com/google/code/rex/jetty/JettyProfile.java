@@ -1,9 +1,9 @@
-package inspector.servers.jetty;
+package com.google.code.rex.jetty;
 
 import org.mortbay.jetty.webapp.WebAppClassLoader;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-import inspector.ServerProfile;
+import com.google.code.rex.ServerProfile;
 
 public class JettyProfile implements ServerProfile {
     public String identifyApplication(ClassLoader classLoader) {

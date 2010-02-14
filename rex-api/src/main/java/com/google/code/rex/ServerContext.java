@@ -1,4 +1,4 @@
-package inspector;
+package com.google.code.rex;
 
 import javax.servlet.ServletContext;
 

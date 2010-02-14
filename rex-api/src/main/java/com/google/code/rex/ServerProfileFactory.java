@@ -1,4 +1,4 @@
-package inspector;
+package com.google.code.rex;
 
 /**
  * Detects a particular class of application servers and creates a {@link ServerProfile}.
