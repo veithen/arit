@@ -8,11 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.code.rex.ServerContext;
 import com.google.code.rex.ServerProfile;
-import com.google.code.rex.jetty.JettyProfile;
+import com.google.code.rex.ServerProfileFactory;
 
 public class InspectorServlet extends HttpServlet {
-    private static final ServerProfile profile = new JettyProfile();
+    private ServerProfile profile;
     
     private void visit(ThreadGroup threadGroup, PrintWriter out) {
         int numThreads = threadGroup.activeCount();
@@ -39,13 +40,33 @@ public class InspectorServlet extends HttpServlet {
         }
     }
 
+    private ServerContext getServerContext() {
+        return new ServerContext(getServletContext(), getClass().getClassLoader());
+    }
+    
+    @Override
+    public void init() throws ServletException {
+        ServerContext serverContext = getServerContext();
+        for (ServerProfileFactory spf : ProviderFinder.find(ServerProfileFactory.class)) {
+            profile = spf.createServerProfile(serverContext);
+            if (profile != null) {
+                break;
+            }
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ThreadGroup tg = Thread.currentThread().getThreadGroup();
-        ThreadGroup parent;
-        while ((parent = tg.getParent()) != null) {
-            tg = parent;
+        if (profile == null) {
+            request.setAttribute("serverContext", getServerContext());
+            request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
+        } else {
+            ThreadGroup tg = Thread.currentThread().getThreadGroup();
+            ThreadGroup parent;
+            while ((parent = tg.getParent()) != null) {
+                tg = parent;
+            }
+            visit(tg, response.getWriter());
         }
-        visit(tg, response.getWriter());
     }
 }

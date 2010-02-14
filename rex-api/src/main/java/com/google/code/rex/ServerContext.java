@@ -6,7 +6,7 @@ public class ServerContext {
     private final ServletContext servletContext;
     private final ClassLoader applicationClassLoader;
     
-    ServerContext(ServletContext servletContext, ClassLoader applicationClassLoader) {
+    public ServerContext(ServletContext servletContext, ClassLoader applicationClassLoader) {
         this.servletContext = servletContext;
         this.applicationClassLoader = applicationClassLoader;
     }
