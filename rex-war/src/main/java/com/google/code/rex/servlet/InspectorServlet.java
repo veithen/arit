@@ -1,45 +1,26 @@
 package com.google.code.rex.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.code.rex.ResourceEnumerator;
+import com.google.code.rex.ResourceEnumeratorFactory;
 import com.google.code.rex.ServerContext;
 import com.google.code.rex.ServerProfile;
 import com.google.code.rex.ServerProfileFactory;
 
 public class InspectorServlet extends HttpServlet {
     private ServerProfile profile;
+    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
-    private void visit(ThreadGroup threadGroup, PrintWriter out) {
-        int numThreads = threadGroup.activeCount();
-        Thread[] threads = new Thread[numThreads*2];
-        numThreads = threadGroup.enumerate(threads, false);
-        for (int i=0; i<numThreads; i++) {
-            Thread thread = threads[i];
-            ClassLoader tccl = thread.getContextClassLoader();
-            out.print(threadGroup + " " + thread + " " + tccl);
-            if (tccl != null) {
-                out.print(" " + tccl.getClass().getName());
-            }
-            out.println();
-            if (tccl != null) {
-                out.println(profile.identifyApplication(tccl));
-            }
-        }
-
-        int numGroups = threadGroup.activeGroupCount();
-        ThreadGroup[] groups = new ThreadGroup[numGroups*2];
-        numGroups = threadGroup.enumerate(groups, false);
-        for (int i=0; i<numGroups; i++) {
-            visit(groups[i], out);
-        }
-    }
-
     private ServerContext getServerContext() {
         return new ServerContext(getServletContext(), getClass().getClassLoader());
     }
@@ -53,6 +34,7 @@ public class InspectorServlet extends HttpServlet {
                 break;
             }
         }
+        resourceEnumeratorFactories = ProviderFinder.find(ResourceEnumeratorFactory.class);
     }
 
     @Override
@@ -61,12 +43,34 @@ public class InspectorServlet extends HttpServlet {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
-            ThreadGroup tg = Thread.currentThread().getThreadGroup();
-            ThreadGroup parent;
-            while ((parent = tg.getParent()) != null) {
-                tg = parent;
+            List<Application> applications = new ArrayList<Application>();
+            Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
+            for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
+                ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
+                while (resourceEnumerator.next()) {
+                    ClassLoader classLoader = resourceEnumerator.getClassLoader();
+                    if (classLoader != null) {
+                        Application application;
+                        if (classLoaderMap.containsKey(classLoader)) {
+                            application = classLoaderMap.get(classLoader);
+                        } else {
+                            String appName = profile.identifyApplication(classLoader);
+                            if (appName == null) {
+                                application = null;
+                            } else {
+                                application = new Application(appName);
+                            }
+                            classLoaderMap.put(classLoader, application);
+                            applications.add(application);
+                        }
+                        if (application != null) {
+                            application.getResources().add(new Resource(resourceEnumerator.getDescription()));
+                        }
+                    }
+                }
             }
-            visit(tg, response.getWriter());
+            request.setAttribute("applications", applications);
+            request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
     }
 }

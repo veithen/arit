@@ -13,6 +13,11 @@
     <packaging>war</packaging>
     <dependencies>
         <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rex-api</artifactId>
             <version>${project.version}</version>
@@ -20,6 +25,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rex-jetty</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rex-threads</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
