@@ -3,6 +3,7 @@ package com.google.code.rex.threads;
 import java.lang.reflect.Field;
 
 import com.google.code.rex.Provider;
+import com.google.code.rex.util.ReflectionUtil;
 
 public class TimerThreadInspectorProvider implements Provider<ThreadInspector> {
     public ThreadInspector getImplementation() {
@@ -12,13 +13,10 @@ public class TimerThreadInspectorProvider implements Provider<ThreadInspector> {
         Field sizeField;
         try {
             timerThreadClass = Class.forName("java.util.TimerThread");
-            queueField = timerThreadClass.getDeclaredField("queue");
-            queueField.setAccessible(true);
+            queueField = ReflectionUtil.getField(timerThreadClass, "queue");
             Class<?> taskQueueClass = Class.forName("java.util.TaskQueue");
-            timerTaskArrayField = taskQueueClass.getDeclaredField("queue");
-            timerTaskArrayField.setAccessible(true);
-            sizeField = taskQueueClass.getDeclaredField("size");
-            sizeField.setAccessible(true);
+            timerTaskArrayField = ReflectionUtil.getField(taskQueueClass, "queue");
+            sizeField = ReflectionUtil.getField(taskQueueClass, "size");
         } catch (ClassNotFoundException ex) {
             return null;
         } catch (NoSuchFieldException ex) {

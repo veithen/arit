@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.code.rex.Provider;
+import com.google.code.rex.util.ReflectionUtil;
 
 public class DefaultDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
     public DriverManagerInspector getImplementation() {
         try {
-            Field driversField = DriverManager.class.getDeclaredField("drivers");
-            driversField.setAccessible(true);
+            Field driversField = ReflectionUtil.getField(DriverManager.class, "drivers");
             final Vector<?> drivers = (Vector<?>)driversField.get(null);
-            final Field driverClassField = Class.forName("java.sql.DriverInfo").getDeclaredField("driverClass");
-            driverClassField.setAccessible(true);
+            final Field driverClassField = ReflectionUtil.getField(Class.forName("java.sql.DriverInfo"), "driverClass");
             return new DriverManagerInspector() {
                 public List<Class<?>> getDriverClasses() {
                     List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
