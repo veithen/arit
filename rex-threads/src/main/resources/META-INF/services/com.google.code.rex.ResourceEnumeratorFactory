@@ -1,1 +1,2 @@
 com.google.code.rex.threads.ThreadEnumeratorFactory
+com.google.code.rex.threads.ThreadLocalEnumeratorFactoryProvider

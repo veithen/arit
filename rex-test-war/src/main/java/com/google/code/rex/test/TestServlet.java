@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import org.apache.derby.jdbc.EmbeddedDriver;
 
 public class TestServlet extends HttpServlet {
+    private final static ThreadLocal<HttpServlet> threadLocal = new ThreadLocal<HttpServlet>();
+    
     @Override
     public void init() throws ServletException {
         new Timer().schedule(new TimerTask() {
@@ -18,5 +20,6 @@ public class TestServlet extends HttpServlet {
             }
         }, 0, 1000);
         new EmbeddedDriver();
+        threadLocal.set(this);
     }
 }
