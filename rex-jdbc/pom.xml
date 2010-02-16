@@ -17,5 +17,16 @@
             <artifactId>rex-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.3.2.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
