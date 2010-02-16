@@ -1,0 +1,2 @@
+com.google.code.rex.threads.DefaultThreadInspector
+com.google.code.rex.threads.TimerThreadInspector

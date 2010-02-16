@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.code.rex.ProviderFinder;
 import com.google.code.rex.ResourceEnumerator;
 import com.google.code.rex.ResourceEnumeratorFactory;
 import com.google.code.rex.ServerContext;
@@ -48,23 +49,25 @@ public class InspectorServlet extends HttpServlet {
             for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.next()) {
-                    ClassLoader classLoader = resourceEnumerator.getClassLoader();
-                    if (classLoader != null) {
-                        Application application;
-                        if (classLoaderMap.containsKey(classLoader)) {
-                            application = classLoaderMap.get(classLoader);
-                        } else {
-                            String appName = profile.identifyApplication(classLoader);
-                            if (appName == null) {
-                                application = null;
+                    for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
+                        if (classLoader != null) {
+                            Application application;
+                            if (classLoaderMap.containsKey(classLoader)) {
+                                application = classLoaderMap.get(classLoader);
                             } else {
-                                application = new Application(appName);
+                                String appName = profile.identifyApplication(classLoader);
+                                if (appName == null) {
+                                    application = null;
+                                } else {
+                                    application = new Application(appName);
+                                }
+                                classLoaderMap.put(classLoader, application);
+                                applications.add(application);
                             }
-                            classLoaderMap.put(classLoader, application);
-                            applications.add(application);
-                        }
-                        if (application != null) {
-                            application.getResources().add(new Resource(resourceEnumerator.getDescription()));
+                            if (application != null) {
+                                application.getResources().add(new Resource(resourceEnumerator.getDescription()));
+                                break;
+                            }
                         }
                     }
                 }

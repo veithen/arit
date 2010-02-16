@@ -1,4 +1,4 @@
-package com.google.code.rex.servlet;
+package com.google.code.rex;
 
 import java.io.BufferedReader;
 import java.io.IOException;

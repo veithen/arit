@@ -1,7 +1,9 @@
 package com.google.code.rex;
 
+import java.util.Collection;
+
 public interface ResourceEnumerator {
-    ClassLoader getClassLoader();
+    Collection<ClassLoader> getClassLoaders();
     String getDescription();
     boolean next();
 }

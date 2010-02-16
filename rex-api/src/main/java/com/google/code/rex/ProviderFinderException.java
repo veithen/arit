@@ -1,4 +1,4 @@
-package com.google.code.rex.servlet;
+package com.google.code.rex;
 
 public class ProviderFinderException extends RuntimeException {
     private static final long serialVersionUID = 3670591986040636952L;

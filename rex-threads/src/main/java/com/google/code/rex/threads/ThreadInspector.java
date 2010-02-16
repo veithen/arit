@@ -1,24 +1,15 @@
 package com.google.code.rex.threads;
 
-import java.lang.reflect.Field;
-
-public class ThreadInspector {
-    private final Field targetField;
+public interface ThreadInspector {
+    /**
+     * Get a description of the given thread.
+     * 
+     * @param thread
+     *            the thread to inspect
+     * @return a description of the thread, or <code>null</code> if the inspector doesn't recognize
+     *         the given type of thread
+     */
+    ThreadDescription getDescription(Thread thread);
     
-    public ThreadInspector() {
-        try {
-            targetField = Thread.class.getDeclaredField("target");
-        } catch (NoSuchFieldException ex) {
-            throw new NoSuchFieldError(ex.getMessage());
-        }
-        targetField.setAccessible(true);
-    }
-
-    public Runnable getRunnable(Thread thread) {
-        try {
-            return (Runnable)targetField.get(thread);
-        } catch (IllegalAccessException ex) {
-            throw new IllegalAccessError(ex.getMessage());
-        }
-    }
+    int getPriority();
 }
