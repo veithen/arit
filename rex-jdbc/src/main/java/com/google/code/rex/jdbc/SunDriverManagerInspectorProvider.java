@@ -9,9 +9,11 @@ import java.util.Vector;
 import com.google.code.rex.Provider;
 import com.google.code.rex.util.ReflectionUtil;
 
-public class DefaultDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
+public class SunDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
     public DriverManagerInspector getImplementation() {
         try {
+            // Java 1.5 uses "drivers" attribute.
+            // Java 1.6 has some copy-on-write feature and uses "readDrivers".
             final Field driversField = ReflectionUtil.getField(DriverManager.class, "drivers", "readDrivers");
             final Field driverClassField = ReflectionUtil.getField(Class.forName("java.sql.DriverInfo"), "driverClass");
             return new DriverManagerInspector() {

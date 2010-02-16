@@ -1,1 +1,2 @@
-com.google.code.rex.jdbc.DefaultDriverManagerInspectorProvider
+com.google.code.rex.jdbc.SunDriverManagerInspectorProvider
+com.google.code.rex.jdbc.IBMDriverManagerInspectorProvider

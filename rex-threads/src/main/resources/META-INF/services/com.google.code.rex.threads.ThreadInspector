@@ -1,2 +1,3 @@
 com.google.code.rex.threads.DefaultThreadInspectorProvider
-com.google.code.rex.threads.TimerThreadInspectorProvider
+com.google.code.rex.threads.SunTimerThreadInspectorProvider
+com.google.code.rex.threads.IBMTimerThreadInspectorProvider
