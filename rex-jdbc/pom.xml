@@ -9,14 +9,13 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>rex-test-war</artifactId>
-    <description>Test Web application that deliberately leaks resources.</description>
-    <packaging>war</packaging>
+    <artifactId>rex-jdbc</artifactId>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>10.3.2.1</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rex-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

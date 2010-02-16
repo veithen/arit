@@ -17,6 +17,7 @@
     </dependencies>
     <modules>
         <module>rex-api</module>
+        <module>rex-jdbc</module>
         <module>rex-jetty</module>
         <module>rex-test-war</module>
         <module>rex-threads</module>

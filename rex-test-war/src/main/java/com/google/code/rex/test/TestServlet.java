@@ -6,6 +6,8 @@ import java.util.TimerTask;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.derby.jdbc.EmbeddedDriver;
+
 public class TestServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
@@ -15,5 +17,6 @@ public class TestServlet extends HttpServlet {
                 // Do nothing
             }
         }, 0, 1000);
+        new EmbeddedDriver();
     }
 }

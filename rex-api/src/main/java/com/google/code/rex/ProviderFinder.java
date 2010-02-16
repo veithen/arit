@@ -28,21 +28,43 @@ public class ProviderFinder {
                     String line;
                     while ((line = in.readLine()) != null) {
                         if (line.length() != 0 && line.charAt(0) != '#') {
-                            Class<? extends T> clazz;
+                            Class<?> clazz;
                             try {
-                                clazz = classLoader.loadClass(line).asSubclass(providerType);
+                                clazz = classLoader.loadClass(line);
                             } catch (ClassNotFoundException ex) {
                                 throw new ProviderFinderException("Class " + line + " not found");
-                            } catch (ClassCastException ex) {
-                                throw new ProviderFinderException("Class " + line + " is not of type " + providerType.getName());
                             }
-                            T instance;
-                            try {
-                                instance = clazz.newInstance();
-                            } catch (Exception ex) {
-                                throw new ProviderFinderException("Unable to instantiate " + clazz, ex);
+                            if (Provider.class.isAssignableFrom(clazz)) {
+                                Provider<?> provider;
+                                try {
+                                    provider = (Provider<?>)clazz.newInstance();
+                                } catch (Exception ex) {
+                                    throw new ProviderFinderException("Unable to instantiate " + clazz, ex);
+                                }
+                                T impl;
+                                try {
+                                    impl = providerType.cast(provider.getImplementation());
+                                } catch (ClassCastException ex) {
+                                    throw new ProviderFinderException("Class " + clazz.getName() + " is not a provider for implementations of type " + providerType.getName());
+                                }
+                                if (impl != null) {
+                                    providers.add(impl);
+                                }
+                            } else {
+                                Class<? extends T> implClass;
+                                try {
+                                    implClass = clazz.asSubclass(providerType);
+                                } catch (ClassCastException ex) {
+                                    throw new ProviderFinderException("Class " + clazz.getName() + " is not of type " + providerType.getName());
+                                }
+                                T impl;
+                                try {
+                                    impl = implClass.newInstance();
+                                } catch (Exception ex) {
+                                    throw new ProviderFinderException("Unable to instantiate " + implClass, ex);
+                                }
+                                providers.add(impl);
                             }
-                            providers.add(instance);
                         }
                     }
                 } finally {
