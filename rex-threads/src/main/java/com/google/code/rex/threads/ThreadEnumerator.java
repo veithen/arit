@@ -9,14 +9,12 @@ import com.google.code.rex.ResourceEnumerator;
 
 public class ThreadEnumerator implements ResourceEnumerator {
     private final Thread[] threads;
-    private final List<ThreadInspector> threadInspectors;
     private int current = -1;
     private Thread thread;
     private ThreadDescription description;
 
-    public ThreadEnumerator(Thread[] threads, List<ThreadInspector> threadInspectors) {
+    public ThreadEnumerator(Thread[] threads) {
         this.threads = threads;
-        this.threadInspectors = threadInspectors;
     }
 
     public Collection<ClassLoader> getClassLoaders() {
@@ -31,10 +29,7 @@ public class ThreadEnumerator implements ResourceEnumerator {
         if (current+1 < threads.length) {
             current++;
             thread = threads[current];
-            description = null;
-            for (Iterator<ThreadInspector> it = threadInspectors.iterator(); description == null && it.hasNext(); ) {
-                description = it.next().getDescription(thread);
-            }
+            description = ThreadInspectors.getInstance().getDescription(thread);
             return true;
         } else {
             return false;
