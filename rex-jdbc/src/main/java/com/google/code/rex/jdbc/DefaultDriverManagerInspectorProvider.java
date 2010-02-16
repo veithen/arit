@@ -12,25 +12,25 @@ import com.google.code.rex.util.ReflectionUtil;
 public class DefaultDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
     public DriverManagerInspector getImplementation() {
         try {
-            Field driversField = ReflectionUtil.getField(DriverManager.class, "drivers");
-            final Vector<?> drivers = (Vector<?>)driversField.get(null);
+            final Field driversField = ReflectionUtil.getField(DriverManager.class, "drivers", "readDrivers");
             final Field driverClassField = ReflectionUtil.getField(Class.forName("java.sql.DriverInfo"), "driverClass");
             return new DriverManagerInspector() {
                 public List<Class<?>> getDriverClasses() {
-                    List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
-                    for (Object driverInfo : drivers) {
-                        try {
+                    try {
+                        // We need to get the field value every time, because in JRE 1.6, the Vector
+                        // is replaced when a new driver is added.
+                        Vector<?> drivers = (Vector<?>)driversField.get(null);
+                        List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
+                        for (Object driverInfo : drivers) {
                             driverClasses.add((Class<?>)driverClassField.get(driverInfo));
-                        } catch (IllegalAccessException ex) {
-                            throw new IllegalAccessError(ex.getMessage());
                         }
+                        return driverClasses;
+                    } catch (IllegalAccessException ex) {
+                        throw new IllegalAccessError(ex.getMessage());
                     }
-                    return driverClasses;
                 }
             };
         } catch (NoSuchFieldException ex) {
-            return null;
-        } catch (IllegalAccessException ex) {
             return null;
         } catch (ClassNotFoundException ex) {
             return null;
