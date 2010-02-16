@@ -11,21 +11,11 @@ public class TimerThreadInspector implements ThreadInspector {
     private final Field timerTaskArrayField;
     private final Field sizeField;
     
-    public TimerThreadInspector() {
-        try {
-            timerThreadClass = Class.forName("java.util.TimerThread");
-            queueField = timerThreadClass.getDeclaredField("queue");
-            queueField.setAccessible(true);
-            Class<?> taskQueueClass = Class.forName("java.util.TaskQueue");
-            timerTaskArrayField = taskQueueClass.getDeclaredField("queue");
-            timerTaskArrayField.setAccessible(true);
-            sizeField = taskQueueClass.getDeclaredField("size");
-            sizeField.setAccessible(true);
-        } catch (ClassNotFoundException ex) {
-            throw new NoClassDefFoundError(ex.getMessage());
-        } catch (NoSuchFieldException ex) {
-            throw new NoSuchFieldError(ex.getMessage());
-        }
+    public TimerThreadInspector(Class<?> timerThreadClass, Field queueField, Field timerTaskArrayField, Field sizeField) {
+        this.timerThreadClass = timerThreadClass;
+        this.queueField = queueField;
+        this.timerTaskArrayField = timerTaskArrayField;
+        this.sizeField = sizeField;
     }
 
     public ThreadDescription getDescription(Thread thread) {

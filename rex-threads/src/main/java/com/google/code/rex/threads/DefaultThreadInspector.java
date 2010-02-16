@@ -12,13 +12,8 @@ import java.util.Set;
 public class DefaultThreadInspector implements ThreadInspector {
     private final Field targetField;
     
-    public DefaultThreadInspector() {
-        try {
-            targetField = Thread.class.getDeclaredField("target");
-        } catch (NoSuchFieldException ex) {
-            throw new NoSuchFieldError(ex.getMessage());
-        }
-        targetField.setAccessible(true);
+    public DefaultThreadInspector(Field targetField) {
+        this.targetField = targetField;
     }
 
     public ThreadDescription getDescription(Thread thread) {

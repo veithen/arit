@@ -1,2 +1,2 @@
-com.google.code.rex.threads.DefaultThreadInspector
-com.google.code.rex.threads.TimerThreadInspector
+com.google.code.rex.threads.DefaultThreadInspectorProvider
+com.google.code.rex.threads.TimerThreadInspectorProvider
