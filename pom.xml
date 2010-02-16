@@ -18,6 +18,7 @@
     <modules>
         <module>rex-api</module>
         <module>rex-jetty</module>
+        <module>rex-test-war</module>
         <module>rex-threads</module>
         <module>rex-war</module>
     </modules>

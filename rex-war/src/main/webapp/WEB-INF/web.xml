@@ -8,12 +8,6 @@
         <servlet-name>InspectorServlet</servlet-name>
         <servlet-class>com.google.code.rex.servlet.InspectorServlet</servlet-class>
     </servlet>
-    <servlet>
-        <display-name>Test servlet</display-name>
-        <servlet-name>TestServlet</servlet-name>
-        <servlet-class>com.google.code.rex.servlet.TestServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
     <servlet-mapping>
         <servlet-name>InspectorServlet</servlet-name>
         <url-pattern>/</url-pattern>

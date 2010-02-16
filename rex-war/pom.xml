@@ -40,8 +40,16 @@
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
+                <version>6.1.22</version>
                 <configuration>
                     <contextPath>/</contextPath>
+                    <!-- scanIntervalSeconds>10</scanIntervalSeconds -->
+                    <contextHandlers>
+                        <contextHandler implementation="org.mortbay.jetty.webapp.WebAppContext">
+                            <war>../rex-test-war/target/rex-test-war-${project.version}.war</war>
+                            <contextPath>/test</contextPath>
+                        </contextHandler>
+                   </contextHandlers>
                 </configuration>
             </plugin>
         </plugins>

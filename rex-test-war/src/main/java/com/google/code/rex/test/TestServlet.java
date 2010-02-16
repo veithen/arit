@@ -1,4 +1,4 @@
-package com.google.code.rex.servlet;
+package com.google.code.rex.test;
 
 import java.util.Timer;
 import java.util.TimerTask;
