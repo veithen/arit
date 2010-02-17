@@ -31,6 +31,7 @@
         <module>rex-test-war</module>
         <module>rex-threads</module>
         <module>rex-war</module>
+        <module>rex-websphere</module>
     </modules>
     <build>
         <plugins>
