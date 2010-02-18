@@ -23,11 +23,16 @@ public class TimerThreadInspector implements ThreadInspector {
                 Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
                 Object taskQueue = queueField.get(thread);
                 TimerTask[] timerTasks = (TimerTask[])timerTaskArrayField.get(taskQueue);
-                for (int i=0; i<timerTasks.length; i++) {
-                    TimerTask task = timerTasks[i];
+                boolean first = true;
+                for (TimerTask task : timerTasks) {
                     if (task != null) {
                         Class<?> taskClass = task.getClass();
-                        description.append(i == 1 ? "; tasks: " : ", ");
+                        if (first) {
+                            description.append("; tasks: ");
+                            first = false;
+                        } else {
+                            description.append(", ");
+                        }
                         description.append(taskClass.getName());
                         classLoaders.add(taskClass.getClassLoader());
                     }
