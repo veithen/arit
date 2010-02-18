@@ -2,6 +2,8 @@ package com.google.code.rex.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +74,11 @@ public class InspectorServlet extends HttpServlet {
                     }
                 }
             }
+            Collections.sort(applications, new Comparator<Application>() {
+                public int compare(Application o1, Application o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
             request.setAttribute("applications", applications);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
