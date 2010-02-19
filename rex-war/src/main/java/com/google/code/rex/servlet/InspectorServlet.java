@@ -62,9 +62,9 @@ public class InspectorServlet extends HttpServlet {
                                     application = null;
                                 } else {
                                     application = new Application(appName);
+                                    applications.add(application);
                                 }
                                 classLoaderMap.put(classLoader, application);
-                                applications.add(application);
                             }
                             if (application != null) {
                                 application.getResources().add(new Resource(resourceEnumerator.getDescription()));
