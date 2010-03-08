@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.google.code.rex</groupId>
-        <artifactId>rex</artifactId>
+        <groupId>com.google.code.arit</groupId>
+        <artifactId>arit</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>rex-war</artifactId>
+    <artifactId>arit-war</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
@@ -19,30 +19,30 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>rex-api</artifactId>
+            <artifactId>arit-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>rex-jetty</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>rex-websphere</artifactId>
+            <artifactId>arit-jetty</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>rex-threads</artifactId>
+            <artifactId>arit-websphere</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>rex-jdbc</artifactId>
+            <artifactId>arit-threads</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>arit-jdbc</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -58,7 +58,7 @@
                     <!-- scanIntervalSeconds>10</scanIntervalSeconds -->
                     <contextHandlers>
                         <contextHandler implementation="org.mortbay.jetty.webapp.WebAppContext">
-                            <war>../rex-test-war/target/rex-test-war-${project.version}.war</war>
+                            <war>../arit-test-war/target/arit-test-war-${project.version}.war</war>
                             <contextPath>/test</contextPath>
                         </contextHandler>
                    </contextHandlers>

@@ -4,29 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.google.code.rex</groupId>
-        <artifactId>rex</artifactId>
+        <groupId>com.google.code.arit</groupId>
+        <artifactId>arit</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>rex-jdbc</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>arit-test-war</artifactId>
+    <description>Test Web application that deliberately leaks resources.</description>
+    <packaging>war</packaging>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>rex-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>10.3.2.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.google.code.rex</groupId>
-    <artifactId>rex</artifactId>
+    <groupId>com.google.code.arit</groupId>
+    <artifactId>arit</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <dependencies>
@@ -25,13 +25,13 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-        <module>rex-api</module>
-        <module>rex-jdbc</module>
-        <module>rex-jetty</module>
-        <module>rex-test-war</module>
-        <module>rex-threads</module>
-        <module>rex-war</module>
-        <module>rex-websphere</module>
+        <module>arit-api</module>
+        <module>arit-jdbc</module>
+        <module>arit-jetty</module>
+        <module>arit-test-war</module>
+        <module>arit-threads</module>
+        <module>arit-war</module>
+        <module>arit-websphere</module>
     </modules>
     <build>
         <plugins>
