@@ -9,7 +9,9 @@ public class TomcatProfile implements ServerProfile {
     public String identifyApplication(ClassLoader classLoader) {
         if (classLoader instanceof WebappClassLoader) {
             WebappClassLoader wacl = (WebappClassLoader)classLoader;
-            return ((ProxyDirContext)wacl.getResources()).getContextName();
+            ProxyDirContext context = (ProxyDirContext)wacl.getResources();
+            // Tomcat removes the DirContext when stopping the application
+            return context == null ? "<defunct>" : context.getContextName();
         } else {
             return null;
         }
