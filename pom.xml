@@ -71,6 +71,12 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!--
+                    Note: Use the following commands to do a release:
+                    
+                    $ mvn [--batch-mode] -Dusername=... -Dpassword=... release:prepare
+                    $ mvn release:clean
+                -->
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.0</version>
                 <inherited>false</inherited>
