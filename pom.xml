@@ -74,7 +74,7 @@
                 <!--
                     Note: Use the following commands to do a release:
                     
-                    $ mvn [--batch-mode] -Dusername=... -Dpassword=... release:prepare
+                    $ mvn -Dusername=... -Dpassword=... release:prepare
                     $ mvn release:clean
                 -->
                 <artifactId>maven-release-plugin</artifactId>
