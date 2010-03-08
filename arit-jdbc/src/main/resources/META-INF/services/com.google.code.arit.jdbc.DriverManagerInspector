@@ -1,0 +1,2 @@
+com.google.code.arit.jdbc.SunDriverManagerInspectorProvider
+com.google.code.arit.jdbc.IBMDriverManagerInspectorProvider

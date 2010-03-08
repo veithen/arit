@@ -6,7 +6,7 @@
     <servlet>
         <display-name>Test servlet</display-name>
         <servlet-name>TestServlet</servlet-name>
-        <servlet-class>com.google.code.rex.test.TestServlet</servlet-class>
+        <servlet-class>com.google.code.arit.test.TestServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 </web-app>

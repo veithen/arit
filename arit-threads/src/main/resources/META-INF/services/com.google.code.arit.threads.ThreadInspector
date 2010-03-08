@@ -1,0 +1,3 @@
+com.google.code.arit.threads.DefaultThreadInspectorProvider
+com.google.code.arit.threads.SunTimerThreadInspectorProvider
+com.google.code.arit.threads.IBMTimerThreadInspectorProvider
