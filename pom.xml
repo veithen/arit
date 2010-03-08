@@ -7,6 +7,35 @@
     <artifactId>arit</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>Arit</name>
+    <url>http://code.google.com/p/arit/</url>
+    <inceptionYear>2010</inceptionYear>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Andreas Veithen</name>
+            <id>andreas.veithen</id>
+            <email>andreas.veithen (at) gmail.com</email>
+            <roles>
+                <role>Despot</role>
+            </roles>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/arit/issues/</url>
+    </issueManagement>
+    <scm>
+        <url>http://code.google.com/p/arit/source/browse/#svn/trunk/</url>
+        <connection>scm:svn:http://arit.googlecode.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://arit.googlecode.com/svn/trunk</developerConnection>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>

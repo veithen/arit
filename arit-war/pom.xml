@@ -11,6 +11,7 @@
     </parent>
     <artifactId>arit-war</artifactId>
     <packaging>war</packaging>
+    <name>Arit :: WAR distribution</name>
     <dependencies>
         <dependency>
             <groupId>taglibs</groupId>

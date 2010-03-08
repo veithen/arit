@@ -12,6 +12,7 @@
     <artifactId>arit-test-war</artifactId>
     <description>Test Web application that deliberately leaks resources.</description>
     <packaging>war</packaging>
+    <name>Arit :: Test WAR</name>
     <dependencies>
         <dependency>
             <groupId>org.apache.derby</groupId>

@@ -11,6 +11,7 @@
     </parent>
     <artifactId>arit-jetty</artifactId>
     <packaging>jar</packaging>
+    <name>Arit :: Jetty support</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

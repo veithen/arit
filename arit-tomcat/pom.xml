@@ -11,6 +11,7 @@
     </parent>
     <artifactId>arit-tomcat</artifactId>
     <packaging>jar</packaging>
+    <name>Arit :: Tomcat support</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

@@ -11,6 +11,7 @@
     </parent>
     <artifactId>arit-jdbc</artifactId>
     <packaging>jar</packaging>
+    <name>Arit :: JDBC DriverManager inspector</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

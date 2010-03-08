@@ -11,4 +11,5 @@
     </parent>
     <artifactId>arit-api</artifactId>
     <packaging>jar</packaging>
+    <name>Arit :: API</name>
 </project>
