@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.arit</groupId>
     <artifactId>arit</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>pom</packaging>
     <name>Arit</name>
     <url>http://code.google.com/p/arit/</url>
@@ -32,9 +30,9 @@
         <url>http://code.google.com/p/arit/issues/</url>
     </issueManagement>
     <scm>
-        <url>http://code.google.com/p/arit/source/browse/#svn/trunk/</url>
-        <connection>scm:svn:http://arit.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://arit.googlecode.com/svn/trunk</developerConnection>
+        <url>http://code.google.com/p/arit/source/browse/#svn/tags/arit-0.1</url>
+        <connection>scm:svn:http://arit.googlecode.com/svn/tags/arit-0.1</connection>
+        <developerConnection>scm:svn:https://arit.googlecode.com/svn/tags/arit-0.1</developerConnection>
     </scm>
     <dependencies>
         <dependency>
