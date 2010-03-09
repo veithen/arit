@@ -55,6 +55,7 @@
         <module>arit-api</module>
         <module>arit-jdbc</module>
         <module>arit-jetty</module>
+        <module>arit-shutdown-hooks</module>
         <module>arit-test-war</module>
         <module>arit-threads</module>
         <module>arit-tomcat</module>
