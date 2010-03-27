@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.arit</groupId>
     <artifactId>arit</artifactId>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Arit</name>
     <url>http://code.google.com/p/arit/</url>
@@ -30,9 +30,9 @@
         <url>http://code.google.com/p/arit/issues/</url>
     </issueManagement>
     <scm>
-        <url>http://code.google.com/p/arit/source/browse/#svn/tags/arit-0.2</url>
-        <connection>scm:svn:http://arit.googlecode.com/svn/tags/arit-0.2</connection>
-        <developerConnection>scm:svn:https://arit.googlecode.com/svn/tags/arit-0.2</developerConnection>
+        <url>http://code.google.com/p/arit/source/browse/#svn/trunk/</url>
+        <connection>scm:svn:http://arit.googlecode.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://arit.googlecode.com/svn/trunk</developerConnection>
     </scm>
     <dependencies>
         <dependency>
