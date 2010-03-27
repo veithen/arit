@@ -15,6 +15,10 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
         this.threadLocalInspector = threadLocalInspector;
     }
 
+    public String getDescription() {
+        return "Thread locals";
+    }
+
     public ResourceEnumerator createEnumerator() {
         Map<ThreadLocal<?>,Set<Class<?>>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<Class<?>>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {

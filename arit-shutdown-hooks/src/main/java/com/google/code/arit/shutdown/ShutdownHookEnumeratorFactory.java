@@ -10,6 +10,10 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
         this.inspector = inspector;
     }
 
+    public String getDescription() {
+        return "Shutdown hooks";
+    }
+
     public ResourceEnumerator createEnumerator() {
         return new ShutdownHookEnumerator(inspector.getShutdownHooks());
     }

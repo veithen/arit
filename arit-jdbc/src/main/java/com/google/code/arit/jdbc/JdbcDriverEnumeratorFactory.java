@@ -10,6 +10,10 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
         this.driverManagerInspector = driverManagerInspector;
     }
 
+    public String getDescription() {
+        return "JDBC drivers";
+    }
+
     public ResourceEnumerator createEnumerator() {
         return new JdbcDriverEnumerator(driverManagerInspector.getDriverClasses());
     }

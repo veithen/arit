@@ -79,6 +79,7 @@ public class InspectorServlet extends HttpServlet {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
+            request.setAttribute("factories", resourceEnumeratorFactories);
             request.setAttribute("applications", applications);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }

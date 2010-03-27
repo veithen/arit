@@ -10,8 +10,15 @@
             <title>Resources</title>
         </head>
         <body>
+            <h1>Supported resource types</h1>
+            <ul>
+                <c:forEach items="${factories}" var="factory">
+                    <li><c:out value="${factory.description}"/></li>
+                </c:forEach>
+            </ul>
+            <h1>Resources by application</h1>
             <c:forEach items="${applications}" var="app">
-                <h1><c:out value="${app.name}"/></h1>
+                <h2><c:out value="${app.name}"/></h2>
                 <ul>
                     <c:forEach items="${app.resources}" var="resource">
                         <li><c:out value="${resource.description}"/></li>
