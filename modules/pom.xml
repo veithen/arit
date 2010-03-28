@@ -30,6 +30,7 @@
         <module>arit-tomcat</module>
         <module>arit-war</module>
         <module>arit-websphere</module>
+        <module>arit-websphere-apis</module>
     </modules>
     <build>
         <plugins>
