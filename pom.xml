@@ -44,6 +44,7 @@
         </dependencies>
     </dependencyManagement>
     <modules>
+        <module>legal-files</module>
         <module>modules</module>
     </modules>
     <build>
