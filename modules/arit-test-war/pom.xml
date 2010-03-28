@@ -3,24 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.arit</groupId>
-        <artifactId>arit</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>arit-jetty</artifactId>
-    <packaging>jar</packaging>
-    <name>Arit :: Jetty support</name>
+    <artifactId>arit-test-war</artifactId>
+    <description>Test Web application that deliberately leaks resources.</description>
+    <packaging>war</packaging>
+    <name>Arit :: Test WAR</name>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>arit-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>6.1.22</version>
-            <scope>provided</scope>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.3.2.1</version>
         </dependency>
     </dependencies>
 </project>

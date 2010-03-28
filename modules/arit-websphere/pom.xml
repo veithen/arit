@@ -3,11 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.arit</groupId>
-        <artifactId>arit</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>arit-api</artifactId>
+    <artifactId>arit-websphere</artifactId>
     <packaging>jar</packaging>
-    <name>Arit :: API</name>
+    <name>Arit :: WebSphere support</name>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>arit-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.arit</groupId>
-        <artifactId>arit</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>arit-shutdown-hooks</artifactId>
+    <artifactId>arit-tomcat</artifactId>
     <packaging>jar</packaging>
-    <name>Arit :: Shutdown hooks inspector</name>
+    <name>Arit :: Tomcat support</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -17,9 +17,23 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>6.0.24</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>tomcat-repository</id>
+            <url>http://tomcat.apache.org/dev/dist/m2-repository</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

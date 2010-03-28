@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.arit</groupId>
-        <artifactId>arit</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>arit-threads</artifactId>
+    <artifactId>arit-jdbc</artifactId>
     <packaging>jar</packaging>
-    <name>Arit :: Thread inspector</name>
+    <name>Arit :: JDBC DriverManager inspector</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
