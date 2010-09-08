@@ -20,4 +20,14 @@ public class ReflectionUtil {
         }
         throw exception;
     }
+    
+    public static Field getField(Class<?> clazz, Class<?> type) throws NoSuchFieldException {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (type.isAssignableFrom(field.getType())) {
+                field.setAccessible(true);
+                return field;
+            }
+        }
+        throw new NoSuchFieldException();
+    }
 }

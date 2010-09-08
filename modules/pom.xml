@@ -24,6 +24,7 @@
         <module>arit-ear</module>
         <module>arit-jdbc</module>
         <module>arit-jetty</module>
+        <module>arit-mbeans</module>
         <module>arit-shutdown-hooks</module>
         <module>arit-test-war</module>
         <module>arit-threads</module>
