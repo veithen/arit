@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.PlexusContainerException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
 import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -21,6 +26,7 @@ import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.ServerProfileFactory;
 
 public class InspectorServlet extends HttpServlet {
+    private PlexusContainer container;
     private ServerProfile profile;
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
@@ -30,14 +36,26 @@ public class InspectorServlet extends HttpServlet {
     
     @Override
     public void init() throws ServletException {
-        ServerContext serverContext = getServerContext();
-        for (ServerProfileFactory spf : ProviderFinder.find(ServerProfileFactory.class)) {
-            profile = spf.createServerProfile(serverContext);
-            if (profile != null) {
-                break;
+        try {
+            container = new DefaultPlexusContainer();
+            ServerContext serverContext = getServerContext();
+            for (ServerProfileFactory spf : container.lookupList(ServerProfileFactory.class)) {
+                profile = spf.createServerProfile(serverContext);
+                if (profile != null) {
+                    break;
+                }
             }
+        } catch (PlexusContainerException ex) {
+            throw new ServletException(ex);
+        } catch (ComponentLookupException ex) {
+            throw new ServletException(ex);
         }
         resourceEnumeratorFactories = ProviderFinder.find(ResourceEnumeratorFactory.class);
+    }
+
+    @Override
+    public void destroy() {
+        container.dispose();
     }
 
     @Override

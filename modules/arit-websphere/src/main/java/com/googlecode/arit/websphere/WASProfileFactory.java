@@ -8,11 +8,14 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.ServerProfileFactory;
 import com.googlecode.arit.util.ReflectionUtil;
 
+@Component(role=ServerProfileFactory.class, hint="websphere")
 public class WASProfileFactory implements ServerProfileFactory {
     public ServerProfile createServerProfile(ServerContext serverContext) {
         try {
