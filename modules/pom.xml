@@ -26,6 +26,7 @@
         <module>arit-jetty</module>
         <module>arit-mbeans</module>
         <module>arit-shutdown-hooks</module>
+        <module>arit-sun-apis</module>
         <module>arit-test-war</module>
         <module>arit-threads</module>
         <module>arit-tomcat</module>

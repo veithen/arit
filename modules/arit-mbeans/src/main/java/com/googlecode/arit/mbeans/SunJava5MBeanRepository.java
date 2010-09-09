@@ -4,10 +4,10 @@ import javax.management.ObjectName;
 
 import com.sun.jmx.mbeanserver.Repository;
 
-public class SunMBeanRepository implements MBeanRepository {
+public class SunJava5MBeanRepository implements MBeanRepository {
     private final Repository repository;
 
-    public SunMBeanRepository(Repository repository) {
+    public SunJava5MBeanRepository(Repository repository) {
         this.repository = repository;
     }
 
