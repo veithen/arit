@@ -29,7 +29,7 @@ public class MBeanEnumerator implements ResourceEnumerator {
     }
 
     public String getDescription() {
-        return name.toString();
+        return "MBean: " + name.toString() + " (class: " + mbean.getClass().getName() + ")";
     }
 
     public boolean next() {

@@ -13,6 +13,11 @@ public class SunJava6MBeanRepository implements MBeanRepository {
     }
 
     public Object retrieve(ObjectName name) {
-        return ((DynamicMBean2)repository.retrieve(name)).getResource();
+        Object object = repository.retrieve(name);
+        if (object instanceof DynamicMBean2) {
+            return ((DynamicMBean2)object).getResource();
+        } else {
+            return object;
+        }
     }
 }
