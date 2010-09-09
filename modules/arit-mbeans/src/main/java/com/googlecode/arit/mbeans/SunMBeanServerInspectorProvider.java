@@ -1,7 +1,7 @@
 package com.googlecode.arit.mbeans;
 
-import com.google.code.arit.Provider;
-import com.google.code.arit.util.ReflectionUtil;
+import com.googlecode.arit.Provider;
+import com.googlecode.arit.util.ReflectionUtil;
 import com.sun.jmx.interceptor.DefaultMBeanServerInterceptor;
 import com.sun.jmx.interceptor.MBeanServerInterceptor;
 import com.sun.jmx.mbeanserver.JmxMBeanServer;

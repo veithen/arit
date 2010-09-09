@@ -2,9 +2,9 @@ package com.googlecode.arit.mbeans;
 
 import java.util.List;
 
-import com.google.code.arit.Provider;
-import com.google.code.arit.ProviderFinder;
-import com.google.code.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.Provider;
+import com.googlecode.arit.ProviderFinder;
+import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class MBeanEnumeratorFactoryProvider implements Provider<ResourceEnumeratorFactory> {
     public ResourceEnumeratorFactory getImplementation() {

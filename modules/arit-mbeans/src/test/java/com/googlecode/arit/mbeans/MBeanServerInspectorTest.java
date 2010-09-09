@@ -5,7 +5,7 @@ import java.lang.management.ManagementFactory;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import com.google.code.arit.ProviderFinder;
+import com.googlecode.arit.ProviderFinder;
 
 import junit.framework.TestCase;
 

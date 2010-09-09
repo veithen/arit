@@ -1,0 +1,2 @@
+com.googlecode.arit.shutdown.SunShutdownHookInspectorProvider
+com.googlecode.arit.shutdown.IBMShutdownHookInspectorProvider

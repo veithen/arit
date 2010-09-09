@@ -9,7 +9,7 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import com.google.code.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceEnumerator;
 
 public class MBeanEnumerator implements ResourceEnumerator {
     private final List<MBeanServerInspector> mbsInspectors; 

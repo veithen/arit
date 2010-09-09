@@ -6,7 +6,7 @@
     <servlet>
         <display-name>Inspector servlet</display-name>
         <servlet-name>InspectorServlet</servlet-name>
-        <servlet-class>com.google.code.arit.servlet.InspectorServlet</servlet-class>
+        <servlet-class>com.googlecode.arit.servlet.InspectorServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InspectorServlet</servlet-name>

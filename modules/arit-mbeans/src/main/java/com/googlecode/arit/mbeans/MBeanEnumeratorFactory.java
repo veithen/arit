@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.management.MBeanServerFactory;
 
-import com.google.code.arit.ResourceEnumerator;
-import com.google.code.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     private final List<MBeanServerInspector> mbsInspectors; 
