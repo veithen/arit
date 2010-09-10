@@ -25,6 +25,7 @@
         <module>arit-jdbc</module>
         <module>arit-jetty</module>
         <module>arit-mbeans</module>
+        <module>arit-rbeans</module>
         <module>arit-shutdown-hooks</module>
         <module>arit-sun-apis</module>
         <module>arit-test-war</module>

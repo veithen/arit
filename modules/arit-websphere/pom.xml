@@ -22,6 +22,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>arit-rbeans</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>arit-websphere-apis</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>

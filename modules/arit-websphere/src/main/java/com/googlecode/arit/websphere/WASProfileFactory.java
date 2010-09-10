@@ -1,6 +1,5 @@
 package com.googlecode.arit.websphere;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 import javax.management.MBeanServer;
@@ -13,7 +12,8 @@ import org.codehaus.plexus.component.annotations.Component;
 import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.ServerProfileFactory;
-import com.googlecode.arit.util.ReflectionUtil;
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ServerProfileFactory.class, hint="websphere")
 public class WASProfileFactory implements ServerProfileFactory {
@@ -36,15 +36,14 @@ public class WASProfileFactory implements ServerProfileFactory {
             return null;
         }
         
-        Class<?> classLoaderClass = serverContext.getApplicationClassLoader().getClass();
-        if (classLoaderClass.getName().equals("com.ibm.ws.classloader.CompoundClassLoader")) {
-            Field nameField;
-            try {
-                nameField = ReflectionUtil.getField(classLoaderClass, "name");
-            } catch (NoSuchFieldException ex) {
-                return null;
-            }
-            return new WASProfile(classLoaderClass, nameField);
+        RBeanFactory<CompoundClassLoader> rbeanFactory;
+        try {
+            rbeanFactory = RBeanFactory.create(CompoundClassLoader.class);
+        } catch (RBeanFactoryException ex) {
+            return null;
+        }
+        if (rbeanFactory.appliesTo(serverContext.getApplicationClassLoader())) {
+            return new WASProfile(rbeanFactory);
         } else {
             return null;
         }
