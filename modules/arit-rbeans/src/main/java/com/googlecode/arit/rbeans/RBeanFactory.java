@@ -27,6 +27,18 @@ public class RBeanFactory {
         return rbeanInfo;
     }
     
+    synchronized RBeanInfo getRBeanInfoForTargetClass(Class<?> targetClass) {
+        RBeanInfo result = null;
+        for (RBeanInfo rbeanInfo : rbeanInfoMap.values()) {
+            Class<?> rbeanTargetClass = rbeanInfo.getTargetClass();
+            if (rbeanTargetClass.isAssignableFrom(targetClass)
+                    && (result == null || result.getTargetClass().isAssignableFrom(targetClass))) {
+                result = rbeanInfo;
+            }
+        }
+        return result;
+    }
+    
     public boolean check(Class<?>... rbeanClasses) {
         try {
             for (Class<?> rbeanClass : rbeanClasses) {
@@ -73,20 +85,36 @@ public class RBeanFactory {
                 }
                 methodHandler = new AccessorHandler(field);
             } else {
+                Method targetMethod;
                 try {
-                    methodHandler = new SimpleMethodHandler(targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes()));
+                    targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
                 } catch (NoSuchMethodException ex) {
                     throw new RBeanFactoryException(ex);
                 }
+                methodHandler = new SimpleMethodHandler(targetMethod, getResultHandler(proxyMethod.getReturnType(), targetMethod.getReturnType()));
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }
         return new RBeanInfo(rbeanClass, targetClass, methodHandlers);
     }
     
+    private ObjectHandler getResultHandler(Class<?> proxyReturnType, Class<?> targetReturnType) {
+        if (proxyReturnType.getAnnotation(RBean.class) == null) {
+            return PassThroughHandler.INSTANCE;
+        } else {
+            // Ensure that the RBeanInfo is loaded so that we can later locate it based on
+            // the target class
+            getRBeanInfo(proxyReturnType);
+            return new WrappingHandler(this);
+        }
+    }
+    
     public <T> T createRBean(Class<T> rbeanClass, Object object) throws RBeanFactoryException {
-        RBeanInfo rbeanInfo = getRBeanInfo(rbeanClass);
-        return rbeanClass.cast(Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),
-                new Class<?>[] { rbeanClass }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object)));
+        return rbeanClass.cast(createRBean(getRBeanInfo(rbeanClass), object));
+    }
+    
+    Object createRBean(RBeanInfo rbeanInfo, Object object) throws RBeanFactoryException {
+        return Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),
+                new Class<?>[] { rbeanInfo.getRBeanClass() }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
     }
 }
