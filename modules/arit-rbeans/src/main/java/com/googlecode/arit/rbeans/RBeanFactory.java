@@ -49,7 +49,7 @@ public class RBeanFactory {
         if (rbeanAnnotation == null) {
             throw new RBeanFactoryException("No RBean annotation found on class " + rbeanClass.getName());
         }
-        String targetClassName = rbeanAnnotation.targetClass();
+        String targetClassName = rbeanAnnotation.target();
         Class<?> targetClass;
         try {
             targetClass = cl.loadClass(targetClassName);
