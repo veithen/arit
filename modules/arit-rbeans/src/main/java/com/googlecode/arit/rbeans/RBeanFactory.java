@@ -77,7 +77,7 @@ public class RBeanFactory {
                 if (field == null) {
                     throw new RBeanFactoryException(exception);
                 }
-                methodHandler = new AccessorHandler(field);
+                methodHandler = new AccessorHandler(field, getResultHandler(proxyMethod.getReturnType(), field.getType()));
             } else {
                 Method targetMethod;
                 try {
