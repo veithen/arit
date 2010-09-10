@@ -90,6 +90,12 @@ public class RBeanFactory {
             methodHandlers.put(proxyMethod, methodHandler);
         }
         rbeanInfoMap.put(rbeanClass, new RBeanInfo(rbeanClass, targetClass, methodHandlers));
+        SeeAlso seeAlso = rbeanClass.getAnnotation(SeeAlso.class);
+        if (seeAlso != null) {
+            for (Class<?> clazz : seeAlso.value()) {
+                load(clazz);
+            }
+        }
     }
     
     private ObjectHandler getResultHandler(Class<?> proxyReturnType, Class<?> targetReturnType) throws RBeanFactoryException {

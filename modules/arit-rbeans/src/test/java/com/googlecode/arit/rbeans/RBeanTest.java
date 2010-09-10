@@ -19,4 +19,11 @@ public class RBeanTest {
         ParentRBean rbean = rbf.createRBean(ParentRBean.class, new Parent());
         Assert.assertEquals("Hello", rbean.getChild().sayHello());
     }
+    
+    @Test
+    public void testSeeAlso() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(VehicleHolderRBean.class);
+        VehicleHolderRBean rbean = rbf.createRBean(VehicleHolderRBean.class, new VehicleHolder(new Car()));
+        Assert.assertTrue(rbean.getVehicle() instanceof CarRBean);
+    }
 }
