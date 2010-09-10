@@ -89,7 +89,7 @@ public class RBeanFactory {
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }
-        rbeanInfoMap.put(rbeanClass, new RBeanInfo(rbeanClass, targetClass, methodHandlers));
+        rbeanInfoMap.put(rbeanClass, new RBeanInfo(rbeanClass, targetClass, rbeanAnnotation.isStatic(), methodHandlers));
         SeeAlso seeAlso = rbeanClass.getAnnotation(SeeAlso.class);
         if (seeAlso != null) {
             for (Class<?> clazz : seeAlso.value()) {
@@ -107,11 +107,24 @@ public class RBeanFactory {
         }
     }
     
+    public <T> T createRBean(Class<T> rbeanClass) {
+        return createRBean(rbeanClass, null);
+    }
+    
     public <T> T createRBean(Class<T> rbeanClass, Object object) {
         return rbeanClass.cast(createRBean(getRBeanInfo(rbeanClass), object));
     }
     
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
+        if (rbeanInfo.isStatic()) {
+            if (object != null) {
+                throw new IllegalArgumentException("No object expected for static RBean");
+            }
+        } else {
+            if (object == null) {
+                throw new IllegalArgumentException("Object must not be null");
+            }
+        }
         return Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),
                 new Class<?>[] { rbeanInfo.getRBeanClass() }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
     }

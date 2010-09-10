@@ -6,11 +6,13 @@ import java.util.Map;
 public class RBeanInfo {
     private final Class<?> rbeanClass;
     private final Class<?> targetClass;
+    private final boolean isStatic;
     private final Map<Method,MethodHandler> methodHandlers;
     
-    RBeanInfo(Class<?> rbeanClass, Class<?> targetClass, Map<Method,MethodHandler> methodHandlers) {
+    RBeanInfo(Class<?> rbeanClass, Class<?> targetClass, boolean isStatic, Map<Method,MethodHandler> methodHandlers) {
         this.rbeanClass = rbeanClass;
         this.targetClass = targetClass;
+        this.isStatic = isStatic;
         this.methodHandlers = methodHandlers;
     }
 
@@ -20,6 +22,10 @@ public class RBeanInfo {
 
     public Class<?> getTargetClass() {
         return targetClass;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
     }
 
     Map<Method,MethodHandler> getMethodHandlers() {
