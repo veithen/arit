@@ -1,4 +1,4 @@
-package com.googlecode.arit.jdbc;
+package com.googlecode.arit.jdbc.sun;
 
 import java.lang.reflect.Field;
 import java.sql.DriverManager;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.googlecode.arit.Provider;
+import com.googlecode.arit.jdbc.DriverManagerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.util.ReflectionUtil;

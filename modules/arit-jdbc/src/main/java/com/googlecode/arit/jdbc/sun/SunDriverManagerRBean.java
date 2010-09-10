@@ -1,4 +1,4 @@
-package com.googlecode.arit.jdbc;
+package com.googlecode.arit.jdbc.sun;
 
 import java.util.Vector;
 

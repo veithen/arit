@@ -1,4 +1,4 @@
-package com.googlecode.arit.jdbc;
+package com.googlecode.arit.jdbc.ibm;
 
 import java.lang.reflect.Field;
 import java.sql.DriverManager;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.arit.Provider;
+import com.googlecode.arit.jdbc.DriverManagerInspector;
 import com.googlecode.arit.util.ReflectionUtil;
 
 public class IBMDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
