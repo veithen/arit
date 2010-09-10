@@ -36,14 +36,10 @@ public class WASProfileFactory implements ServerProfileFactory {
             return null;
         }
         
-        RBeanFactory<CompoundClassLoaderRBean> compoundClassLoaderRBF;
-        try {
-            compoundClassLoaderRBF = RBeanFactory.create(CompoundClassLoaderRBean.class);
-        } catch (RBeanFactoryException ex) {
-            return null;
-        }
-        if (compoundClassLoaderRBF.appliesTo(serverContext.getApplicationClassLoader())) {
-            return new WASProfile(compoundClassLoaderRBF);
+        RBeanFactory rbf = new RBeanFactory();
+        if (rbf.check(CompoundClassLoaderRBean.class)
+                && rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(serverContext.getApplicationClassLoader())) {
+            return new WASProfile(rbf);
         } else {
             return null;
         }

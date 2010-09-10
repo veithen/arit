@@ -4,15 +4,15 @@ import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class WASProfile implements ServerProfile {
-    private final RBeanFactory<CompoundClassLoaderRBean> compoundClassLoaderRBF;
+    private final RBeanFactory rbf;
     
-    public WASProfile(RBeanFactory<CompoundClassLoaderRBean> compoundClassLoaderRBF) {
-        this.compoundClassLoaderRBF = compoundClassLoaderRBF;
+    public WASProfile(RBeanFactory rbf) {
+        this.rbf = rbf;
     }
 
     public String identifyApplication(ClassLoader classLoader) {
-        if (compoundClassLoaderRBF.appliesTo(classLoader)) {
-            return compoundClassLoaderRBF.createRBean(classLoader).getName();
+        if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
+            return rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName();
         } else {
             return null;
         }
