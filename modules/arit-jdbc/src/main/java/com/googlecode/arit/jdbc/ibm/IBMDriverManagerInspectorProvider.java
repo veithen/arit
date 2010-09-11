@@ -15,21 +15,22 @@
  */
 package com.googlecode.arit.jdbc.ibm;
 
-import java.lang.reflect.Field;
-import java.sql.DriverManager;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.arit.Provider;
 import com.googlecode.arit.jdbc.DriverManagerInspector;
-import com.googlecode.arit.util.ReflectionUtil;
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class IBMDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
     public DriverManagerInspector getImplementation() {
         try {
+            RBeanFactory rbf = new RBeanFactory(DriverManagerRBean.class);
             // "theDrivers" is a final field; we only need to retrieve it once
-            Field theDriversField = ReflectionUtil.getField(DriverManager.class, "theDrivers");
-            final List<?> drivers = (List<?>)theDriversField.get(null);
+            DriverManagerRBean driverManager = rbf.createRBean(DriverManagerRBean.class);
+            final List<Driver> drivers = driverManager.getDrivers();
             return new DriverManagerInspector() {
                 public List<Class<?>> getDriverClasses() {
                     List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
@@ -39,10 +40,8 @@ public class IBMDriverManagerInspectorProvider implements Provider<DriverManager
                     return driverClasses;
                 }
             };
-        } catch (NoSuchFieldException ex) {
+        } catch (RBeanFactoryException ex) {
             return null;
-        } catch (IllegalAccessException ex) {
-            throw new IllegalAccessError(ex.getMessage());
         }
     }
 }
