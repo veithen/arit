@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -129,11 +130,16 @@ public class RBeanFactory {
         }
     }
     
-    private static Class<?> getRawType(Type genericType) {
+    private static Class<?> getRawType(Type genericType) throws RBeanFactoryException {
         if (genericType instanceof Class<?>) {
             return (Class<?>)genericType;
-        } else {
+        } else if (genericType instanceof ParameterizedType) {
             return (Class<?>)((ParameterizedType)genericType).getRawType();
+        } else if (genericType instanceof TypeVariable<?>) {
+            // TODO: not entirely correct
+            return Object.class;
+        } else {
+            throw new RBeanFactoryException("Unable to determine raw type for " + genericType);
         }
     }
     
@@ -141,14 +147,19 @@ public class RBeanFactory {
         Class<?> toClass = getRawType(toType);
         Class<?> fromClass = getRawType(fromType);
         if (toClass.getAnnotation(RBean.class) == null) {
-            if (toClass.equals(Iterable.class)) {
-                Class<?> itemClass = getRawType(((ParameterizedType)toType).getActualTypeArguments()[0]);
-                if (itemClass.getAnnotation(RBean.class) != null) {
-                    load(itemClass);
-                    return new CollectionWrapper(this, itemClass);
-                }
+            Class<?> itemClass = null;
+            boolean isArray = toClass.isArray();
+            if (isArray) {
+                itemClass = toClass.getComponentType();
+            } else if (toClass.equals(Iterable.class)) {
+                itemClass = getRawType(((ParameterizedType)toType).getActualTypeArguments()[0]);
             }
-            return toClass.isAssignableFrom(fromClass) ? PassThroughHandler.INSTANCE : null;
+            if (itemClass != null && itemClass.getAnnotation(RBean.class) != null) {
+                load(itemClass);
+                return new CollectionWrapper(this, itemClass, fromClass.isArray());
+            } else {
+                return toClass.isAssignableFrom(fromClass) ? PassThroughHandler.INSTANCE : null;
+            }
         } else {
             load(toClass);
             return new ObjectWrapper(this);

@@ -15,17 +15,11 @@
  */
 package com.googlecode.arit.threadlocals;
 
-import com.googlecode.arit.Provider;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.rbeans.Accessor;
+import com.googlecode.arit.rbeans.RBean;
 
-public class DefaultThreadLocalInspectorProvider implements Provider<ThreadLocalInspector> {
-    public ThreadLocalInspector getImplementation() {
-        try {
-            return new DefaultThreadLocalInspector(new RBeanFactory(ThreadRBean.class));
-        } catch (RBeanFactoryException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+@RBean(target="java.lang.ThreadLocal$ThreadLocalMap")
+public interface ThreadLocalMapRBean {
+    @Accessor(name="table")
+    Iterable<ThreadLocalMapEntryRBean> getTable();
 }

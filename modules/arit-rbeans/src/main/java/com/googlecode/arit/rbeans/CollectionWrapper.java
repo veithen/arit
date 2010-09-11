@@ -15,16 +15,24 @@
  */
 package com.googlecode.arit.rbeans;
 
+import java.util.Arrays;
+
 public class CollectionWrapper<T> implements ObjectHandler {
     private final RBeanFactory rbf;
     private final Class<T> rbeanClass;
+    private final boolean fromArray;
 
-    public CollectionWrapper(RBeanFactory rbf, Class<T> rbeanClass) {
+    public CollectionWrapper(RBeanFactory rbf, Class<T> rbeanClass, boolean fromArray) {
         this.rbf = rbf;
         this.rbeanClass = rbeanClass;
+        this.fromArray = fromArray;
     }
 
     public Object handle(Object object) {
-        return object == null ? null : new RBeanCollection<T>(rbf, rbeanClass, (Iterable<?>)object);
+        if (object == null) {
+            return null;
+        } else {
+            return new RBeanCollection<T>(rbf, rbeanClass, fromArray ? Arrays.asList((Object[])object) : (Iterable<?>)object);
+        }
     }
 }
