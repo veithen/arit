@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jdbc.sun;
+package com.googlecode.arit.shutdown.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 
-@RBean(target="java.sql.DriverManager", isStatic=true)
-public interface DriverManagerRBean {
-    // Java 1.5 uses "drivers" attribute.
-    // Java 1.6 has some copy-on-write feature and uses "readDrivers".
-    @Accessor(name={"drivers", "readDrivers"})
-    Iterable<DriverInfoRBean> getDrivers();
+@RBean(target="java.lang.Shutdown$WrappedHook")
+public interface WrappedHookRBean {
+    @Accessor(name="hook")
+    Thread getHook();
 }
