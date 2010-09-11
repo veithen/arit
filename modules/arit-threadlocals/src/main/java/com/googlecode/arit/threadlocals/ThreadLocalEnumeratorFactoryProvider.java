@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads;
+package com.googlecode.arit.threadlocals;
 
 import java.util.List;
-import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import com.googlecode.arit.Provider;
 import com.googlecode.arit.ProviderFinder;
-import com.googlecode.arit.threads.ThreadLocalInspector;
+import com.googlecode.arit.ResourceEnumeratorFactory;
 
-public class ThreadLocalInspectorTest {
-    @Test
-    public void test() {
+public class ThreadLocalEnumeratorFactoryProvider implements Provider<ResourceEnumeratorFactory> {
+    public ResourceEnumeratorFactory getImplementation() {
         List<ThreadLocalInspector> inspectors = ProviderFinder.find(ThreadLocalInspector.class);
-        Assert.assertEquals(1, inspectors.size());
-        ThreadLocalInspector inspector = inspectors.get(0);
-        ThreadLocal<String> threadLocal = new ThreadLocal<String>();
-        threadLocal.set("test");
-        Map<ThreadLocal<?>,Object> threadLocalMap = inspector.getThreadLocalMap(Thread.currentThread());
-        Assert.assertEquals("test", threadLocalMap.get(threadLocal));
+        return inspectors.isEmpty() ? null : new ThreadLocalEnumeratorFactory(inspectors.get(0));
     }
 }
