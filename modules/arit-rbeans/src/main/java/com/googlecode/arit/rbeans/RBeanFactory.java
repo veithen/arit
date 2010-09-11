@@ -3,6 +3,7 @@ package com.googlecode.arit.rbeans;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,14 +48,14 @@ public class RBeanFactory {
         }
         RBean rbeanAnnotation = rbeanClass.getAnnotation(RBean.class);
         if (rbeanAnnotation == null) {
-            throw new RBeanFactoryException("No RBean annotation found on class " + rbeanClass.getName());
+            throw new MissingRBeanAnnotationException("No RBean annotation found on class " + rbeanClass.getName());
         }
         String targetClassName = rbeanAnnotation.target();
         Class<?> targetClass;
         try {
             targetClass = cl.loadClass(targetClassName);
         } catch (ClassNotFoundException ex) {
-            throw new RBeanFactoryException(ex);
+            throw new TargetClassNotFoundException(ex.getMessage());
         }
         Map<Method,MethodHandler> methodHandlers = new HashMap<Method,MethodHandler>();
         for (Method proxyMethod : rbeanClass.getMethods()) {
@@ -69,13 +70,13 @@ public class RBeanFactory {
                         field.setAccessible(true);
                         break;
                     } catch (NoSuchFieldException ex) {
-                        if (exception == null) {
-                            exception = ex;
-                        }
+                        // Continue
                     }
                 }
                 if (field == null) {
-                    throw new RBeanFactoryException(exception);
+                    throw new TargetMemberNotFoundException("The class " + targetClass.getClass()
+                            + " doesn't contain any attribute with one of the following names: "
+                            + Arrays.asList(accessorAnnotation.name()));
                 }
                 methodHandler = new AccessorHandler(field, getResultHandler(proxyMethod.getReturnType(), field.getType()));
             } else {
@@ -83,7 +84,7 @@ public class RBeanFactory {
                 try {
                     targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
                 } catch (NoSuchMethodException ex) {
-                    throw new RBeanFactoryException(ex);
+                    throw new TargetMemberNotFoundException(ex.getMessage());
                 }
                 methodHandler = new SimpleMethodHandler(targetMethod, getResultHandler(proxyMethod.getReturnType(), targetMethod.getReturnType()));
             }
