@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ThreadLocalInspector threadLocalInspector;

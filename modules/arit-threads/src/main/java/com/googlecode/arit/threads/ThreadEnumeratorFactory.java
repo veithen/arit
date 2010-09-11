@@ -17,6 +17,7 @@ package com.googlecode.arit.threads;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     public String getDescription() {

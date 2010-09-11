@@ -30,6 +30,7 @@
         <module>arit-sun-apis</module>
         <module>arit-test-war</module>
         <module>arit-threads</module>
+        <module>arit-thread-utils</module>
         <module>arit-tomcat</module>
         <module>arit-war</module>
         <module>arit-websphere</module>
