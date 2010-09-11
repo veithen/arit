@@ -4,6 +4,15 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.googlecode.arit.rbeans.test1.DummyClass1;
+import com.googlecode.arit.rbeans.test1.DummyClass1RBean;
+import com.googlecode.arit.rbeans.test2.Parent;
+import com.googlecode.arit.rbeans.test2.ParentRBean;
+import com.googlecode.arit.rbeans.test3.Car;
+import com.googlecode.arit.rbeans.test3.CarRBean;
+import com.googlecode.arit.rbeans.test3.VehicleHolder;
+import com.googlecode.arit.rbeans.test3.VehicleHolderRBean;
+
 public class RBeanTest {
     @Test
     public void testPrivateAttributeAccess() throws Exception {

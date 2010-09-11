@@ -1,4 +1,4 @@
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.rbeans.test1;
 
 public class DummyClass1 {
     private String value = "somevalue";
