@@ -72,6 +72,9 @@ Invoking methods through an RBean
   RBeanFactory. To ensure this, specify the RBean types in the list passed to the constructor
   of the RBeanFactory or use the @SeeAlso annotation.
 
+  Automatically wrapping returned objects as RBeans is also supported for collections.
+  To enable this, declare the return type as Iterable\<T\>, where T is an RBean interface.
+
 Accessing attributes through an RBean
 
   To access attributes of the target object through an RBean, define a method on the
@@ -83,3 +86,9 @@ Accessing static attributes and methods
   RBean interface with <<<isStatic=true>>> in the @RBean annotation. When creating the
   RBean instance, use the variant of the <<<createRBean>>> method that doesn't take
   an instance parameter.
+
+Limitations and known issues
+
+  * While Java 5 generics are fully supported, the checks done to ensure compatibility between
+    the RBean interface and the target class are not exhaustive with respect to parameterized
+    types.

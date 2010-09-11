@@ -17,7 +17,9 @@ package com.googlecode.arit.rbeans;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,23 +79,28 @@ public class RBeanFactory {
             MethodHandler methodHandler;
             Accessor accessorAnnotation = proxyMethod.getAnnotation(Accessor.class);
             if (accessorAnnotation != null) {
-                NoSuchFieldException exception = null;
                 Field field = null;
+                ObjectHandler valueHandler = null;
                 for (String name : accessorAnnotation.name()) {
                     try {
                         field = targetClass.getDeclaredField(name);
-                        field.setAccessible(true);
-                        break;
+                        valueHandler = getObjectHandler(proxyMethod.getGenericReturnType(), field.getGenericType());
+                        if (valueHandler != null) {
+                            break;
+                        }
                     } catch (NoSuchFieldException ex) {
                         // Continue
                     }
                 }
-                if (field == null) {
+                if (valueHandler == null) {
                     throw new TargetMemberNotFoundException("The class " + targetClass.getClass()
-                            + " doesn't contain any attribute with one of the following names: "
+                            + " doesn't contain any attribute assignment compatible with "
+                            + proxyMethod.getGenericReturnType()
+                            + " and with one of the following names: "
                             + Arrays.asList(accessorAnnotation.name()));
                 }
-                methodHandler = new AccessorHandler(field, getResultHandler(proxyMethod.getReturnType(), field.getType()));
+                field.setAccessible(true);
+                methodHandler = new AccessorHandler(field, valueHandler);
             } else {
                 Method targetMethod;
                 try {
@@ -101,7 +108,13 @@ public class RBeanFactory {
                 } catch (NoSuchMethodException ex) {
                     throw new TargetMemberNotFoundException(ex.getMessage());
                 }
-                methodHandler = new SimpleMethodHandler(targetMethod, getResultHandler(proxyMethod.getReturnType(), targetMethod.getReturnType()));
+                ObjectHandler returnHandler = getObjectHandler(proxyMethod.getGenericReturnType(), targetMethod.getGenericReturnType());
+                if (returnHandler == null) {
+                    // TODO: create new exception class
+                    throw new RBeanFactoryException("The RBean method " + proxyMethod + " is not compatible with the target method "
+                            + targetMethod + " because the return types are incompatible");
+                }
+                methodHandler = new SimpleMethodHandler(targetMethod, returnHandler);
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }
@@ -114,12 +127,29 @@ public class RBeanFactory {
         }
     }
     
-    private ObjectHandler getResultHandler(Class<?> proxyReturnType, Class<?> targetReturnType) throws RBeanFactoryException {
-        if (proxyReturnType.getAnnotation(RBean.class) == null) {
-            return PassThroughHandler.INSTANCE;
+    private static Class<?> getRawType(Type genericType) {
+        if (genericType instanceof Class<?>) {
+            return (Class<?>)genericType;
         } else {
-            load(proxyReturnType);
-            return new WrappingHandler(this);
+            return (Class<?>)((ParameterizedType)genericType).getRawType();
+        }
+    }
+    
+    private ObjectHandler getObjectHandler(Type toType, Type fromType) throws RBeanFactoryException {
+        Class<?> toClass = getRawType(toType);
+        Class<?> fromClass = getRawType(fromType);
+        if (toClass.getAnnotation(RBean.class) == null) {
+            if (toClass.equals(Iterable.class)) {
+                Class<?> itemClass = getRawType(((ParameterizedType)toType).getActualTypeArguments()[0]);
+                if (itemClass.getAnnotation(RBean.class) != null) {
+                    load(itemClass);
+                    return new CollectionWrapper(this, itemClass);
+                }
+            }
+            return toClass.isAssignableFrom(fromClass) ? PassThroughHandler.INSTANCE : null;
+        } else {
+            load(toClass);
+            return new ObjectWrapper(this);
         }
     }
     
@@ -127,6 +157,7 @@ public class RBeanFactory {
         return createRBean(rbeanClass, null);
     }
     
+    // TODO: maybe we should check the runtime type of the object and return a subclass if necessary!
     public <T> T createRBean(Class<T> rbeanClass, Object object) {
         return rbeanClass.cast(createRBean(getRBeanInfo(rbeanClass), object));
     }

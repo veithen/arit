@@ -37,6 +37,11 @@ import com.googlecode.arit.rbeans.test5.NonExistingClassRBean;
 import com.googlecode.arit.rbeans.test5.NonExistingMethodRBean;
 import com.googlecode.arit.rbeans.test6.CyclicSeeAlsoRBean1;
 import com.googlecode.arit.rbeans.test6.CyclicSeeAlsoRBean2;
+import com.googlecode.arit.rbeans.test7.Driver;
+import com.googlecode.arit.rbeans.test7.DriverManager;
+import com.googlecode.arit.rbeans.test7.DriverManagerRBean;
+import com.googlecode.arit.rbeans.test7.DriverRBean;
+import com.googlecode.arit.rbeans.test8.IncompatibleAttributeTypeRBean;
 
 public class RBeanTest {
     @Test
@@ -115,5 +120,20 @@ public class RBeanTest {
     @Test(expected=MissingRBeanAnnotationException.class)
     public void testMissingRBeanAnnotation() throws Exception {
         new RBeanFactory(MissingAnnotationRBean.class);
+    }
+    
+    @Test
+    public void testWithCollectionReturn() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(DriverManagerRBean.class);
+        DriverManager driverManager = new DriverManager();
+        driverManager.registerDriver(new Driver("test"));
+        DriverManagerRBean driverManagerRBean = rbf.createRBean(DriverManagerRBean.class, driverManager);
+        DriverRBean driverRBean = driverManagerRBean.getDrivers().iterator().next();
+        Assert.assertEquals("test", driverRBean.getName());
+    }
+    
+    @Test(expected=TargetMemberNotFoundException.class)
+    public void testIncompatibleAttributeType() throws Exception {
+        new RBeanFactory(IncompatibleAttributeTypeRBean.class);
     }
 }

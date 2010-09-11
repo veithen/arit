@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.rbeans.test7;
 
-public class WrappingHandler implements ObjectHandler {
-    private final RBeanFactory rbf;
+import java.util.ArrayList;
+import java.util.List;
 
-    public WrappingHandler(RBeanFactory rbf) {
-        this.rbf = rbf;
-    }
-
-    public Object handle(Object object) {
-        return object == null ? null : rbf.createRBean(rbf.getRBeanInfoForTargetClass(object.getClass()), object);
+public class DriverManager {
+    private final List<Driver> drivers = new ArrayList<Driver>();
+    
+    public void registerDriver(Driver driver) {
+        drivers.add(driver);
     }
 }
