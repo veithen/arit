@@ -22,11 +22,13 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RBeanFactory {
     private final ClassLoader cl;
-    private final Map<Class<?>,RBeanInfo> rbeanInfoMap = new HashMap<Class<?>,RBeanInfo>();
+    // TODO: we use a LinkedHashMap to make the behavior of the factory reproducible (there seems to be a bug...)
+    private final Map<Class<?>,RBeanInfo> rbeanInfoMap = new LinkedHashMap<Class<?>,RBeanInfo>();
     
     public RBeanFactory(Class<?>... rbeanClasses) throws RBeanFactoryException {
         this(RBeanFactory.class.getClassLoader(), rbeanClasses);
