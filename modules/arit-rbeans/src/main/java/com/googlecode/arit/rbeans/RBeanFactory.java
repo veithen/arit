@@ -118,11 +118,11 @@ public class RBeanFactory {
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
         if (rbeanInfo.isStatic()) {
             if (object != null) {
-                throw new IllegalArgumentException("No object expected for static RBean");
+                throw new IllegalArgumentException("No object expected for static RBean " + rbeanInfo.getRBeanClass().getName());
             }
         } else {
             if (object == null) {
-                throw new IllegalArgumentException("Object must not be null");
+                throw new IllegalArgumentException("Object must not be null because " + rbeanInfo.getRBeanClass().getName() + " is not static");
             }
         }
         return Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),

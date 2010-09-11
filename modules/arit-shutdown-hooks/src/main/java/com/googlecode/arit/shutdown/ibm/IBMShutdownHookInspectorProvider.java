@@ -1,4 +1,4 @@
-package com.googlecode.arit.shutdown;
+package com.googlecode.arit.shutdown.ibm;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.arit.Provider;
+import com.googlecode.arit.shutdown.ShutdownHookInspector;
 import com.googlecode.arit.util.ReflectionUtil;
 
 public class IBMShutdownHookInspectorProvider implements Provider<ShutdownHookInspector> {
