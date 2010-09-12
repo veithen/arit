@@ -15,16 +15,13 @@
  */
 package com.googlecode.arit.threads;
 
-import com.googlecode.arit.Provider;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.rbeans.Accessor;
+import com.googlecode.arit.rbeans.RBean;
 
-public class DefaultThreadInspectorProvider implements Provider<ThreadInspector> {
-    public ThreadInspector getImplementation() {
-        try {
-            return new DefaultThreadInspector(new RBeanFactory(ThreadRBean.class));
-        } catch (RBeanFactoryException ex) {
-            return null;
-        }
-    }
+@RBean(target="java.lang.Thread")
+public interface ThreadRBean {
+    // "target" is used by Sun (1.5 and 1.6)
+    // "runnable" is used by IBM
+    @Accessor(name={"target", "runnable"})
+    Runnable getTarget();
 }

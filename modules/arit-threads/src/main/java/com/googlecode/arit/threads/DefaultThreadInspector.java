@@ -15,9 +15,10 @@
  */
 package com.googlecode.arit.threads;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.googlecode.arit.rbeans.RBeanFactory;
 
 /**
  * Thread inspector that retrieves the {@link Runnable} from the thread.
@@ -25,19 +26,14 @@ import java.util.Set;
  * @author Andreas Veithen
  */
 public class DefaultThreadInspector implements ThreadInspector {
-    private final Field targetField;
+    private final RBeanFactory rbf;
     
-    public DefaultThreadInspector(Field targetField) {
-        this.targetField = targetField;
+    public DefaultThreadInspector(RBeanFactory rbf) {
+        this.rbf = rbf;
     }
 
     public ThreadDescription getDescription(Thread thread) {
-        Runnable target;
-        try {
-            target = (Runnable)targetField.get(thread);
-        } catch (IllegalAccessException ex) {
-            throw new IllegalAccessError(ex.getMessage());
-        }
+        Runnable target = rbf.createRBean(ThreadRBean.class, thread).getTarget();
         StringBuilder description = new StringBuilder("Thread");
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
         classLoaders.add(thread.getContextClassLoader());
