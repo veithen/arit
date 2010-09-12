@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads;
+package com.googlecode.arit.threads.ibm;
 
 import com.googlecode.arit.Provider;
-import com.googlecode.arit.util.ReflectionUtil;
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threads.ThreadInspector;
 
 public class IBMTimerThreadInspectorProvider implements Provider<ThreadInspector> {
     public ThreadInspector getImplementation() {
         try {
-            Class<?> timerThreadClass = Class.forName("java.util.Timer$TimerImpl");
-            Class<?> taskQueueClass = Class.forName("java.util.Timer$TimerImpl$TimerHeap");
-            return new TimerThreadInspector(timerThreadClass,
-                    ReflectionUtil.getField(timerThreadClass, "tasks"),
-                    ReflectionUtil.getField(taskQueueClass, "timers"));
-        } catch (ClassNotFoundException ex) {
-            return null;
-        } catch (NoSuchFieldException ex) {
+            return new IBMTimerThreadInspector(new RBeanFactory(TimerImplRBean.class));
+        } catch (RBeanFactoryException ex) {
             return null;
         }
     }
