@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit;
 
+// TODO: rename to ResourceType
 public interface ResourceEnumeratorFactory {
     String getDescription();
     ResourceEnumerator createEnumerator();
