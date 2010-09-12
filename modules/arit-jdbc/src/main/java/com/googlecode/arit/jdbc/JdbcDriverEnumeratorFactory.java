@@ -17,10 +17,13 @@ package com.googlecode.arit.jdbc;
 
 import java.util.List;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
+@Component(role=ResourceEnumeratorFactory.class, hint="jdbc")
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     private final DriverManagerInspector driverManagerInspector;
 

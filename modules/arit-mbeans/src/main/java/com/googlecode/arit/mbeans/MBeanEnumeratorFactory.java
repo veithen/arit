@@ -19,10 +19,13 @@ import java.util.List;
 
 import javax.management.MBeanServerFactory;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
+@Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     private final List<MBeanServerInspector> mbsInspectors; 
     

@@ -17,10 +17,13 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
+@Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ShutdownHookInspector inspector;
 

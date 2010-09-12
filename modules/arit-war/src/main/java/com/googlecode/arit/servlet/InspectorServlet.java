@@ -33,7 +33,6 @@ import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
-import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
@@ -61,17 +60,17 @@ public class InspectorServlet extends HttpServlet {
                     break;
                 }
             }
+            for (ResourceEnumeratorFactory resourceEnumeratorFactory : container.lookupList(ResourceEnumeratorFactory.class)) {
+                if (resourceEnumeratorFactory.isAvailable()) {
+                    availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+                } else {
+                    unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+                }
+            }
         } catch (PlexusContainerException ex) {
             throw new ServletException(ex);
         } catch (ComponentLookupException ex) {
             throw new ServletException(ex);
-        }
-        for (ResourceEnumeratorFactory resourceEnumeratorFactory : ProviderFinder.find(ResourceEnumeratorFactory.class)) {
-            if (resourceEnumeratorFactory.isAvailable()) {
-                availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            } else {
-                unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            }
         }
     }
 

@@ -21,11 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
+@Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ThreadLocalInspector threadLocalInspector;
 
