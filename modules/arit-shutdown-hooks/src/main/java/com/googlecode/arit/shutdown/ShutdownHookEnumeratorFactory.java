@@ -15,14 +15,22 @@
  */
 package com.googlecode.arit.shutdown;
 
+import java.util.List;
+
+import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ShutdownHookInspector inspector;
 
-    public ShutdownHookEnumeratorFactory(ShutdownHookInspector inspector) {
-        this.inspector = inspector;
+    public ShutdownHookEnumeratorFactory() {
+        List<ShutdownHookInspector> inspectors = ProviderFinder.find(ShutdownHookInspector.class);
+        inspector = inspectors.isEmpty() ? null : inspectors.get(0);
+    }
+
+    public boolean isAvailable() {
+        return inspector != null;
     }
 
     public String getDescription() {

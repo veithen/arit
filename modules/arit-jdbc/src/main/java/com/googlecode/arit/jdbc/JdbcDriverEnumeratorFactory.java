@@ -15,14 +15,22 @@
  */
 package com.googlecode.arit.jdbc;
 
+import java.util.List;
+
+import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     private final DriverManagerInspector driverManagerInspector;
 
-    public JdbcDriverEnumeratorFactory(DriverManagerInspector driverManagerInspector) {
-        this.driverManagerInspector = driverManagerInspector;
+    public JdbcDriverEnumeratorFactory() {
+        List<DriverManagerInspector> inspectors = ProviderFinder.find(DriverManagerInspector.class);
+        driverManagerInspector = inspectors.isEmpty() ? null : inspectors.get(0);
+    }
+
+    public boolean isAvailable() {
+        return driverManagerInspector != null;
     }
 
     public String getDescription() {

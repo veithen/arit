@@ -43,7 +43,8 @@ import com.googlecode.arit.ServerProfileFactory;
 public class InspectorServlet extends HttpServlet {
     private PlexusContainer container;
     private ServerProfile profile;
-    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    private final List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
+    private final List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     
     private ServerContext getServerContext() {
         return new ServerContext(getServletContext(), getClass().getClassLoader());
@@ -65,12 +66,20 @@ public class InspectorServlet extends HttpServlet {
         } catch (ComponentLookupException ex) {
             throw new ServletException(ex);
         }
-        resourceEnumeratorFactories = ProviderFinder.find(ResourceEnumeratorFactory.class);
+        for (ResourceEnumeratorFactory resourceEnumeratorFactory : ProviderFinder.find(ResourceEnumeratorFactory.class)) {
+            if (resourceEnumeratorFactory.isAvailable()) {
+                availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+            } else {
+                unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+            }
+        }
     }
 
     @Override
     public void destroy() {
         container.dispose();
+        availableResourceEnumeratorFactories.clear();
+        unavailableResourceEnumeratorFactories.clear();
     }
 
     @Override
@@ -81,7 +90,7 @@ public class InspectorServlet extends HttpServlet {
         } else {
             List<Application> applications = new ArrayList<Application>();
             Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
-            for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
+            for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.next()) {
                     for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
@@ -112,7 +121,8 @@ public class InspectorServlet extends HttpServlet {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
-            request.setAttribute("factories", resourceEnumeratorFactories);
+            // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
+            request.setAttribute("factories", availableResourceEnumeratorFactories);
             request.setAttribute("applications", applications);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }

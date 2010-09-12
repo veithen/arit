@@ -19,14 +19,19 @@ import java.util.List;
 
 import javax.management.MBeanServerFactory;
 
+import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     private final List<MBeanServerInspector> mbsInspectors; 
     
-    public MBeanEnumeratorFactory(List<MBeanServerInspector> mbsInspectors) {
-        this.mbsInspectors = mbsInspectors;
+    public MBeanEnumeratorFactory() {
+        mbsInspectors = ProviderFinder.find(MBeanServerInspector.class);
+    }
+
+    public boolean isAvailable() {
+        return !mbsInspectors.isEmpty();
     }
 
     public String getDescription() {

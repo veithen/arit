@@ -20,6 +20,10 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
+    public boolean isAvailable() {
+        return true;
+    }
+
     public String getDescription() {
         return "Threads and timers";
     }

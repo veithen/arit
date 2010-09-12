@@ -17,9 +17,11 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadUtils;
@@ -27,8 +29,13 @@ import com.googlecode.arit.threadutils.ThreadUtils;
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ThreadLocalInspector threadLocalInspector;
 
-    public ThreadLocalEnumeratorFactory(ThreadLocalInspector threadLocalInspector) {
-        this.threadLocalInspector = threadLocalInspector;
+    public ThreadLocalEnumeratorFactory() {
+        List<ThreadLocalInspector> inspectors = ProviderFinder.find(ThreadLocalInspector.class);
+        threadLocalInspector = inspectors.isEmpty() ? null : inspectors.get(0);
+    }
+
+    public boolean isAvailable() {
+        return threadLocalInspector != null;
     }
 
     public String getDescription() {
