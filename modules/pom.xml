@@ -23,6 +23,7 @@
         <module>arit-api</module>
         <module>arit-ear</module>
         <module>arit-jdbc</module>
+        <module>arit-jee</module>
         <module>arit-jetty</module>
         <module>arit-mbeans</module>
         <module>arit-rbeans</module>
