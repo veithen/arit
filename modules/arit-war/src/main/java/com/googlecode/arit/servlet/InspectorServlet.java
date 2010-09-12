@@ -29,7 +29,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.servlet.PlexusServletUtils;
 
 import com.googlecode.arit.ResourceEnumerator;
@@ -38,10 +43,17 @@ import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.ServerProfileFactory;
 
+@Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
+    @Requirement(role=ServerProfileFactory.class)
+    private List<ServerProfileFactory> serverProfileFactories;
+    
+    @Requirement(role=ResourceEnumeratorFactory.class)
+    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    
     private ServerProfile profile;
-    private final List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
-    private final List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
+    private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
+    private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     
     private ServerContext getServerContext() {
         return new ServerContext(getServletContext(), getClass().getClassLoader());
@@ -49,24 +61,19 @@ public class InspectorServlet extends HttpServlet {
     
     @Override
     public void init() throws ServletException {
-        try {
-            PlexusContainer container = PlexusServletUtils.getPlexusContainer(getServletContext());
-            ServerContext serverContext = getServerContext();
-            for (ServerProfileFactory spf : container.lookupList(ServerProfileFactory.class)) {
-                profile = spf.createServerProfile(serverContext);
-                if (profile != null) {
-                    break;
-                }
+        ServerContext serverContext = getServerContext();
+        for (ServerProfileFactory spf : serverProfileFactories) {
+            profile = spf.createServerProfile(serverContext);
+            if (profile != null) {
+                break;
             }
-            for (ResourceEnumeratorFactory resourceEnumeratorFactory : container.lookupList(ResourceEnumeratorFactory.class)) {
-                if (resourceEnumeratorFactory.isAvailable()) {
-                    availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-                } else {
-                    unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-                }
+        }
+        for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
+            if (resourceEnumeratorFactory.isAvailable()) {
+                availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+            } else {
+                unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
             }
-        } catch (ComponentLookupException ex) {
-            throw new ServletException(ex);
         }
     }
 
