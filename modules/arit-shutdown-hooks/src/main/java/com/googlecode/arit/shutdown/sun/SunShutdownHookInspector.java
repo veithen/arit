@@ -19,32 +19,41 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.googlecode.arit.Provider;
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.shutdown.ShutdownHookInspector;
 
-public class SunShutdownHookInspectorProvider implements Provider<ShutdownHookInspector> {
-    public ShutdownHookInspector getImplementation() {
+@Component(role=ShutdownHookInspector.class, hint="sun")
+public class SunShutdownHookInspector implements ShutdownHookInspector {
+    private final ShutdownRBean shutdown;
+    
+    public SunShutdownHookInspector() {
+        ShutdownRBean shutdown;
         try {
             RBeanFactory rbf = new RBeanFactory(ShutdownRBean.class);
-            final ShutdownRBean shutdown = rbf.createRBean(ShutdownRBean.class);
-            return new ShutdownHookInspector() {
-                public List<Thread> getShutdownHooks() {
-                    Iterable<WrappedHookRBean> wrappedHooks = shutdown.getHooks();
-                    if (wrappedHooks != null) {
-                        List<Thread> hooks = new ArrayList<Thread>();
-                        for (WrappedHookRBean wrappedHook : wrappedHooks) {
-                            hooks.add(wrappedHook.getHook());
-                        }
-                        return hooks;
-                    } else {
-                        return Collections.emptyList();
-                    }
-                }
-            };
+            shutdown = rbf.createRBean(ShutdownRBean.class);
         } catch (RBeanFactoryException ex) {
-            return null;
+            shutdown = null;
+        }
+        this.shutdown = shutdown;
+    }
+
+    public boolean isAvailable() {
+        return shutdown != null;
+    }
+
+    public List<Thread> getShutdownHooks() {
+        Iterable<WrappedHookRBean> wrappedHooks = shutdown.getHooks();
+        if (wrappedHooks != null) {
+            List<Thread> hooks = new ArrayList<Thread>();
+            for (WrappedHookRBean wrappedHook : wrappedHooks) {
+                hooks.add(wrappedHook.getHook());
+            }
+            return hooks;
+        } else {
+            return Collections.emptyList();
         }
     }
 }

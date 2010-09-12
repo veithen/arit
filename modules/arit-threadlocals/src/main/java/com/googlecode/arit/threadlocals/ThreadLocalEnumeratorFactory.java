@@ -22,23 +22,28 @@ import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
-import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
-    private final ThreadLocalInspector threadLocalInspector;
-
-    public ThreadLocalEnumeratorFactory() {
-        List<ThreadLocalInspector> inspectors = ProviderFinder.find(ThreadLocalInspector.class);
-        threadLocalInspector = inspectors.isEmpty() ? null : inspectors.get(0);
+    @Requirement(role=ThreadLocalInspector.class)
+    private List<ThreadLocalInspector> inspectors;
+    
+    private ThreadLocalInspector getInspector() {
+        for (ThreadLocalInspector inspector : inspectors) {
+            if (inspector.isAvailable()) {
+                return inspector;
+            }
+        }
+        return null;
     }
 
     public boolean isAvailable() {
-        return threadLocalInspector != null;
+        return getInspector() != null;
     }
 
     public String getDescription() {
@@ -46,9 +51,10 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
+        ThreadLocalInspector inspector = getInspector();
         Map<ThreadLocal<?>,Set<Class<?>>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<Class<?>>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {
-            for (Map.Entry<ThreadLocal<?>,Object> entry : threadLocalInspector.getThreadLocalMap(thread).entrySet()) {
+            for (Map.Entry<ThreadLocal<?>,Object> entry : inspector.getThreadLocalMap(thread).entrySet()) {
                 ThreadLocal<?> threadLocal = entry.getKey();
                 Object value = entry.getValue();
                 if (value != null) {

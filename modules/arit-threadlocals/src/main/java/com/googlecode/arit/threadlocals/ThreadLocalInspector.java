@@ -18,5 +18,6 @@ package com.googlecode.arit.threadlocals;
 import java.util.Map;
 
 public interface ThreadLocalInspector {
+    boolean isAvailable();
     Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);
 }

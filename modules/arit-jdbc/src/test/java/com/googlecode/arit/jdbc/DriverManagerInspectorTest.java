@@ -18,22 +18,29 @@ package com.googlecode.arit.jdbc;
 import java.sql.DriverManager;
 import java.util.List;
 
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.googlecode.arit.ProviderFinder;
-import com.googlecode.arit.jdbc.DriverManagerInspector;
 
 public class DriverManagerInspectorTest {
     @Test
     public void test() throws Exception {
-        List<DriverManagerInspector> inspectors = ProviderFinder.find(DriverManagerInspector.class);
-        Assert.assertEquals(1, inspectors.size());
-        DriverManagerInspector inspector = inspectors.get(0);
+        PlexusContainer container = new DefaultPlexusContainer();
+        List<DriverManagerInspector> inspectors = container.lookupList(DriverManagerInspector.class);
+        DriverManagerInspector inspector = null;
+        for (DriverManagerInspector candidate : inspectors) {
+            if (candidate.isAvailable()) {
+                inspector = candidate;
+                break;
+            }
+        }
+        Assert.assertNotNull(inspector);
         MyDriver driver = new MyDriver();
         DriverManager.registerDriver(driver);
         List<Class<?>> classes = inspector.getDriverClasses();
         Assert.assertTrue(classes.contains(MyDriver.class));
         DriverManager.deregisterDriver(driver);
+        container.dispose();
     }
 }

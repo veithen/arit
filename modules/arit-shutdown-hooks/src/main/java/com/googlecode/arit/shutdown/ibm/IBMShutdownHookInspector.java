@@ -19,24 +19,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.arit.Provider;
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.shutdown.ShutdownHookInspector;
 
-public class IBMShutdownHookInspectorProvider implements Provider<ShutdownHookInspector> {
-    public ShutdownHookInspector getImplementation() {
+@Component(role=ShutdownHookInspector.class, hint="ibm")
+public class IBMShutdownHookInspector implements ShutdownHookInspector {
+    private final Map<Thread,Thread> hooks;
+    
+    public IBMShutdownHookInspector() {
+        Map<Thread,Thread> hooks;
         try {
             RBeanFactory rbf = new RBeanFactory(ApplicationShutdownHooksRBean.class);
             ApplicationShutdownHooksRBean rbean = rbf.createRBean(ApplicationShutdownHooksRBean.class);
-            final Map<Thread,Thread> hooks = rbean.getHooks();
-            return new ShutdownHookInspector() {
-                public List<Thread> getShutdownHooks() {
-                    return new ArrayList<Thread>(hooks.values());
-                }
-            };
+            hooks = rbean.getHooks();
 		} catch (RBeanFactoryException ex) {
-		    return null;
+		    hooks = null;
         }
+		this.hooks = hooks;
+    }
+    
+    public boolean isAvailable() {
+        return hooks != null;
+    }
+
+    public List<Thread> getShutdownHooks() {
+        return new ArrayList<Thread>(hooks.values());
     }
 }

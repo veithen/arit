@@ -18,13 +18,27 @@ package com.googlecode.arit.threadlocals;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
+import org.codehaus.plexus.component.annotations.Component;
 
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
+
+@Component(role=ThreadLocalInspector.class)
 public class DefaultThreadLocalInspector implements ThreadLocalInspector {
     private final RBeanFactory rbf;
     
-    public DefaultThreadLocalInspector(RBeanFactory rbf) {
+    public DefaultThreadLocalInspector() {
+        RBeanFactory rbf;
+        try {
+            rbf = new RBeanFactory(ThreadRBean.class);
+        } catch (RBeanFactoryException ex) {
+            rbf = null;
+        }
         this.rbf = rbf;
+    }
+
+    public boolean isAvailable() {
+        return rbf != null;
     }
 
     public Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread) {

@@ -18,5 +18,6 @@ package com.googlecode.arit.mbeans;
 import javax.management.MBeanServer;
 
 public interface MBeanServerInspector {
+    boolean isAvailable();
     MBeanRepository inspect(MBeanServer mbs);
 }

@@ -20,25 +20,33 @@ import java.lang.management.ManagementFactory;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import com.googlecode.arit.ProviderFinder;
-
 import junit.framework.TestCase;
+
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
 
 public class MBeanServerInspectorTest extends TestCase {
     public void test() throws Exception {
+        PlexusContainer container = new DefaultPlexusContainer();
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Object mbean = new Dummy();
         ObjectName name = new ObjectName("Test:type=Dummy");
         mbs.registerMBean(mbean, name);
+        boolean found = false;
         try {
-            for (MBeanServerInspector inspector : ProviderFinder.find(MBeanServerInspector.class)) {
-                MBeanRepository repository = inspector.inspect(mbs);
-                if (repository != null) {
-                    assertSame(mbean, repository.retrieve(name));
+            for (MBeanServerInspector inspector : container.lookupList(MBeanServerInspector.class)) {
+                if (inspector.isAvailable()) {
+                    MBeanRepository repository = inspector.inspect(mbs);
+                    if (repository != null) {
+                        assertSame(mbean, repository.retrieve(name));
+                        found = true;
+                    }
                 }
             }
         } finally {
             mbs.unregisterMBean(name);
         }
+        assertTrue(found);
+        container.dispose();
     }
 }

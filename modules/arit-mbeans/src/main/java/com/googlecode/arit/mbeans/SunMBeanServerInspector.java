@@ -17,16 +17,30 @@ package com.googlecode.arit.mbeans;
 
 import javax.management.MBeanServer;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.sun.jmx.mbeanserver.Repository;
 
+@Component(role=MBeanServerInspector.class, hint="sun")
 public class SunMBeanServerInspector implements MBeanServerInspector {
     private final RBeanFactory rbf;
     private final boolean isJava6;
     
-    public SunMBeanServerInspector(RBeanFactory rbf, boolean isJava6) {
+    public SunMBeanServerInspector() {
+        RBeanFactory rbf;
+        try {
+            rbf = new RBeanFactory(JmxMBeanServerRBean.class);
+        } catch (RBeanFactoryException ex) {
+            rbf = null;
+        }
         this.rbf = rbf;
-        this.isJava6 = isJava6;
+        isJava6 = !System.getProperty("java.version").startsWith("1.5");
+    }
+
+    public boolean isAvailable() {
+        return rbf != null;
     }
 
     public MBeanRepository inspect(MBeanServer mbs) {

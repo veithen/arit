@@ -18,21 +18,28 @@ package com.googlecode.arit.threadlocals;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.googlecode.arit.ProviderFinder;
-import com.googlecode.arit.threadlocals.ThreadLocalInspector;
-
 public class ThreadLocalInspectorTest {
     @Test
-    public void test() {
-        List<ThreadLocalInspector> inspectors = ProviderFinder.find(ThreadLocalInspector.class);
-        Assert.assertEquals(1, inspectors.size());
-        ThreadLocalInspector inspector = inspectors.get(0);
+    public void test() throws Exception {
+        PlexusContainer container = new DefaultPlexusContainer();
+        List<ThreadLocalInspector> inspectors = container.lookupList(ThreadLocalInspector.class);
+        ThreadLocalInspector inspector = null;
+        for (ThreadLocalInspector candidate : inspectors) {
+            if (candidate.isAvailable()) {
+                inspector = candidate;
+                break;
+            }
+        }
+        Assert.assertNotNull(inspector);
         ThreadLocal<String> threadLocal = new ThreadLocal<String>();
         threadLocal.set("test");
         Map<ThreadLocal<?>,Object> threadLocalMap = inspector.getThreadLocalMap(Thread.currentThread());
         Assert.assertEquals("test", threadLocalMap.get(threadLocal));
+        container.dispose();
     }
 }

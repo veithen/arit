@@ -20,21 +20,23 @@ import java.util.List;
 import javax.management.MBeanServerFactory;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
-import com.googlecode.arit.ProviderFinder;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
-    private final List<MBeanServerInspector> mbsInspectors; 
+    @Requirement(role=MBeanServerInspector.class)
+    private List<MBeanServerInspector> mbsInspectors; 
     
-    public MBeanEnumeratorFactory() {
-        mbsInspectors = ProviderFinder.find(MBeanServerInspector.class);
-    }
-
     public boolean isAvailable() {
-        return !mbsInspectors.isEmpty();
+        for (MBeanServerInspector inspector : mbsInspectors) {
+            if (inspector.isAvailable()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getDescription() {

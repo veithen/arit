@@ -19,29 +19,38 @@ import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.arit.Provider;
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.jdbc.DriverManagerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-public class IBMDriverManagerInspectorProvider implements Provider<DriverManagerInspector> {
-    public DriverManagerInspector getImplementation() {
+@Component(role=DriverManagerInspector.class, hint="ibm")
+public class IBMDriverManagerInspector implements DriverManagerInspector {
+    private final List<Driver> drivers;
+    
+    public IBMDriverManagerInspector() {
+        List<Driver> drivers;
         try {
             RBeanFactory rbf = new RBeanFactory(DriverManagerRBean.class);
             // "theDrivers" is a final field; we only need to retrieve it once
             DriverManagerRBean driverManager = rbf.createRBean(DriverManagerRBean.class);
-            final List<Driver> drivers = driverManager.getDrivers();
-            return new DriverManagerInspector() {
-                public List<Class<?>> getDriverClasses() {
-                    List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
-                    for (Object driver : drivers) {
-                        driverClasses.add(driver.getClass());
-                    }
-                    return driverClasses;
-                }
-            };
+            drivers = driverManager.getDrivers();
         } catch (RBeanFactoryException ex) {
-            return null;
+            drivers = null;
         }
+        this.drivers = drivers;
+    }
+    
+    public boolean isAvailable() {
+        return drivers != null;
+    }
+
+    public List<Class<?>> getDriverClasses() {
+        List<Class<?>> driverClasses = new ArrayList<Class<?>>(drivers.size());
+        for (Object driver : drivers) {
+            driverClasses.add(driver.getClass());
+        }
+        return driverClasses;
     }
 }
