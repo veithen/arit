@@ -21,19 +21,12 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class ShutdownHookInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        List<ShutdownHookInspector> inspectors = getContainer().lookupList(ShutdownHookInspector.class);
-        ShutdownHookInspector inspector = null;
-        for (ShutdownHookInspector candidate : inspectors) {
-            if (candidate.isAvailable()) {
-                inspector = candidate;
-                break;
-            }
-        }
-        assertNotNull(inspector);
+        ShutdownHookInspectorManager inspectorManager = lookup(ShutdownHookInspectorManager.class);
+        assertTrue(inspectorManager.isAvailable());
         Thread hook = new Thread();
         Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(hook);
-        List<Thread> hooks = inspector.getShutdownHooks();
+        List<Thread> hooks = inspectorManager.getInspector().getShutdownHooks();
         assertTrue(hooks.contains(hook));
         runtime.removeShutdownHook(hook);
     }

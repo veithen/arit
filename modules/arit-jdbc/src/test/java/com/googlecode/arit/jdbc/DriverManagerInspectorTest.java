@@ -22,18 +22,11 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class DriverManagerInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        List<DriverManagerInspector> inspectors = getContainer().lookupList(DriverManagerInspector.class);
-        DriverManagerInspector inspector = null;
-        for (DriverManagerInspector candidate : inspectors) {
-            if (candidate.isAvailable()) {
-                inspector = candidate;
-                break;
-            }
-        }
-        assertNotNull(inspector);
+        DriverManagerInspectorManager inspectorManager = lookup(DriverManagerInspectorManager.class);
+        assertTrue(inspectorManager.isAvailable());
         MyDriver driver = new MyDriver();
         DriverManager.registerDriver(driver);
-        List<Class<?>> classes = inspector.getDriverClasses();
+        List<Class<?>> classes = inspectorManager.getInspector().getDriverClasses();
         assertTrue(classes.contains(MyDriver.class));
         DriverManager.deregisterDriver(driver);
     }

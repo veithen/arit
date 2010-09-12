@@ -17,7 +17,8 @@ package com.googlecode.arit.jdbc;
 
 import java.util.List;
 
-public interface DriverManagerInspector {
-    boolean isAvailable();
+import com.googlecode.arit.Inspector;
+
+public interface DriverManagerInspector extends Inspector {
     List<Class<?>> getDriverClasses();
 }

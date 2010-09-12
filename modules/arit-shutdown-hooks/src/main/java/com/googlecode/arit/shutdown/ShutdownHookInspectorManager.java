@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit.shutdown;
 
-import java.util.Map;
+import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.Inspector;
+import com.googlecode.arit.SingletonInspectorManager;
 
-public interface ThreadLocalInspector extends Inspector {
-    Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);
+@Component(role=ShutdownHookInspectorManager.class)
+public class ShutdownHookInspectorManager extends SingletonInspectorManager<ShutdownHookInspector> {
+    public ShutdownHookInspectorManager() {
+        super(ShutdownHookInspector.class);
+    }
 }

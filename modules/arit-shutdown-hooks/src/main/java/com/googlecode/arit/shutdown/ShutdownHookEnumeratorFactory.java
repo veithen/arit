@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.shutdown;
 
-import java.util.List;
-
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
@@ -25,20 +23,11 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(role=ShutdownHookInspector.class)
-    private List<ShutdownHookInspector> inspectors;
-
-    private ShutdownHookInspector getInspector() {
-        for (ShutdownHookInspector inspector : inspectors) {
-            if (inspector.isAvailable()) {
-                return inspector;
-            }
-        }
-        return null;
-    }
+    @Requirement
+    private ShutdownHookInspectorManager inspectorManager;
 
     public boolean isAvailable() {
-        return getInspector() != null;
+        return inspectorManager.isAvailable();
     }
 
     public String getDescription() {
@@ -46,6 +35,6 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ShutdownHookEnumerator(getInspector().getShutdownHooks());
+        return new ShutdownHookEnumerator(inspectorManager.getInspector().getShutdownHooks());
     }
 }

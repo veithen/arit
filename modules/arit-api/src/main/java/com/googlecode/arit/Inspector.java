@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit;
 
-import java.util.Map;
-
-import com.googlecode.arit.Inspector;
-
-public interface ThreadLocalInspector extends Inspector {
-    Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);
+public interface Inspector {
+    boolean isAvailable();
 }

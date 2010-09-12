@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.jdbc;
 
-import java.util.List;
-
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
@@ -25,20 +23,11 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="jdbc")
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(role=DriverManagerInspector.class)
-    private List<DriverManagerInspector> inspectors;
+    @Requirement
+    private DriverManagerInspectorManager inspectorManager;
 
-    private DriverManagerInspector getInspector() {
-        for (DriverManagerInspector inspector : inspectors) {
-            if (inspector.isAvailable()) {
-                return inspector;
-            }
-        }
-        return null;
-    }
-    
     public boolean isAvailable() {
-        return getInspector() != null;
+        return inspectorManager.isAvailable();
     }
 
     public String getDescription() {
@@ -46,6 +35,6 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new JdbcDriverEnumerator(getInspector().getDriverClasses());
+        return new JdbcDriverEnumerator(inspectorManager.getInspector().getDriverClasses());
     }
 }

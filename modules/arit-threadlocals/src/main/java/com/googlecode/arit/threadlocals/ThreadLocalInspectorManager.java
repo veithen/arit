@@ -15,10 +15,13 @@
  */
 package com.googlecode.arit.threadlocals;
 
-import java.util.Map;
+import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.Inspector;
+import com.googlecode.arit.SingletonInspectorManager;
 
-public interface ThreadLocalInspector extends Inspector {
-    Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);
+@Component(role=ThreadLocalInspectorManager.class)
+public class ThreadLocalInspectorManager extends SingletonInspectorManager<ThreadLocalInspector> {
+    public ThreadLocalInspectorManager() {
+        super(ThreadLocalInspector.class);
+    }
 }

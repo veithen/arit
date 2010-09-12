@@ -17,7 +17,8 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
-public interface ShutdownHookInspector {
-    boolean isAvailable();
+import com.googlecode.arit.Inspector;
+
+public interface ShutdownHookInspector extends Inspector {
     List<Thread> getShutdownHooks();
 }
