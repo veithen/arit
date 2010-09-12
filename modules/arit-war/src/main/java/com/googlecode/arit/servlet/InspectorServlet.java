@@ -28,10 +28,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.servlet.PlexusServletUtils;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -40,7 +39,6 @@ import com.googlecode.arit.ServerProfile;
 import com.googlecode.arit.ServerProfileFactory;
 
 public class InspectorServlet extends HttpServlet {
-    private PlexusContainer container;
     private ServerProfile profile;
     private final List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     private final List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
@@ -52,7 +50,7 @@ public class InspectorServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            container = new DefaultPlexusContainer();
+            PlexusContainer container = PlexusServletUtils.getPlexusContainer(getServletContext());
             ServerContext serverContext = getServerContext();
             for (ServerProfileFactory spf : container.lookupList(ServerProfileFactory.class)) {
                 profile = spf.createServerProfile(serverContext);
@@ -67,8 +65,6 @@ public class InspectorServlet extends HttpServlet {
                     unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
                 }
             }
-        } catch (PlexusContainerException ex) {
-            throw new ServletException(ex);
         } catch (ComponentLookupException ex) {
             throw new ServletException(ex);
         }
@@ -76,7 +72,6 @@ public class InspectorServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        container.dispose();
         availableResourceEnumeratorFactories.clear();
         unavailableResourceEnumeratorFactories.clear();
     }

@@ -3,6 +3,9 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     version="2.5">
     <display-name>Arit Web Application</display-name>
+    <listener>
+        <listener-class>org.codehaus.plexus.servlet.PlexusServletContextListener</listener-class>
+    </listener>
     <servlet>
         <display-name>Inspector servlet</display-name>
         <servlet-name>InspectorServlet</servlet-name>
