@@ -17,16 +17,11 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.codehaus.plexus.PlexusContainer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.codehaus.plexus.PlexusTestCase;
 
-public class ShutdownHookInspectorTest {
-    @Test
+public class ShutdownHookInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        PlexusContainer container = new DefaultPlexusContainer();
-        List<ShutdownHookInspector> inspectors = container.lookupList(ShutdownHookInspector.class);
+        List<ShutdownHookInspector> inspectors = getContainer().lookupList(ShutdownHookInspector.class);
         ShutdownHookInspector inspector = null;
         for (ShutdownHookInspector candidate : inspectors) {
             if (candidate.isAvailable()) {
@@ -34,13 +29,12 @@ public class ShutdownHookInspectorTest {
                 break;
             }
         }
-        Assert.assertNotNull(inspector);
+        assertNotNull(inspector);
         Thread hook = new Thread();
         Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(hook);
         List<Thread> hooks = inspector.getShutdownHooks();
-        Assert.assertTrue(hooks.contains(hook));
+        assertTrue(hooks.contains(hook));
         runtime.removeShutdownHook(hook);
-        container.dispose();
     }
 }

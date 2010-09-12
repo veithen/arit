@@ -18,16 +18,11 @@ package com.googlecode.arit.threadlocals;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.codehaus.plexus.PlexusContainer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.codehaus.plexus.PlexusTestCase;
 
-public class ThreadLocalInspectorTest {
-    @Test
+public class ThreadLocalInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        PlexusContainer container = new DefaultPlexusContainer();
-        List<ThreadLocalInspector> inspectors = container.lookupList(ThreadLocalInspector.class);
+        List<ThreadLocalInspector> inspectors = getContainer().lookupList(ThreadLocalInspector.class);
         ThreadLocalInspector inspector = null;
         for (ThreadLocalInspector candidate : inspectors) {
             if (candidate.isAvailable()) {
@@ -35,11 +30,10 @@ public class ThreadLocalInspectorTest {
                 break;
             }
         }
-        Assert.assertNotNull(inspector);
+        assertNotNull(inspector);
         ThreadLocal<String> threadLocal = new ThreadLocal<String>();
         threadLocal.set("test");
         Map<ThreadLocal<?>,Object> threadLocalMap = inspector.getThreadLocalMap(Thread.currentThread());
-        Assert.assertEquals("test", threadLocalMap.get(threadLocal));
-        container.dispose();
+        assertEquals("test", threadLocalMap.get(threadLocal));
     }
 }

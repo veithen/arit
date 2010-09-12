@@ -18,16 +18,11 @@ package com.googlecode.arit.jdbc;
 import java.sql.DriverManager;
 import java.util.List;
 
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.codehaus.plexus.PlexusContainer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.codehaus.plexus.PlexusTestCase;
 
-public class DriverManagerInspectorTest {
-    @Test
+public class DriverManagerInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        PlexusContainer container = new DefaultPlexusContainer();
-        List<DriverManagerInspector> inspectors = container.lookupList(DriverManagerInspector.class);
+        List<DriverManagerInspector> inspectors = getContainer().lookupList(DriverManagerInspector.class);
         DriverManagerInspector inspector = null;
         for (DriverManagerInspector candidate : inspectors) {
             if (candidate.isAvailable()) {
@@ -35,12 +30,11 @@ public class DriverManagerInspectorTest {
                 break;
             }
         }
-        Assert.assertNotNull(inspector);
+        assertNotNull(inspector);
         MyDriver driver = new MyDriver();
         DriverManager.registerDriver(driver);
         List<Class<?>> classes = inspector.getDriverClasses();
-        Assert.assertTrue(classes.contains(MyDriver.class));
+        assertTrue(classes.contains(MyDriver.class));
         DriverManager.deregisterDriver(driver);
-        container.dispose();
     }
 }
