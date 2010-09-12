@@ -19,15 +19,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Exchanger;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.codehaus.plexus.PlexusTestCase;
 
-import com.googlecode.arit.threads.ThreadDescription;
-import com.googlecode.arit.threads.ThreadInspectors;
-
-public class ThreadInspectorTest {
-    @Test
+public class ThreadInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
+        ThreadInspectorManager inspectorManager = lookup(ThreadInspectorManager.class);
+        assertTrue(inspectorManager.isAvailable());
         Timer timer = new Timer();
         // java.util.Timer doesn't offer any method to get the timer thread; thus
         // we need to get this information from within a TimerTask.
@@ -49,8 +46,8 @@ public class ThreadInspectorTest {
             }
         }, 1000, 1000);
         Thread thread = exchanger.exchange(null);
-        ThreadDescription description = ThreadInspectors.getInstance().getDescription(thread);
-        Assert.assertTrue(description.getDescription().contains(ThreadInspectorTest.class.getName() + "$"));
+        ThreadDescription description = inspectorManager.getDescription(thread);
+        assertTrue(description.getDescription().contains(ThreadInspectorTest.class.getName() + "$"));
         timer.cancel();
     }
 }

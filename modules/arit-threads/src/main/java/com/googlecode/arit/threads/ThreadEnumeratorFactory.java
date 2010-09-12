@@ -16,6 +16,7 @@
 package com.googlecode.arit.threads;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -23,6 +24,9 @@ import com.googlecode.arit.threadutils.ThreadUtils;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="thread")
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement
+    private ThreadInspectorManager inspectorManager;
+    
     public boolean isAvailable() {
         return true;
     }
@@ -32,6 +36,6 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ThreadEnumerator(ThreadUtils.getAllThreads());
+        return new ThreadEnumerator(inspectorManager, ThreadUtils.getAllThreads());
     }
 }

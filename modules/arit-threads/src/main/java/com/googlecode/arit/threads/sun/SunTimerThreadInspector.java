@@ -17,14 +17,29 @@ package com.googlecode.arit.threads.sun;
 
 import java.util.TimerTask;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.threads.AbstractTimerThreadInspector;
+import org.codehaus.plexus.component.annotations.Component;
 
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threads.AbstractTimerThreadInspector;
+import com.googlecode.arit.threads.ThreadInspector;
+
+@Component(role=ThreadInspector.class, hint="sun-timer")
 public class SunTimerThreadInspector extends AbstractTimerThreadInspector {
     private final RBeanFactory rbf;
 
-    public SunTimerThreadInspector(RBeanFactory rbf) {
+    public SunTimerThreadInspector() {
+        RBeanFactory rbf;
+        try {
+            rbf = new RBeanFactory(TimerThreadRBean.class);
+        } catch (RBeanFactoryException ex) {
+            rbf = null;
+        }
         this.rbf = rbf;
+    }
+
+    public boolean isAvailable() {
+        return rbf != null;
     }
 
     @Override

@@ -15,16 +15,23 @@
  */
 package com.googlecode.arit.threads;
 
-import com.googlecode.arit.Provider;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import org.codehaus.plexus.component.annotations.Component;
 
-public class DefaultThreadInspectorProvider implements Provider<ThreadInspector> {
-    public ThreadInspector getImplementation() {
-        try {
-            return new DefaultThreadInspector(new RBeanFactory(ThreadRBean.class));
-        } catch (RBeanFactoryException ex) {
-            return null;
+import com.googlecode.arit.PriorityBasedInspectorManager;
+
+@Component(role=ThreadInspectorManager.class)
+public class ThreadInspectorManager extends PriorityBasedInspectorManager<ThreadInspector> {
+    public ThreadInspectorManager() {
+        super(ThreadInspector.class);
+    }
+    
+    public ThreadDescription getDescription(Thread thread) {
+        for (ThreadInspector inspector : getInspectors()) {
+            ThreadDescription description = inspector.getDescription(thread);
+            if (description != null) {
+                return description;
+            }
         }
+        return null;
     }
 }

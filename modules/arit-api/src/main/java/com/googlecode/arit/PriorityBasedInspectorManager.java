@@ -15,28 +15,33 @@
  */
 package com.googlecode.arit;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class SingletonInspectorManager<T extends Inspector> extends AbstractInspectorManager<T> {
-    private T inspector;
-
-    public SingletonInspectorManager(Class<T> inspectorClass) {
+public class PriorityBasedInspectorManager<T extends PriorityBasedInspector> extends AbstractInspectorManager<T> {
+    private List<T> inspectors;
+    
+    public PriorityBasedInspectorManager(Class<T> inspectorClass) {
         super(inspectorClass);
     }
 
+    @Override
     protected void initialize(List<T> availableInspectors) {
-        inspector = availableInspectors.isEmpty() ? null : availableInspectors.get(0);
-    }
-    
-    public boolean isAvailable() {
-        return inspector != null;
+        inspectors = new ArrayList<T>(availableInspectors);
+        Collections.sort(inspectors, new Comparator<T>() {
+            public int compare(T o1, T o2) {
+                return o2.getPriority()-o1.getPriority();
+            }
+        });
     }
 
-    public T getInspector() {
-        if (inspector == null) {
-            throw new IllegalStateException("No available inspector");
-        } else {
-            return inspector;
-        }
+    public boolean isAvailable() {
+        return !inspectors.isEmpty();
+    }
+    
+    public List<T> getInspectors() {
+        return inspectors;
     }
 }

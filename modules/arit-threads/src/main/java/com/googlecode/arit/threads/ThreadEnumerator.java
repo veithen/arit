@@ -17,18 +17,18 @@ package com.googlecode.arit.threads;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import com.googlecode.arit.ResourceEnumerator;
 
 public class ThreadEnumerator implements ResourceEnumerator {
+    private final ThreadInspectorManager inspectorManager;
     private final Thread[] threads;
     private int current = -1;
     private Thread thread;
     private ThreadDescription description;
 
-    public ThreadEnumerator(Thread[] threads) {
+    public ThreadEnumerator(ThreadInspectorManager inspectorManager, Thread[] threads) {
+        this.inspectorManager = inspectorManager;
         this.threads = threads;
     }
 
@@ -44,7 +44,7 @@ public class ThreadEnumerator implements ResourceEnumerator {
         if (current+1 < threads.length) {
             current++;
             thread = threads[current];
-            description = ThreadInspectors.getInstance().getDescription(thread);
+            description = inspectorManager.getDescription(thread);
             return true;
         } else {
             return false;

@@ -18,18 +18,32 @@ package com.googlecode.arit.threads;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 /**
  * Thread inspector that retrieves the {@link Runnable} from the thread.
  * 
  * @author Andreas Veithen
  */
+@Component(role=ThreadInspector.class)
 public class DefaultThreadInspector implements ThreadInspector {
     private final RBeanFactory rbf;
     
-    public DefaultThreadInspector(RBeanFactory rbf) {
+    public DefaultThreadInspector() {
+        RBeanFactory rbf;
+        try {
+            rbf = new RBeanFactory(ThreadRBean.class);
+        } catch (RBeanFactoryException ex) {
+            rbf = null;
+        }
         this.rbf = rbf;
+    }
+
+    public boolean isAvailable() {
+        return rbf != null;
     }
 
     public ThreadDescription getDescription(Thread thread) {
