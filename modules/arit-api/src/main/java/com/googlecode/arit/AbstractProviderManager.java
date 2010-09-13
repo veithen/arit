@@ -24,13 +24,13 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-public abstract class AbstractInspectorManager<T extends Inspector> implements Initializable {
+public abstract class AbstractProviderManager<T extends Provider> implements Initializable {
     private final Class<T> inspectorClass;
     
     @Requirement
     private PlexusContainer container;
     
-    public AbstractInspectorManager(Class<T> inspectorClass) {
+    public AbstractProviderManager(Class<T> inspectorClass) {
         this.inspectorClass = inspectorClass;
     }
     

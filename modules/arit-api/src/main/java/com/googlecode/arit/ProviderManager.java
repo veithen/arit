@@ -15,6 +15,26 @@
  */
 package com.googlecode.arit;
 
-public interface Inspector {
-    boolean isAvailable();
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProviderManager<T extends Provider> extends AbstractProviderManager<T> {
+    private List<T> inspectors;
+    
+    public ProviderManager(Class<T> inspectorClass) {
+        super(inspectorClass);
+    }
+
+    @Override
+    protected void initialize(List<T> availableInspectors) {
+        inspectors = new ArrayList<T>(availableInspectors);
+    }
+
+    public boolean isAvailable() {
+        return !inspectors.isEmpty();
+    }
+    
+    protected List<T> getInspectors() {
+        return inspectors;
+    }
 }

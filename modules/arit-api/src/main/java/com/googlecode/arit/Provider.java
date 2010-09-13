@@ -13,21 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jetty;
+package com.googlecode.arit;
 
-import org.mortbay.jetty.webapp.WebAppClassLoader;
-import org.mortbay.jetty.webapp.WebAppContext;
-
-import com.googlecode.arit.ServerProfile;
-
-public class JettyProfile implements ServerProfile {
-    public String identifyApplication(ClassLoader classLoader) {
-        if (classLoader instanceof WebAppClassLoader) {
-            WebAppClassLoader wacl = (WebAppClassLoader)classLoader;
-            WebAppContext context = (WebAppContext)wacl.getContext();
-            return context.getContextPath();
-        } else {
-            return null;
-        }
-    }
+public interface Provider {
+    boolean isAvailable();
 }

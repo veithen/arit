@@ -30,10 +30,10 @@ import com.googlecode.arit.threadutils.ThreadUtils;
 @Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private ThreadLocalInspectorManager inspectorManager;
+    private ThreadLocalInspectorManager inspector;
     
     public boolean isAvailable() {
-        return inspectorManager.isAvailable();
+        return inspector.isAvailable();
     }
 
     public String getDescription() {
@@ -41,7 +41,6 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        ThreadLocalInspector inspector = inspectorManager.getInspector();
         Map<ThreadLocal<?>,Set<Class<?>>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<Class<?>>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {
             for (Map.Entry<ThreadLocal<?>,Object> entry : inspector.getThreadLocalMap(thread).entrySet()) {

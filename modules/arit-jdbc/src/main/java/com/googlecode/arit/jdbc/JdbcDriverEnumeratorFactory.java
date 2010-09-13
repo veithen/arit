@@ -24,10 +24,10 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 @Component(role=ResourceEnumeratorFactory.class, hint="jdbc")
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private DriverManagerInspectorManager inspectorManager;
+    private DriverManagerInspectorManager inspector;
 
     public boolean isAvailable() {
-        return inspectorManager.isAvailable();
+        return inspector.isAvailable();
     }
 
     public String getDescription() {
@@ -35,6 +35,6 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new JdbcDriverEnumerator(inspectorManager.getInspector().getDriverClasses());
+        return new JdbcDriverEnumerator(inspector.getDriverClasses());
     }
 }

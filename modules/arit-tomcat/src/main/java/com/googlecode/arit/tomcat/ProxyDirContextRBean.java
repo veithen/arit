@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.tomcat;
 
-public interface PriorityBasedInspector extends Inspector {
-    int getPriority();
+import com.googlecode.arit.rbeans.RBean;
+
+@RBean(target="org.apache.naming.resources.ProxyDirContext")
+public interface ProxyDirContextRBean {
+    String getContextName();
 }

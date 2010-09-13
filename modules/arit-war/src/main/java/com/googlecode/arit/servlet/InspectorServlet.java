@@ -28,30 +28,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.servlet.PlexusServletUtils;
 
+import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
-import com.googlecode.arit.ServerProfile;
-import com.googlecode.arit.ServerProfileFactory;
 
 @Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
-    @Requirement(role=ServerProfileFactory.class)
-    private List<ServerProfileFactory> serverProfileFactories;
+    @Requirement
+    private ClassLoaderInspector classLoaderInspector;
     
     @Requirement(role=ResourceEnumeratorFactory.class)
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
-    private ServerProfile profile;
     private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     
@@ -61,13 +53,6 @@ public class InspectorServlet extends HttpServlet {
     
     @Override
     public void init() throws ServletException {
-        ServerContext serverContext = getServerContext();
-        for (ServerProfileFactory spf : serverProfileFactories) {
-            profile = spf.createServerProfile(serverContext);
-            if (profile != null) {
-                break;
-            }
-        }
         for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {
                 availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
@@ -85,7 +70,7 @@ public class InspectorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (profile == null) {
+        if (!classLoaderInspector.isAvailable()) {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
@@ -100,11 +85,11 @@ public class InspectorServlet extends HttpServlet {
                             if (classLoaderMap.containsKey(classLoader)) {
                                 application = classLoaderMap.get(classLoader);
                             } else {
-                                String appName = profile.identifyApplication(classLoader);
-                                if (appName == null) {
+                                ModuleDescription desc = classLoaderInspector.inspect(classLoader);
+                                if (desc == null) {
                                     application = null;
                                 } else {
-                                    application = new Application(appName);
+                                    application = new Application(desc.getDisplayName());
                                     applications.add(application);
                                 }
                                 classLoaderMap.put(classLoader, application);

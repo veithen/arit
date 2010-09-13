@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads;
+package com.googlecode.arit.servlet;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.PriorityBasedProviderManager;
+import com.googlecode.arit.ClassLoaderInspectorProvider;
+import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ProviderManager;
 
-@Component(role=ThreadInspectorManager.class)
-public class ThreadInspectorManager extends PriorityBasedProviderManager<ThreadInspector> {
-    public ThreadInspectorManager() {
-        super(ThreadInspector.class);
+@Component(role=ClassLoaderInspector.class)
+public class ClassLoaderInspector extends ProviderManager<ClassLoaderInspectorProvider> {
+    public ClassLoaderInspector() {
+        super(ClassLoaderInspectorProvider.class);
     }
     
-    public ThreadDescription getDescription(Thread thread) {
-        for (ThreadInspector inspector : getInspectors()) {
-            ThreadDescription description = inspector.getDescription(thread);
-            if (description != null) {
-                return description;
+    public ModuleDescription inspect(ClassLoader classLoader) {
+        for (ClassLoaderInspectorProvider provider : getInspectors()) {
+            ModuleDescription desc = provider.inspect(classLoader);
+            if (desc != null) {
+                return desc;
             }
         }
         return null;

@@ -15,19 +15,34 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.ServerProfile;
-import com.googlecode.arit.rbeans.RBeanFactory;
+import org.codehaus.plexus.component.annotations.Component;
 
-public class WASProfile implements ServerProfile {
+import com.googlecode.arit.ClassLoaderInspectorProvider;
+import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.rbeans.RBeanFactory;
+import com.googlecode.arit.rbeans.RBeanFactoryException;
+
+@Component(role=ClassLoaderInspectorProvider.class, hint="websphere")
+public class WASClassLoaderInspectorProvider implements ClassLoaderInspectorProvider {
     private final RBeanFactory rbf;
     
-    public WASProfile(RBeanFactory rbf) {
+    public WASClassLoaderInspectorProvider() {
+        RBeanFactory rbf;
+        try {
+            rbf = new RBeanFactory(CompoundClassLoaderRBean.class);
+        } catch (RBeanFactoryException ex) {
+            rbf = null;
+        }
         this.rbf = rbf;
     }
 
-    public String identifyApplication(ClassLoader classLoader) {
+    public boolean isAvailable() {
+        return rbf != null;
+    }
+
+    public ModuleDescription inspect(ClassLoader classLoader) {
         if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            return rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName();
+            return new ModuleDescription(null, rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName(), classLoader);
         } else {
             return null;
         }

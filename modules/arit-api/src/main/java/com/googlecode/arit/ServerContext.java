@@ -17,6 +17,7 @@ package com.googlecode.arit;
 
 import javax.servlet.ServletContext;
 
+// TODO: eliminate this
 public class ServerContext {
     private final ServletContext servletContext;
     private final ClassLoader applicationClassLoader;

@@ -13,21 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit;
 
-import java.util.Map;
-
-import org.codehaus.plexus.component.annotations.Component;
-
-import com.googlecode.arit.SingletonProviderManager;
-
-@Component(role=ThreadLocalInspectorManager.class)
-public class ThreadLocalInspectorManager extends SingletonProviderManager<ThreadLocalInspector> {
-    public ThreadLocalInspectorManager() {
-        super(ThreadLocalInspector.class);
+public class ModuleDescription {
+    private final ModuleType type;
+    private final String displayName;
+    private final ClassLoader classLoader;
+    
+    public ModuleDescription(ModuleType type, String displayName, ClassLoader classLoader) {
+        this.type = type;
+        this.displayName = displayName;
+        this.classLoader = classLoader;
     }
 
-    public Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread) {
-        return getInspector().getThreadLocalMap(thread);
+    public ModuleType getType() {
+        return type;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
     }
 }

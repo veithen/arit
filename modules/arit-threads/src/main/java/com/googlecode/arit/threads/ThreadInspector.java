@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.threads;
 
-import com.googlecode.arit.PriorityBasedInspector;
+import com.googlecode.arit.PriorityBasedProvider;
 
-public interface ThreadInspector extends PriorityBasedInspector {
+public interface ThreadInspector extends PriorityBasedProvider {
     /**
      * Get a description of the given thread.
      * 

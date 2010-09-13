@@ -15,7 +15,7 @@
  */
 package com.googlecode.arit;
 
-public interface ServerProfile {
+public interface ClassLoaderInspectorProvider extends Provider {
     /**
      * Determine the application to which a given class loader belongs. The implementation should
      * only inspect the given class loader, but not its parents.
@@ -28,5 +28,5 @@ public interface ServerProfile {
      *         application. It may be a context path, the name of the application, the location of
      *         the WAR or EAR file, or any other useful identifier.
      */
-    String identifyApplication(ClassLoader classLoader);
+    ModuleDescription inspect(ClassLoader classLoader);
 }

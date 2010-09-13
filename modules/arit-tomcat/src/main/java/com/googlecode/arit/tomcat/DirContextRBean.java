@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit.tomcat;
 
-import java.util.Map;
+import com.googlecode.arit.rbeans.RBean;
 
-import org.codehaus.plexus.component.annotations.Component;
+// TODO: actually, we shouldn't need an RBean for this
+@RBean(target="javax.naming.DirContext")
+public interface DirContextRBean {
 
-import com.googlecode.arit.SingletonProviderManager;
-
-@Component(role=ThreadLocalInspectorManager.class)
-public class ThreadLocalInspectorManager extends SingletonProviderManager<ThreadLocalInspector> {
-    public ThreadLocalInspectorManager() {
-        super(ThreadLocalInspector.class);
-    }
-
-    public Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread) {
-        return getInspector().getThreadLocalMap(thread);
-    }
 }

@@ -24,10 +24,10 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 @Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private ShutdownHookInspectorManager inspectorManager;
+    private ShutdownHookInspectorManager inspector;
 
     public boolean isAvailable() {
-        return inspectorManager.isAvailable();
+        return inspector.isAvailable();
     }
 
     public String getDescription() {
@@ -35,6 +35,6 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ShutdownHookEnumerator(inspectorManager.getInspector().getShutdownHooks());
+        return new ShutdownHookEnumerator(inspector.getShutdownHooks());
     }
 }

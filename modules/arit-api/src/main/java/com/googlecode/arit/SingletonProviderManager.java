@@ -17,10 +17,10 @@ package com.googlecode.arit;
 
 import java.util.List;
 
-public class SingletonInspectorManager<T extends Inspector> extends AbstractInspectorManager<T> {
+public class SingletonProviderManager<T extends Provider> extends AbstractProviderManager<T> {
     private T inspector;
 
-    public SingletonInspectorManager(Class<T> inspectorClass) {
+    public SingletonProviderManager(Class<T> inspectorClass) {
         super(inspectorClass);
     }
 
@@ -32,7 +32,7 @@ public class SingletonInspectorManager<T extends Inspector> extends AbstractInsp
         return inspector != null;
     }
 
-    public T getInspector() {
+    protected T getInspector() {
         if (inspector == null) {
             throw new IllegalStateException("No available inspector");
         } else {

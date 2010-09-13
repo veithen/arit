@@ -13,20 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.jetty;
 
-/**
- * Detects a particular class of application servers and creates a {@link ServerProfile}.
- * 
- * @author Andreas Veithen
- */
-public interface ServerProfileFactory {
-    /**
-     * Create a server profile.
-     * 
-     * @param serverContext
-     *            provides information about the server
-     * @return a server profile, or <code>null</code> if the server is not supported by this factory
-     */
-    ServerProfile createServerProfile(ServerContext serverContext);
+import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.SeeAlso;
+
+@RBean(target="org.mortbay.jetty.webapp.WebAppClassLoader")
+@SeeAlso(WebAppContextRBean.class)
+public interface WebAppClassLoaderRBean {
+    ContextHandlerRBean getContext();
 }

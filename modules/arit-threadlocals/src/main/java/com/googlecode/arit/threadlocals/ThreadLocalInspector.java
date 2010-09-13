@@ -17,8 +17,8 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.Map;
 
-import com.googlecode.arit.Inspector;
+import com.googlecode.arit.Provider;
 
-public interface ThreadLocalInspector extends Inspector {
+public interface ThreadLocalInspector extends Provider {
     Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);
 }

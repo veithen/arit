@@ -15,13 +15,19 @@
  */
 package com.googlecode.arit.jdbc;
 
+import java.util.List;
+
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.SingletonInspectorManager;
+import com.googlecode.arit.SingletonProviderManager;
 
 @Component(role=DriverManagerInspectorManager.class)
-public class DriverManagerInspectorManager extends SingletonInspectorManager<DriverManagerInspector> {
+public class DriverManagerInspectorManager extends SingletonProviderManager<DriverManagerInspector> {
     public DriverManagerInspectorManager() {
         super(DriverManagerInspector.class);
+    }
+    
+    public List<Class<?>> getDriverClasses() {
+        return getInspector().getDriverClasses();
     }
 }

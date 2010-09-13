@@ -20,10 +20,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PriorityBasedInspectorManager<T extends PriorityBasedInspector> extends AbstractInspectorManager<T> {
+public class PriorityBasedProviderManager<T extends PriorityBasedProvider> extends AbstractProviderManager<T> {
     private List<T> inspectors;
     
-    public PriorityBasedInspectorManager(Class<T> inspectorClass) {
+    public PriorityBasedProviderManager(Class<T> inspectorClass) {
         super(inspectorClass);
     }
 
@@ -41,7 +41,7 @@ public class PriorityBasedInspectorManager<T extends PriorityBasedInspector> ext
         return !inspectors.isEmpty();
     }
     
-    public List<T> getInspectors() {
+    protected List<T> getInspectors() {
         return inspectors;
     }
 }

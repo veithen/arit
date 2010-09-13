@@ -17,8 +17,8 @@ package com.googlecode.arit.mbeans;
 
 import javax.management.MBeanServer;
 
-import com.googlecode.arit.Inspector;
+import com.googlecode.arit.Provider;
 
-public interface MBeanServerInspector extends Inspector {
+public interface MBeanServerInspector extends Provider {
     MBeanRepository inspect(MBeanServer mbs);
 }

@@ -15,13 +15,19 @@
  */
 package com.googlecode.arit.shutdown;
 
+import java.util.List;
+
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.SingletonInspectorManager;
+import com.googlecode.arit.SingletonProviderManager;
 
 @Component(role=ShutdownHookInspectorManager.class)
-public class ShutdownHookInspectorManager extends SingletonInspectorManager<ShutdownHookInspector> {
+public class ShutdownHookInspectorManager extends SingletonProviderManager<ShutdownHookInspector> {
     public ShutdownHookInspectorManager() {
         super(ShutdownHookInspector.class);
+    }
+    
+    public List<Thread> getShutdownHooks() {
+        return getInspector().getShutdownHooks();
     }
 }
