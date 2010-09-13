@@ -25,7 +25,7 @@ import com.googlecode.arit.threadutils.ThreadUtils;
 @Component(role=ResourceEnumeratorFactory.class, hint="thread")
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private ThreadInspectorManager inspectorManager;
+    private ThreadInspector inspectorManager;
     
     public boolean isAvailable() {
         return true;

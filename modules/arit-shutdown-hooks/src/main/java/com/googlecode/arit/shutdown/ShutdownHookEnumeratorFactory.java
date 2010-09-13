@@ -24,7 +24,7 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 @Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private ShutdownHookInspectorManager inspector;
+    private ShutdownHookInspector inspector;
 
     public boolean isAvailable() {
         return inspector.isAvailable();

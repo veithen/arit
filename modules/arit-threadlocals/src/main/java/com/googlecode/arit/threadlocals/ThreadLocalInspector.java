@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jdbc;
+package com.googlecode.arit.threadlocals;
 
-import java.util.List;
+import java.util.Map;
 
 import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.SingletonPluginManager;
 
-@Component(role=DriverManagerInspectorManager.class)
-public class DriverManagerInspectorManager extends SingletonPluginManager<DriverManagerInspectorPlugin> {
-    public DriverManagerInspectorManager() {
-        super(DriverManagerInspectorPlugin.class);
+@Component(role=ThreadLocalInspector.class)
+public class ThreadLocalInspector extends SingletonPluginManager<ThreadLocalInspectorPlugin> {
+    public ThreadLocalInspector() {
+        super(ThreadLocalInspectorPlugin.class);
     }
-    
-    public List<Class<?>> getDriverClasses() {
-        return getPlugin().getDriverClasses();
+
+    public Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread) {
+        return getPlugin().getThreadLocalMap(thread);
     }
 }

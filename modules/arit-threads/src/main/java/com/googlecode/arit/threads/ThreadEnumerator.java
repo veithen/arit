@@ -21,13 +21,13 @@ import java.util.Collections;
 import com.googlecode.arit.ResourceEnumerator;
 
 public class ThreadEnumerator implements ResourceEnumerator {
-    private final ThreadInspectorManager inspectorManager;
+    private final ThreadInspector inspectorManager;
     private final Thread[] threads;
     private int current = -1;
     private Thread thread;
     private ThreadDescription description;
 
-    public ThreadEnumerator(ThreadInspectorManager inspectorManager, Thread[] threads) {
+    public ThreadEnumerator(ThreadInspector inspectorManager, Thread[] threads) {
         this.inspectorManager = inspectorManager;
         this.threads = threads;
     }

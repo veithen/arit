@@ -21,7 +21,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class ShutdownHookInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        ShutdownHookInspectorManager inspector = lookup(ShutdownHookInspectorManager.class);
+        ShutdownHookInspector inspector = lookup(ShutdownHookInspector.class);
         assertTrue(inspector.isAvailable());
         Thread hook = new Thread();
         Runtime runtime = Runtime.getRuntime();

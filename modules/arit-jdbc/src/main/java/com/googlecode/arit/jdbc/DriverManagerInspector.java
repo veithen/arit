@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.shutdown;
+package com.googlecode.arit.jdbc;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.SingletonPluginManager;
 
-@Component(role=ShutdownHookInspectorManager.class)
-public class ShutdownHookInspectorManager extends SingletonPluginManager<ShutdownHookInspectorPlugin> {
-    public ShutdownHookInspectorManager() {
-        super(ShutdownHookInspectorPlugin.class);
+@Component(role=DriverManagerInspector.class)
+public class DriverManagerInspector extends SingletonPluginManager<DriverManagerInspectorPlugin> {
+    public DriverManagerInspector() {
+        super(DriverManagerInspectorPlugin.class);
     }
     
-    public List<Thread> getShutdownHooks() {
-        return getPlugin().getShutdownHooks();
+    public List<Class<?>> getDriverClasses() {
+        return getPlugin().getDriverClasses();
     }
 }

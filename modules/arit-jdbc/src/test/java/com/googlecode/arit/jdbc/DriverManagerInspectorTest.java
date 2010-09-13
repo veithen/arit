@@ -22,7 +22,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class DriverManagerInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        DriverManagerInspectorManager inspector = lookup(DriverManagerInspectorManager.class);
+        DriverManagerInspector inspector = lookup(DriverManagerInspector.class);
         assertTrue(inspector.isAvailable());
         MyDriver driver = new MyDriver();
         DriverManager.registerDriver(driver);

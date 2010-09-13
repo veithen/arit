@@ -24,7 +24,7 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 @Component(role=ResourceEnumeratorFactory.class, hint="jdbc")
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private DriverManagerInspectorManager inspector;
+    private DriverManagerInspector inspector;
 
     public boolean isAvailable() {
         return inspector.isAvailable();

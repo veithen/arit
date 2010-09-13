@@ -23,7 +23,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class ThreadInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        ThreadInspectorManager inspectorManager = lookup(ThreadInspectorManager.class);
+        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Timer timer = new Timer();
         // java.util.Timer doesn't offer any method to get the timer thread; thus

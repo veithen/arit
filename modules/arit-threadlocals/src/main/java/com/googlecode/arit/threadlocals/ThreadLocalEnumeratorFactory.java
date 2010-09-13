@@ -30,7 +30,7 @@ import com.googlecode.arit.threadutils.ThreadUtils;
 @Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement
-    private ThreadLocalInspectorManager inspector;
+    private ThreadLocalInspector inspector;
     
     public boolean isAvailable() {
         return inspector.isAvailable();

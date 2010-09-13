@@ -21,7 +21,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 public class ThreadLocalInspectorTest extends PlexusTestCase {
     public void test() throws Exception {
-        ThreadLocalInspectorManager inspector = lookup(ThreadLocalInspectorManager.class);
+        ThreadLocalInspector inspector = lookup(ThreadLocalInspector.class);
         assertTrue(inspector.isAvailable());
         ThreadLocal<String> threadLocal = new ThreadLocal<String>();
         threadLocal.set("test");

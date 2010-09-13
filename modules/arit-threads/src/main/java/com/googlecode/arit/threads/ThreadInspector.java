@@ -19,9 +19,9 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.PriorityBasedPluginManager;
 
-@Component(role=ThreadInspectorManager.class)
-public class ThreadInspectorManager extends PriorityBasedPluginManager<ThreadInspectorPlugin> {
-    public ThreadInspectorManager() {
+@Component(role=ThreadInspector.class)
+public class ThreadInspector extends PriorityBasedPluginManager<ThreadInspectorPlugin> {
+    public ThreadInspector() {
         super(ThreadInspectorPlugin.class);
     }
     
