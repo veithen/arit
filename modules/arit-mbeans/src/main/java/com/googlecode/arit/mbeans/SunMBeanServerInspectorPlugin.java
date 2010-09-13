@@ -13,39 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads.sun;
+package com.googlecode.arit.mbeans;
 
-import java.util.TimerTask;
+import javax.management.MBeanServer;
 
 import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.googlecode.arit.threads.AbstractTimerThreadInspector;
-import com.googlecode.arit.threads.ThreadInspector;
+import com.sun.jmx.mbeanserver.Repository;
 
-@Component(role=ThreadInspector.class, hint="sun-timer")
-public class SunTimerThreadInspector extends AbstractTimerThreadInspector {
+@Component(role=MBeanServerInspectorPlugin.class, hint="sun")
+public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
-
-    public SunTimerThreadInspector() {
+    private final boolean isJava6;
+    
+    public SunMBeanServerInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(TimerThreadRBean.class);
+            rbf = new RBeanFactory(JmxMBeanServerRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
         this.rbf = rbf;
+        isJava6 = !System.getProperty("java.version").startsWith("1.5");
     }
 
     public boolean isAvailable() {
         return rbf != null;
     }
 
-    @Override
-    protected TimerTask[] getTimerTasks(Thread thread) {
-        if (rbf.getRBeanInfo(TimerThreadRBean.class).getTargetClass().isInstance(thread)) {
-            return rbf.createRBean(TimerThreadRBean.class, thread).getQueue().getQueue();
+    public MBeanRepository inspect(MBeanServer mbs) {
+        if (rbf.getRBeanInfo(JmxMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
+            MBeanServerInterceptorRBean interceptor = rbf.createRBean(JmxMBeanServerRBean.class, mbs).getInterceptor();
+            Repository repository = (Repository)((DefaultMBeanServerInterceptorRBean)interceptor).getRepository();
+            return isJava6 ? new SunJava6MBeanRepository(repository) : new SunJava5MBeanRepository(repository);
         } else {
             return null;
         }

@@ -17,16 +17,16 @@ package com.googlecode.arit.websphere;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorProvider;
+import com.googlecode.arit.ClassLoaderInspectorPlugin;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ClassLoaderInspectorProvider.class, hint="websphere")
-public class WASClassLoaderInspectorProvider implements ClassLoaderInspectorProvider {
+@Component(role=ClassLoaderInspectorPlugin.class, hint="websphere")
+public class WASClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public WASClassLoaderInspectorProvider() {
+    public WASClassLoaderInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(CompoundClassLoaderRBean.class);

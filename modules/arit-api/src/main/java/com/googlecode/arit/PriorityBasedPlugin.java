@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jdbc;
+package com.googlecode.arit;
 
-import java.util.List;
-
-import com.googlecode.arit.Provider;
-
-public interface DriverManagerInspector extends Provider {
-    List<Class<?>> getDriverClasses();
+public interface PriorityBasedPlugin extends Plugin {
+    int getPriority();
 }

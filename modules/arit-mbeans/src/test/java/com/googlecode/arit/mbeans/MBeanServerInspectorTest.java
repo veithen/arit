@@ -30,7 +30,7 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
         mbs.registerMBean(mbean, name);
         boolean found = false;
         try {
-            for (MBeanServerInspector inspector : getContainer().lookupList(MBeanServerInspector.class)) {
+            for (MBeanServerInspectorPlugin inspector : getContainer().lookupList(MBeanServerInspectorPlugin.class)) {
                 if (inspector.isAvailable()) {
                     MBeanRepository repository = inspector.inspect(mbs);
                     if (repository != null) {

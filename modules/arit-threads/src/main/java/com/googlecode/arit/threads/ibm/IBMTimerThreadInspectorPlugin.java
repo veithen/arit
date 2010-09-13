@@ -21,14 +21,14 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.googlecode.arit.threads.AbstractTimerThreadInspector;
-import com.googlecode.arit.threads.ThreadInspector;
+import com.googlecode.arit.threads.AbstractTimerThreadInspectorPlugin;
+import com.googlecode.arit.threads.ThreadInspectorPlugin;
 
-@Component(role=ThreadInspector.class, hint="ibm-timer")
-public class IBMTimerThreadInspector extends AbstractTimerThreadInspector {
+@Component(role=ThreadInspectorPlugin.class, hint="ibm-timer")
+public class IBMTimerThreadInspectorPlugin extends AbstractTimerThreadInspectorPlugin {
     private final RBeanFactory rbf;
 
-    public IBMTimerThreadInspector() {
+    public IBMTimerThreadInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(TimerImplRBean.class);

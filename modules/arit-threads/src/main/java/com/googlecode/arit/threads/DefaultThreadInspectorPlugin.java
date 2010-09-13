@@ -28,11 +28,11 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ThreadInspector.class)
-public class DefaultThreadInspector implements ThreadInspector {
+@Component(role=ThreadInspectorPlugin.class)
+public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public DefaultThreadInspector() {
+    public DefaultThreadInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(ThreadRBean.class);

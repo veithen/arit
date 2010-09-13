@@ -28,14 +28,14 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(role=MBeanServerInspector.class)
-    private List<MBeanServerInspector> mbsInspectors; 
+    @Requirement(role=MBeanServerInspectorPlugin.class)
+    private List<MBeanServerInspectorPlugin> mbsInspectors; 
     
     @Requirement
     private Logger logger;
     
     public boolean isAvailable() {
-        for (MBeanServerInspector inspector : mbsInspectors) {
+        for (MBeanServerInspectorPlugin inspector : mbsInspectors) {
             if (inspector.isAvailable()) {
                 return true;
             }

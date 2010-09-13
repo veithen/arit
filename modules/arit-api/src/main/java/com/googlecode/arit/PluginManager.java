@@ -15,28 +15,26 @@
  */
 package com.googlecode.arit;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SingletonProviderManager<T extends Provider> extends AbstractProviderManager<T> {
-    private T inspector;
-
-    public SingletonProviderManager(Class<T> inspectorClass) {
-        super(inspectorClass);
+public class PluginManager<T extends Plugin> extends AbstractPluginManager<T> {
+    private List<T> plugins;
+    
+    public PluginManager(Class<T> pluginClass) {
+        super(pluginClass);
     }
 
-    protected void initialize(List<T> availableInspectors) {
-        inspector = availableInspectors.isEmpty() ? null : availableInspectors.get(0);
+    @Override
+    protected void initialize(List<T> availablePlugins) {
+        plugins = new ArrayList<T>(availablePlugins);
+    }
+
+    public boolean isAvailable() {
+        return !plugins.isEmpty();
     }
     
-    public boolean isAvailable() {
-        return inspector != null;
-    }
-
-    protected T getInspector() {
-        if (inspector == null) {
-            throw new IllegalStateException("No available inspector");
-        } else {
-            return inspector;
-        }
+    protected List<T> getPlugins() {
+        return plugins;
     }
 }

@@ -21,15 +21,15 @@ import java.util.List;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.jdbc.DriverManagerInspector;
+import com.googlecode.arit.jdbc.DriverManagerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=DriverManagerInspector.class, hint="ibm")
-public class IBMDriverManagerInspector implements DriverManagerInspector {
+@Component(role=DriverManagerInspectorPlugin.class, hint="ibm")
+public class IBMDriverManagerInspectorPlugin implements DriverManagerInspectorPlugin {
     private final List<Driver> drivers;
     
-    public IBMDriverManagerInspector() {
+    public IBMDriverManagerInspectorPlugin() {
         List<Driver> drivers;
         try {
             RBeanFactory rbf = new RBeanFactory(DriverManagerRBean.class);

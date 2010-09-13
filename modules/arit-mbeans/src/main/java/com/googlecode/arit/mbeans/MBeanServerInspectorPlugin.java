@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads;
+package com.googlecode.arit.mbeans;
 
-import com.googlecode.arit.PriorityBasedProvider;
+import javax.management.MBeanServer;
 
-public interface ThreadInspector extends PriorityBasedProvider {
-    /**
-     * Get a description of the given thread.
-     * 
-     * @param thread
-     *            the thread to inspect
-     * @return a description of the thread, or <code>null</code> if the inspector doesn't recognize
-     *         the given type of thread
-     */
-    ThreadDescription getDescription(Thread thread);
+import com.googlecode.arit.Plugin;
+
+public interface MBeanServerInspectorPlugin extends Plugin {
+    MBeanRepository inspect(MBeanServer mbs);
 }

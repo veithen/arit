@@ -23,13 +23,13 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.googlecode.arit.shutdown.ShutdownHookInspector;
+import com.googlecode.arit.shutdown.ShutdownHookInspectorPlugin;
 
-@Component(role=ShutdownHookInspector.class, hint="sun")
-public class SunShutdownHookInspector implements ShutdownHookInspector {
+@Component(role=ShutdownHookInspectorPlugin.class, hint="sun")
+public class SunShutdownHookInspectorPlugin implements ShutdownHookInspectorPlugin {
     private final ShutdownRBean shutdown;
     
-    public SunShutdownHookInspector() {
+    public SunShutdownHookInspectorPlugin() {
         ShutdownRBean shutdown;
         try {
             RBeanFactory rbf = new RBeanFactory(ShutdownRBean.class);

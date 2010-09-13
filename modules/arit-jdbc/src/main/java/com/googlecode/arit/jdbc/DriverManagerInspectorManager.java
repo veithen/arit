@@ -19,15 +19,15 @@ import java.util.List;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.SingletonProviderManager;
+import com.googlecode.arit.SingletonPluginManager;
 
 @Component(role=DriverManagerInspectorManager.class)
-public class DriverManagerInspectorManager extends SingletonProviderManager<DriverManagerInspector> {
+public class DriverManagerInspectorManager extends SingletonPluginManager<DriverManagerInspectorPlugin> {
     public DriverManagerInspectorManager() {
-        super(DriverManagerInspector.class);
+        super(DriverManagerInspectorPlugin.class);
     }
     
     public List<Class<?>> getDriverClasses() {
-        return getInspector().getDriverClasses();
+        return getPlugin().getDriverClasses();
     }
 }

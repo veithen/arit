@@ -29,7 +29,7 @@ import org.codehaus.plexus.logging.Logger;
 import com.googlecode.arit.ResourceEnumerator;
 
 public class MBeanEnumerator implements ResourceEnumerator {
-    private final List<MBeanServerInspector> mbsInspectors; 
+    private final List<MBeanServerInspectorPlugin> mbsInspectors; 
     private final Iterator<MBeanServer> mbsIterator;
     private final Logger logger;
     private MBeanRepository repository;
@@ -37,7 +37,7 @@ public class MBeanEnumerator implements ResourceEnumerator {
     private ObjectName name;
     private Object mbean;
 
-    public MBeanEnumerator(List<MBeanServerInspector> mbsInspectors, Iterator<MBeanServer> mbsIterator, Logger logger) {
+    public MBeanEnumerator(List<MBeanServerInspectorPlugin> mbsInspectors, Iterator<MBeanServer> mbsIterator, Logger logger) {
         this.mbsInspectors = mbsInspectors;
         this.mbsIterator = mbsIterator;
         this.logger = logger;
@@ -60,7 +60,7 @@ public class MBeanEnumerator implements ResourceEnumerator {
             } else if (mbsIterator.hasNext()) {
                 mbeanIterator = null;
                 MBeanServer mbs = mbsIterator.next();
-                for (MBeanServerInspector inspector : mbsInspectors) {
+                for (MBeanServerInspectorPlugin inspector : mbsInspectors) {
                     repository = inspector.inspect(mbs);
                     if (repository == null) {
                         logger.error("Unable to inspect MBeanServer of type " + mbs.getClass().getName());

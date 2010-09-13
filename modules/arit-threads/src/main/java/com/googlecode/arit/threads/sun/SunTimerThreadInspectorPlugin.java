@@ -13,39 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.tomcat;
+package com.googlecode.arit.threads.sun;
+
+import java.util.TimerTask;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorProvider;
-import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threads.AbstractTimerThreadInspectorPlugin;
+import com.googlecode.arit.threads.ThreadInspectorPlugin;
 
-@Component(role=ClassLoaderInspectorProvider.class, hint="tomcat")
-public class TomcatClassLoaderInspectorProvider implements ClassLoaderInspectorProvider {
+@Component(role=ThreadInspectorPlugin.class, hint="sun-timer")
+public class SunTimerThreadInspectorPlugin extends AbstractTimerThreadInspectorPlugin {
     private final RBeanFactory rbf;
-    
-    public TomcatClassLoaderInspectorProvider() {
+
+    public SunTimerThreadInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(WebappClassLoaderRBean.class);
+            rbf = new RBeanFactory(TimerThreadRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
         this.rbf = rbf;
     }
-    
+
     public boolean isAvailable() {
         return rbf != null;
     }
 
-    public ModuleDescription inspect(ClassLoader classLoader) {
-        if (rbf.getRBeanInfo(WebappClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
-            ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
-            // Tomcat removes the DirContext when stopping the application
-            return new ModuleDescription(null, context == null ? "<defunct>" : context.getContextName(), classLoader);
+    @Override
+    protected TimerTask[] getTimerTasks(Thread thread) {
+        if (rbf.getRBeanInfo(TimerThreadRBean.class).getTargetClass().isInstance(thread)) {
+            return rbf.createRBean(TimerThreadRBean.class, thread).getQueue().getQueue();
         } else {
             return null;
         }

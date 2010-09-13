@@ -19,15 +19,15 @@ import java.util.Map;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.SingletonProviderManager;
+import com.googlecode.arit.SingletonPluginManager;
 
 @Component(role=ThreadLocalInspectorManager.class)
-public class ThreadLocalInspectorManager extends SingletonProviderManager<ThreadLocalInspector> {
+public class ThreadLocalInspectorManager extends SingletonPluginManager<ThreadLocalInspectorPlugin> {
     public ThreadLocalInspectorManager() {
-        super(ThreadLocalInspector.class);
+        super(ThreadLocalInspectorPlugin.class);
     }
 
     public Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread) {
-        return getInspector().getThreadLocalMap(thread);
+        return getPlugin().getThreadLocalMap(thread);
     }
 }

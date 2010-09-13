@@ -17,16 +17,16 @@ package com.googlecode.arit.threads;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.PriorityBasedProviderManager;
+import com.googlecode.arit.PriorityBasedPluginManager;
 
 @Component(role=ThreadInspectorManager.class)
-public class ThreadInspectorManager extends PriorityBasedProviderManager<ThreadInspector> {
+public class ThreadInspectorManager extends PriorityBasedPluginManager<ThreadInspectorPlugin> {
     public ThreadInspectorManager() {
-        super(ThreadInspector.class);
+        super(ThreadInspectorPlugin.class);
     }
     
     public ThreadDescription getDescription(Thread thread) {
-        for (ThreadInspector inspector : getInspectors()) {
+        for (ThreadInspectorPlugin inspector : getPlugins()) {
             ThreadDescription description = inspector.getDescription(thread);
             if (description != null) {
                 return description;

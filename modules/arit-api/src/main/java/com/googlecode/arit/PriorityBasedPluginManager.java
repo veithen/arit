@@ -20,17 +20,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PriorityBasedProviderManager<T extends PriorityBasedProvider> extends AbstractProviderManager<T> {
-    private List<T> inspectors;
+public class PriorityBasedPluginManager<T extends PriorityBasedPlugin> extends AbstractPluginManager<T> {
+    private List<T> plugins;
     
-    public PriorityBasedProviderManager(Class<T> inspectorClass) {
-        super(inspectorClass);
+    public PriorityBasedPluginManager(Class<T> pluginClass) {
+        super(pluginClass);
     }
 
     @Override
-    protected void initialize(List<T> availableInspectors) {
-        inspectors = new ArrayList<T>(availableInspectors);
-        Collections.sort(inspectors, new Comparator<T>() {
+    protected void initialize(List<T> availablePlugins) {
+        plugins = new ArrayList<T>(availablePlugins);
+        Collections.sort(plugins, new Comparator<T>() {
             public int compare(T o1, T o2) {
                 return o2.getPriority()-o1.getPriority();
             }
@@ -38,10 +38,10 @@ public class PriorityBasedProviderManager<T extends PriorityBasedProvider> exten
     }
 
     public boolean isAvailable() {
-        return !inspectors.isEmpty();
+        return !plugins.isEmpty();
     }
     
-    protected List<T> getInspectors() {
-        return inspectors;
+    protected List<T> getPlugins() {
+        return plugins;
     }
 }

@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
-public abstract class AbstractTimerThreadInspector implements ThreadInspector {
+public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspectorPlugin {
     protected abstract TimerTask[] getTimerTasks(Thread thread);
     
     public ThreadDescription getDescription(Thread thread) {

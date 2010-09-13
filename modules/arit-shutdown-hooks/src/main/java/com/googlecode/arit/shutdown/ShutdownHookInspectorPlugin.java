@@ -17,8 +17,8 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
-import com.googlecode.arit.Provider;
+import com.googlecode.arit.Plugin;
 
-public interface ShutdownHookInspector extends Provider {
+public interface ShutdownHookInspectorPlugin extends Plugin {
     List<Thread> getShutdownHooks();
 }

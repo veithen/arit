@@ -13,41 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans;
-
-import javax.management.MBeanServer;
+package com.googlecode.arit.tomcat;
 
 import org.codehaus.plexus.component.annotations.Component;
 
+import com.googlecode.arit.ClassLoaderInspectorPlugin;
+import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.sun.jmx.mbeanserver.Repository;
 
-@Component(role=MBeanServerInspector.class, hint="sun")
-public class SunMBeanServerInspector implements MBeanServerInspector {
+@Component(role=ClassLoaderInspectorPlugin.class, hint="tomcat")
+public class TomcatClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
     private final RBeanFactory rbf;
-    private final boolean isJava6;
     
-    public SunMBeanServerInspector() {
+    public TomcatClassLoaderInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(JmxMBeanServerRBean.class);
+            rbf = new RBeanFactory(WebappClassLoaderRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
         this.rbf = rbf;
-        isJava6 = !System.getProperty("java.version").startsWith("1.5");
     }
-
+    
     public boolean isAvailable() {
         return rbf != null;
     }
 
-    public MBeanRepository inspect(MBeanServer mbs) {
-        if (rbf.getRBeanInfo(JmxMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
-            MBeanServerInterceptorRBean interceptor = rbf.createRBean(JmxMBeanServerRBean.class, mbs).getInterceptor();
-            Repository repository = (Repository)((DefaultMBeanServerInterceptorRBean)interceptor).getRepository();
-            return isJava6 ? new SunJava6MBeanRepository(repository) : new SunJava5MBeanRepository(repository);
+    public ModuleDescription inspect(ClassLoader classLoader) {
+        if (rbf.getRBeanInfo(WebappClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
+            WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
+            ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
+            // Tomcat removes the DirContext when stopping the application
+            return new ModuleDescription(null, context == null ? "<defunct>" : context.getContextName(), classLoader);
         } else {
             return null;
         }

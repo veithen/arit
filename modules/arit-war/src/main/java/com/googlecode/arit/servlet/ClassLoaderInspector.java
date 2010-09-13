@@ -17,18 +17,18 @@ package com.googlecode.arit.servlet;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorProvider;
+import com.googlecode.arit.ClassLoaderInspectorPlugin;
 import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ProviderManager;
+import com.googlecode.arit.PluginManager;
 
 @Component(role=ClassLoaderInspector.class)
-public class ClassLoaderInspector extends ProviderManager<ClassLoaderInspectorProvider> {
+public class ClassLoaderInspector extends PluginManager<ClassLoaderInspectorPlugin> {
     public ClassLoaderInspector() {
-        super(ClassLoaderInspectorProvider.class);
+        super(ClassLoaderInspectorPlugin.class);
     }
     
     public ModuleDescription inspect(ClassLoader classLoader) {
-        for (ClassLoaderInspectorProvider provider : getInspectors()) {
+        for (ClassLoaderInspectorPlugin provider : getPlugins()) {
             ModuleDescription desc = provider.inspect(classLoader);
             if (desc != null) {
                 return desc;

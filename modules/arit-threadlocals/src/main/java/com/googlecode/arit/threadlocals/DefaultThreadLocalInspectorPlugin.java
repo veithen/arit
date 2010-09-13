@@ -23,11 +23,11 @@ import org.codehaus.plexus.component.annotations.Component;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ThreadLocalInspector.class)
-public class DefaultThreadLocalInspector implements ThreadLocalInspector {
+@Component(role=ThreadLocalInspectorPlugin.class)
+public class DefaultThreadLocalInspectorPlugin implements ThreadLocalInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public DefaultThreadLocalInspector() {
+    public DefaultThreadLocalInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(ThreadRBean.class);

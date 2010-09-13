@@ -15,7 +15,7 @@
  */
 package com.googlecode.arit;
 
-public interface ClassLoaderInspectorProvider extends Provider {
+public interface ClassLoaderInspectorPlugin extends Plugin {
     /**
      * Determine the application to which a given class loader belongs. The implementation should
      * only inspect the given class loader, but not its parents.

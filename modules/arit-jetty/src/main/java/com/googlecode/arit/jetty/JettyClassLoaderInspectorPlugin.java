@@ -17,16 +17,16 @@ package com.googlecode.arit.jetty;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorProvider;
+import com.googlecode.arit.ClassLoaderInspectorPlugin;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ClassLoaderInspectorProvider.class, hint="jetty")
-public class JettyClassLoaderInspectorProvider implements ClassLoaderInspectorProvider {
+@Component(role=ClassLoaderInspectorPlugin.class, hint="jetty")
+public class JettyClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public JettyClassLoaderInspectorProvider() {
+    public JettyClassLoaderInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(WebAppClassLoaderRBean.class);

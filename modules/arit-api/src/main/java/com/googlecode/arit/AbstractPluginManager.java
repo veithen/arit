@@ -24,29 +24,29 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-public abstract class AbstractProviderManager<T extends Provider> implements Initializable {
-    private final Class<T> inspectorClass;
+public abstract class AbstractPluginManager<T extends Plugin> implements Initializable {
+    private final Class<T> pluginClass;
     
     @Requirement
     private PlexusContainer container;
     
-    public AbstractProviderManager(Class<T> inspectorClass) {
-        this.inspectorClass = inspectorClass;
+    public AbstractPluginManager(Class<T> pluginClass) {
+        this.pluginClass = pluginClass;
     }
     
     public void initialize() throws InitializationException {
         try {
-            List<T> availableInspectors = new ArrayList<T>();
-            for (T inspector : container.lookupList(inspectorClass)) {
-                if (inspector.isAvailable()) {
-                    availableInspectors.add(inspector);
+            List<T> availablePlugins = new ArrayList<T>();
+            for (T plugin : container.lookupList(pluginClass)) {
+                if (plugin.isAvailable()) {
+                    availablePlugins.add(plugin);
                 }
             }
-            initialize(availableInspectors);
+            initialize(availablePlugins);
         } catch (ComponentLookupException ex) {
-            throw new InitializationException("Failed to lookup components with role " + inspectorClass, ex);
+            throw new InitializationException("Failed to lookup components with role " + pluginClass, ex);
         }
     }
 
-    protected abstract void initialize(List<T> availableInspectors);
+    protected abstract void initialize(List<T> availablePlugins);
 }

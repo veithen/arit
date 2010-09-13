@@ -13,8 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.threads;
 
-public interface Provider {
-    boolean isAvailable();
+import com.googlecode.arit.PriorityBasedPlugin;
+
+public interface ThreadInspectorPlugin extends PriorityBasedPlugin {
+    /**
+     * Get a description of the given thread.
+     * 
+     * @param thread
+     *            the thread to inspect
+     * @return a description of the thread, or <code>null</code> if the inspector doesn't recognize
+     *         the given type of thread
+     */
+    ThreadDescription getDescription(Thread thread);
 }

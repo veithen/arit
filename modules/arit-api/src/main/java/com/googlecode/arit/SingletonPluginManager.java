@@ -13,21 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.shutdown;
+package com.googlecode.arit;
 
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
+public class SingletonPluginManager<T extends Plugin> extends AbstractPluginManager<T> {
+    private T plugin;
 
-import com.googlecode.arit.SingletonPluginManager;
+    public SingletonPluginManager(Class<T> pluginClass) {
+        super(pluginClass);
+    }
 
-@Component(role=ShutdownHookInspectorManager.class)
-public class ShutdownHookInspectorManager extends SingletonPluginManager<ShutdownHookInspectorPlugin> {
-    public ShutdownHookInspectorManager() {
-        super(ShutdownHookInspectorPlugin.class);
+    protected void initialize(List<T> availablePlugins) {
+        plugin = availablePlugins.isEmpty() ? null : availablePlugins.get(0);
     }
     
-    public List<Thread> getShutdownHooks() {
-        return getPlugin().getShutdownHooks();
+    public boolean isAvailable() {
+        return plugin != null;
+    }
+
+    protected T getPlugin() {
+        if (plugin == null) {
+            throw new IllegalStateException("No available plugin");
+        } else {
+            return plugin;
+        }
     }
 }
