@@ -35,6 +35,8 @@ import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
+import com.googlecode.arit.servlet.log.Message;
+import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 
 @Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
@@ -74,33 +76,39 @@ public class InspectorServlet extends HttpServlet {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
+            List<Message> messages = new ArrayList<Message>();
             List<Application> applications = new ArrayList<Application>();
-            Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
-            for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
-                ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
-                while (resourceEnumerator.next()) {
-                    for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
-                        if (classLoader != null) {
-                            Application application;
-                            if (classLoaderMap.containsKey(classLoader)) {
-                                application = classLoaderMap.get(classLoader);
-                            } else {
-                                ModuleDescription desc = classLoaderInspector.inspect(classLoader);
-                                if (desc == null) {
-                                    application = null;
+            ThreadLocalLogger.setTarget(messages);
+            try {
+                Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
+                for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
+                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
+                    while (resourceEnumerator.next()) {
+                        for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
+                            if (classLoader != null) {
+                                Application application;
+                                if (classLoaderMap.containsKey(classLoader)) {
+                                    application = classLoaderMap.get(classLoader);
                                 } else {
-                                    application = new Application(desc.getDisplayName());
-                                    applications.add(application);
+                                    ModuleDescription desc = classLoaderInspector.inspect(classLoader);
+                                    if (desc == null) {
+                                        application = null;
+                                    } else {
+                                        application = new Application(desc.getDisplayName());
+                                        applications.add(application);
+                                    }
+                                    classLoaderMap.put(classLoader, application);
                                 }
-                                classLoaderMap.put(classLoader, application);
-                            }
-                            if (application != null) {
-                                application.getResources().add(new Resource(resourceEnumerator.getDescription()));
-                                break;
+                                if (application != null) {
+                                    application.getResources().add(new Resource(resourceEnumerator.getDescription()));
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            } finally {
+                ThreadLocalLogger.setTarget(null);
             }
             Collections.sort(applications, new Comparator<Application>() {
                 public int compare(Application o1, Application o2) {
@@ -109,6 +117,7 @@ public class InspectorServlet extends HttpServlet {
             });
             // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
             request.setAttribute("factories", availableResourceEnumeratorFactories);
+            request.setAttribute("messages", messages);
             request.setAttribute("applications", applications);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }

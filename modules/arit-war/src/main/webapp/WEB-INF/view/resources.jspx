@@ -25,6 +25,12 @@
                     </c:forEach>
                 </ul>
             </c:forEach>
+            <h1>Messages</h1>
+            <ul>
+                <c:forEach items="${messages}" var="message">
+                    <li><c:out value="${message.text}"/></li>
+                </c:forEach>
+            </ul>
         </body>
     </html>
 </jsp:root>

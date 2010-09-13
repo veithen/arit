@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<plexus>
+  <components>
+    <component>
+      <role>org.codehaus.plexus.logging.LoggerManager</role>
+      <implementation>com.googlecode.arit.servlet.log.ThreadLocalLoggerManager</implementation>
+      <isolated-realm>false</isolated-realm>
+    </component>
+  </components>
+</plexus>

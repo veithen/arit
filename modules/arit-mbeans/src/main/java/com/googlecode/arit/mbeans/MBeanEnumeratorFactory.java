@@ -21,6 +21,7 @@ import javax.management.MBeanServerFactory;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
+import org.codehaus.plexus.logging.Logger;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -29,6 +30,9 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement(role=MBeanServerInspector.class)
     private List<MBeanServerInspector> mbsInspectors; 
+    
+    @Requirement
+    private Logger logger;
     
     public boolean isAvailable() {
         for (MBeanServerInspector inspector : mbsInspectors) {
@@ -44,6 +48,6 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new MBeanEnumerator(mbsInspectors, MBeanServerFactory.findMBeanServer(null).iterator());
+        return new MBeanEnumerator(mbsInspectors, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
     }
 }
