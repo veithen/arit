@@ -28,19 +28,14 @@ import com.googlecode.arit.ResourceEnumeratorFactory;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(role=MBeanServerInspectorPlugin.class)
-    private List<MBeanServerInspectorPlugin> mbsInspectors; 
+    @Requirement
+    private MBeanServerInspector mbsInspector; 
     
     @Requirement
     private Logger logger;
     
     public boolean isAvailable() {
-        for (MBeanServerInspectorPlugin inspector : mbsInspectors) {
-            if (inspector.isAvailable()) {
-                return true;
-            }
-        }
-        return false;
+        return mbsInspector.isAvailable();
     }
 
     public String getDescription() {
@@ -48,6 +43,6 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new MBeanEnumerator(mbsInspectors, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
+        return new MBeanEnumerator(mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
     }
 }
