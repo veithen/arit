@@ -17,8 +17,10 @@ package com.googlecode.arit.rbeans.test3;
 
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="com.googlecode.arit.rbeans.test3.Vehicle")
+@RBean
+@TargetClass(Vehicle.class)
 @SeeAlso({CarRBean.class, TruckRBean.class})
 public interface VehicleRBean {
 

@@ -62,6 +62,32 @@ public class RBeanFactory {
         return result;
     }
     
+    private Class<?> getTargetClass(Class<?> rbeanClass) throws RBeanFactoryException {
+        Class<?> targetClass = null;
+        TargetClass targetClassAnnotation = rbeanClass.getAnnotation(TargetClass.class);
+        if (targetClassAnnotation != null) {
+            targetClass = targetClassAnnotation.value();
+        }
+        Target targetAnnotation = rbeanClass.getAnnotation(Target.class);
+        if (targetAnnotation != null) {
+            if (targetClass != null) {
+                // TODO: use exception subclass
+                throw new RBeanFactoryException("Unexpected annotation @Target; already found @TargetClass");
+            }
+            String targetClassName = targetAnnotation.value();
+            try {
+                targetClass = cl.loadClass(targetClassName);
+            } catch (ClassNotFoundException ex) {
+                throw new TargetClassNotFoundException(ex.getMessage());
+            }
+        }
+        if (targetClass == null) {
+            // TODO: use exception subclass
+            throw new RBeanFactoryException("An RBean interface must be annotated with @Target or @TargetClass");
+        }
+        return targetClass;
+    }
+    
     private void load(Class<?> rbeanClass) throws RBeanFactoryException {
         if (rbeanInfoMap.containsKey(rbeanClass)) {
             return;
@@ -70,13 +96,7 @@ public class RBeanFactory {
         if (rbeanAnnotation == null) {
             throw new MissingRBeanAnnotationException("No RBean annotation found on class " + rbeanClass.getName());
         }
-        String targetClassName = rbeanAnnotation.target();
-        Class<?> targetClass;
-        try {
-            targetClass = cl.loadClass(targetClassName);
-        } catch (ClassNotFoundException ex) {
-            throw new TargetClassNotFoundException(ex.getMessage());
-        }
+        Class<?> targetClass = getTargetClass(rbeanClass);
         Map<Method,MethodHandler> methodHandlers = new HashMap<Method,MethodHandler>();
         for (Method proxyMethod : rbeanClass.getMethods()) {
             MethodHandler methodHandler;

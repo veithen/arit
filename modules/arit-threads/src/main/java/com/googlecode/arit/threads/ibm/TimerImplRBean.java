@@ -17,8 +17,10 @@ package com.googlecode.arit.threads.ibm;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.util.Timer$TimerImpl")
+@RBean
+@Target("java.util.Timer$TimerImpl")
 public interface TimerImplRBean {
     @Accessor(name="tasks")
     TimerHeapRBean getTasks();

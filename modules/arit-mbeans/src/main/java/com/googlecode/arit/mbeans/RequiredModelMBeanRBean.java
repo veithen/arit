@@ -15,11 +15,15 @@
  */
 package com.googlecode.arit.mbeans;
 
+import javax.management.modelmbean.RequiredModelMBean;
+
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
 // TODO: need a unit test for this!
-@RBean(target="javax.management.modelmbean.RequiredModelMBean")
+@RBean
+@TargetClass(RequiredModelMBean.class)
 public interface RequiredModelMBeanRBean {
     @Accessor(name="managedResource")
     Object getManagedResource();

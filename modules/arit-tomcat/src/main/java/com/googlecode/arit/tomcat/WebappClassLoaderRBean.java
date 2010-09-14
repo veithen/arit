@@ -17,8 +17,10 @@ package com.googlecode.arit.tomcat;
 
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="org.apache.catalina.loader.WebappClassLoader")
+@RBean
+@Target("org.apache.catalina.loader.WebappClassLoader")
 @SeeAlso(ProxyDirContextRBean.class)
 public interface WebappClassLoaderRBean {
     DirContextRBean getResources(); 

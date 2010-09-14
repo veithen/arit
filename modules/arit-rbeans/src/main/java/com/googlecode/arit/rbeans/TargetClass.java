@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.shutdown.sun;
+package com.googlecode.arit.rbeans;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@RBean
-@Target("java.lang.Shutdown$WrappedHook")
-public interface WrappedHookRBean {
-    @Accessor(name="hook")
-    Thread getHook();
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface TargetClass {
+    Class<?> value();
 }

@@ -27,7 +27,8 @@ Introduction to RBeans
   reflection. To do this with an RBean, one would define the following interface:
 
 +------------+
-@RBean(target="java.lang.ClassLoader")
+@RBean
+@TargetClass(ClassLoader.class)
 public interface ClassLoaderRBean {
     Class<?> defineClass(String name,
                          byte[] b,

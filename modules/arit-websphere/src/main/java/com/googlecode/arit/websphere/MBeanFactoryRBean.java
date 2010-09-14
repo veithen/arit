@@ -18,8 +18,10 @@ package com.googlecode.arit.websphere;
 import javax.management.MBeanServer;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.ibm.websphere.management.MBeanFactory")
+@RBean
+@Target("com.ibm.websphere.management.MBeanFactory")
 public interface MBeanFactoryRBean {
     MBeanServer getMBeanServer();
 }

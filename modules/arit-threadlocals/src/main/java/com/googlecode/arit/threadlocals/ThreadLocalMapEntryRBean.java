@@ -17,8 +17,10 @@ package com.googlecode.arit.threadlocals;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.lang.ThreadLocal$ThreadLocalMap$Entry")
+@RBean
+@Target("java.lang.ThreadLocal$ThreadLocalMap$Entry")
 public interface ThreadLocalMapEntryRBean {
     // TODO: should actually be ThreadLocal<?>
     Object get();

@@ -17,8 +17,10 @@ package com.googlecode.arit.websphere;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.ibm.ws.classloader.CompoundClassLoader")
+@RBean
+@Target("com.ibm.ws.classloader.CompoundClassLoader")
 public interface CompoundClassLoaderRBean {
     @Accessor(name="name")
     String getName();

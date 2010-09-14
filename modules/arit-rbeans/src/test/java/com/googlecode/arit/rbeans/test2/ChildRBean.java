@@ -16,8 +16,10 @@
 package com.googlecode.arit.rbeans.test2;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="com.googlecode.arit.rbeans.test2.Child")
+@RBean
+@TargetClass(Child.class)
 public interface ChildRBean {
     String sayHello();
 }

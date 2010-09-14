@@ -16,12 +16,15 @@
 package com.googlecode.arit.jdbc.ibm;
 
 import java.sql.Driver;
+import java.sql.DriverManager;
 import java.util.List;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="java.sql.DriverManager", isStatic=true)
+@RBean(isStatic=true)
+@TargetClass(DriverManager.class)
 public interface DriverManagerRBean {
     @Accessor(name="theDrivers")
     List<Driver> getDrivers();

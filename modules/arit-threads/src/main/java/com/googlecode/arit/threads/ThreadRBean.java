@@ -17,8 +17,10 @@ package com.googlecode.arit.threads;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="java.lang.Thread")
+@RBean
+@TargetClass(Thread.class)
 public interface ThreadRBean {
     // "target" is used by Sun (1.5 and 1.6)
     // "runnable" is used by IBM

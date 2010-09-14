@@ -17,8 +17,10 @@ package com.googlecode.arit.websphere;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.ibm.ws.runtime.deploy.DeployedObjectCollaborator")
+@RBean
+@Target("com.ibm.ws.runtime.deploy.DeployedObjectCollaborator")
 public interface DeployedObjectCollaboratorRBean {
     @Accessor(name="deployedObj")
     DeployedObjectRBean getDeployedObject();

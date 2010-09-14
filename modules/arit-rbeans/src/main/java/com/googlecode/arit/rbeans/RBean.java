@@ -23,6 +23,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RBean {
-    String target();
     boolean isStatic() default false;
 }

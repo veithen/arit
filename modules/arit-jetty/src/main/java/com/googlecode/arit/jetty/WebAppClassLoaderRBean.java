@@ -17,8 +17,10 @@ package com.googlecode.arit.jetty;
 
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="org.mortbay.jetty.webapp.WebAppClassLoader")
+@RBean
+@Target("org.mortbay.jetty.webapp.WebAppClassLoader")
 @SeeAlso(WebAppContextRBean.class)
 public interface WebAppClassLoaderRBean {
     ContextHandlerRBean getContext();

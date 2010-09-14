@@ -17,8 +17,10 @@ package com.googlecode.arit.threadlocals;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="java.lang.Thread")
+@RBean
+@TargetClass(Thread.class)
 public interface ThreadRBean {
     @Accessor(name="threadLocals")
     ThreadLocalMapRBean getThreadLocals();

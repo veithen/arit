@@ -19,8 +19,10 @@ import java.util.List;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="com.googlecode.arit.rbeans.test4.StuffRegistry", isStatic=true)
+@RBean(isStatic=true)
+@TargetClass(StuffRegistry.class)
 public interface StuffRegistryRBean {
     @Accessor(name="registeredStuff")
     List<Stuff> getRegisteredStuff();

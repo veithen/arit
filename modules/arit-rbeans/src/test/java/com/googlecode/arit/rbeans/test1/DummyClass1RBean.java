@@ -17,8 +17,10 @@ package com.googlecode.arit.rbeans.test1;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="com.googlecode.arit.rbeans.test1.DummyClass1")
+@RBean
+@TargetClass(DummyClass1.class)
 public interface DummyClass1RBean {
     @Accessor(name="value")
     String getValue();

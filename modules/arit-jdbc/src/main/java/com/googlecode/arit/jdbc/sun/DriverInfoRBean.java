@@ -17,8 +17,10 @@ package com.googlecode.arit.jdbc.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.sql.DriverInfo")
+@RBean
+@Target("java.sql.DriverInfo")
 public interface DriverInfoRBean {
     @Accessor(name="driverClass")
     Class<?> getDriverClass();

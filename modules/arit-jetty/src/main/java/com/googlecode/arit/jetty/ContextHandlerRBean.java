@@ -16,8 +16,10 @@
 package com.googlecode.arit.jetty;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="org.mortbay.jetty.handler.ContextHandler")
+@RBean
+@Target("org.mortbay.jetty.handler.ContextHandler")
 public interface ContextHandlerRBean {
 
 }

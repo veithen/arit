@@ -15,10 +15,14 @@
  */
 package com.googlecode.arit.tomcat;
 
+import javax.naming.directory.DirContext;
+
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
 // TODO: actually, we shouldn't need an RBean for this
-@RBean(target="javax.naming.DirContext")
+@RBean
+@TargetClass(DirContext.class)
 public interface DirContextRBean {
 
 }

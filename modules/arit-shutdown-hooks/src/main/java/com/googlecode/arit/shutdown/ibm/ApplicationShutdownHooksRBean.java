@@ -19,8 +19,10 @@ import java.util.IdentityHashMap;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.lang.ApplicationShutdownHooks", isStatic=true)
+@RBean(isStatic=true)
+@Target("java.lang.ApplicationShutdownHooks")
 public interface ApplicationShutdownHooksRBean {
     @Accessor(name="hooks")
     IdentityHashMap<Thread,Thread> getHooks();

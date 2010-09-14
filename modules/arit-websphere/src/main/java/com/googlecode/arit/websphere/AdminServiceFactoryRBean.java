@@ -16,8 +16,10 @@
 package com.googlecode.arit.websphere;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.ibm.websphere.management.AdminServiceFactory", isStatic=true)
+@RBean(isStatic=true)
+@Target("com.ibm.websphere.management.AdminServiceFactory")
 public interface AdminServiceFactoryRBean {
     MBeanFactoryRBean getMBeanFactory();
 }

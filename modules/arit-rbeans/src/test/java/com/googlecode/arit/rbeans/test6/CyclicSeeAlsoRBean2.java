@@ -17,8 +17,10 @@ package com.googlecode.arit.rbeans.test6;
 
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="java.lang.String")
+@RBean
+@TargetClass(String.class)
 @SeeAlso(CyclicSeeAlsoRBean1.class)
 public interface CyclicSeeAlsoRBean2 {
 

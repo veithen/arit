@@ -16,8 +16,10 @@
 package com.googlecode.arit.rbeans.test5;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="non.existing.Class")
+@RBean
+@Target("non.existing.Class")
 public interface NonExistingClassRBean {
 
 }

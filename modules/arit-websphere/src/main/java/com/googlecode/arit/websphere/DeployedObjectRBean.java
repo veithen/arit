@@ -16,8 +16,10 @@
 package com.googlecode.arit.websphere;
 
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.ibm.ws.runtime.deploy.DeployedObject")
+@RBean
+@Target("com.ibm.ws.runtime.deploy.DeployedObject")
 public interface DeployedObjectRBean {
     ClassLoader getClassLoader();
 }

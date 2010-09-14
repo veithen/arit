@@ -17,8 +17,10 @@ package com.googlecode.arit.threads.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.util.TimerThread")
+@RBean
+@Target("java.util.TimerThread")
 public interface TimerThreadRBean {
     @Accessor(name="queue")
     TaskQueueRBean getQueue();

@@ -17,8 +17,10 @@ package com.googlecode.arit.mbeans;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="com.sun.jmx.interceptor.DefaultMBeanServerInterceptor")
+@RBean
+@Target("com.sun.jmx.interceptor.DefaultMBeanServerInterceptor")
 public interface DefaultMBeanServerInterceptorRBean extends MBeanServerInterceptorRBean {
     @Accessor(name="repository")
     Object getRepository();

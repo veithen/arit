@@ -19,8 +19,10 @@ import java.util.TimerTask;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.util.TaskQueue")
+@RBean
+@Target("java.util.TaskQueue")
 public interface TaskQueueRBean {
     @Accessor(name="queue")
     TimerTask[] getQueue();

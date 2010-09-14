@@ -17,8 +17,10 @@ package com.googlecode.arit.rbeans.test8;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="com.googlecode.arit.rbeans.test8.SomeClass")
+@RBean
+@TargetClass(SomeClass.class)
 public interface IncompatibleAttributeTypeRBean {
     @Accessor(name="value")
     Integer getValue();

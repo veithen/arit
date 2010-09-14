@@ -17,8 +17,10 @@ package com.googlecode.arit.shutdown.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-@RBean(target="java.lang.Shutdown", isStatic=true)
+@RBean(isStatic=true)
+@Target("java.lang.Shutdown")
 public interface ShutdownRBean {
     @Accessor(name="hooks")
     Iterable<WrappedHookRBean> getHooks();

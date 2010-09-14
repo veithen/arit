@@ -15,10 +15,14 @@
  */
 package com.googlecode.arit.jdbc.sun;
 
+import java.sql.DriverManager;
+
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(target="java.sql.DriverManager", isStatic=true)
+@RBean(isStatic=true)
+@TargetClass(DriverManager.class)
 public interface DriverManagerRBean {
     // Java 1.5 uses "drivers" attribute.
     // Java 1.6 has some copy-on-write feature and uses "readDrivers".
