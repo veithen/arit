@@ -21,7 +21,6 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.mbeans.MBeanRepository;
-import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
@@ -30,8 +29,8 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
     
-    @Requirement
-    private MBeanServerInspector mbsInspector;
+    @Requirement(hint="sun")
+    private MBeanServerInspectorPlugin sunMbsInspector;
     
     public WASMBeanServerInspectorPlugin() {
         RBeanFactory rbf;
@@ -49,7 +48,7 @@ public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
 
     public MBeanRepository inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(PlatformMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
-            return mbsInspector.inspect(rbf.createRBean(PlatformMBeanServerRBean.class, mbs).getDefaultMBeanServer());
+            return sunMbsInspector.inspect(rbf.createRBean(PlatformMBeanServerRBean.class, mbs).getDefaultMBeanServer());
         } else {
             return null;
         }

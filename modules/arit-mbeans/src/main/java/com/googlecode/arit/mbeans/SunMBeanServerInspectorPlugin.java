@@ -31,7 +31,7 @@ public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
     public SunMBeanServerInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(JmxMBeanServerRBean.class);
+            rbf = new RBeanFactory(JmxMBeanServerRBean.class, RequiredModelMBeanRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
@@ -47,7 +47,7 @@ public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
         if (rbf.getRBeanInfo(JmxMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
             MBeanServerInterceptorRBean interceptor = rbf.createRBean(JmxMBeanServerRBean.class, mbs).getInterceptor();
             Repository repository = (Repository)((DefaultMBeanServerInterceptorRBean)interceptor).getRepository();
-            return isJava6 ? new SunJava6MBeanRepository(repository) : new SunJava5MBeanRepository(repository);
+            return isJava6 ? new SunJava6MBeanRepository(repository, rbf) : new SunJava5MBeanRepository(repository);
         } else {
             return null;
         }

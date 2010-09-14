@@ -41,6 +41,9 @@ import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 @Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
     @Requirement
+    private ModuleLister moduleLister;
+    
+    @Requirement
     private ClassLoaderInspector classLoaderInspector;
     
     @Requirement(role=ResourceEnumeratorFactory.class)
@@ -80,6 +83,9 @@ public class InspectorServlet extends HttpServlet {
             List<Application> applications = new ArrayList<Application>();
             ThreadLocalLogger.setTarget(messages);
             try {
+                
+                moduleLister.listModules();
+                
                 Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
                 for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                     ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();

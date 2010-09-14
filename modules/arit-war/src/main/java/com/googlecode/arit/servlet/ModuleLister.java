@@ -24,7 +24,7 @@ import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleListerPlugin;
 import com.googlecode.arit.PluginManager;
 
-@Component(role=ModuleListerPlugin.class)
+@Component(role=ModuleLister.class)
 public class ModuleLister extends PluginManager<ModuleListerPlugin> {
     public ModuleLister() {
         super(ModuleListerPlugin.class);
@@ -33,7 +33,10 @@ public class ModuleLister extends PluginManager<ModuleListerPlugin> {
     public List<ModuleDescription> listModules() {
         List<ModuleDescription> result = new ArrayList<ModuleDescription>();
         for (ModuleListerPlugin plugin : getPlugins()) {
-            result.addAll(plugin.listModules());
+            List<ModuleDescription> descriptions = plugin.listModules();
+            if (descriptions != null) {
+                result.addAll(descriptions);
+            }
         }
         return result;
     }
