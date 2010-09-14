@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("java.lang.Shutdown$WrappedHook")
-public interface WrappedHookRBean {
+public interface WrappedHookRBean extends RBean {
     @Accessor(name="hook")
     Thread getHook();
 }

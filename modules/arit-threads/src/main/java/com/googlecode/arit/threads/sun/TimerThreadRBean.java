@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("java.util.TimerThread")
-public interface TimerThreadRBean {
+public interface TimerThreadRBean extends RBean {
     @Accessor(name="queue")
     TaskQueueRBean getQueue();
 }

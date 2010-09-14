@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(SomeClass.class)
-public interface IncompatibleAttributeTypeRBean {
+public interface IncompatibleAttributeTypeRBean extends RBean {
     @Accessor(name="value")
     Integer getValue();
 }

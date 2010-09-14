@@ -18,8 +18,7 @@ package com.googlecode.arit.rbeans.test3;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(VehicleHolder.class)
-public interface VehicleHolderRBean {
+public interface VehicleHolderRBean extends RBean {
     VehicleRBean getVehicle();
 }

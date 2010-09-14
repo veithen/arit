@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(String.class)
 @SeeAlso(CyclicSeeAlsoRBean1.class)
-public interface CyclicSeeAlsoRBean2 {
+public interface CyclicSeeAlsoRBean2 extends RBean {
 
 }

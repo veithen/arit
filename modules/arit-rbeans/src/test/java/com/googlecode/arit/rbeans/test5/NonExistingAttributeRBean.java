@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(String.class)
-public interface NonExistingAttributeRBean {
+public interface NonExistingAttributeRBean extends RBean {
     @Accessor(name="nonExistingAttribute")
     String getNonExistingAttribute();
 }

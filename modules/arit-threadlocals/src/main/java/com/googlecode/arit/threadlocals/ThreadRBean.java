@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(Thread.class)
-public interface ThreadRBean {
+public interface ThreadRBean extends RBean {
     @Accessor(name="threadLocals")
     ThreadLocalMapRBean getThreadLocals();
     

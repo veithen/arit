@@ -21,8 +21,7 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
 // TODO: actually, we shouldn't need an RBean for this
-@RBean
 @TargetClass(DirContext.class)
-public interface DirContextRBean {
+public interface DirContextRBean extends RBean {
 
 }

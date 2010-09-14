@@ -15,11 +15,10 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean(isStatic=true)
 @Target("com.ibm.websphere.management.AdminServiceFactory")
-public interface AdminServiceFactoryRBean {
+public interface AdminServiceFactoryRBean extends StaticRBean {
     MBeanFactoryRBean getMBeanFactory();
 }

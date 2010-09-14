@@ -18,8 +18,7 @@ package com.googlecode.arit.rbeans.test2;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(Parent.class)
-public interface ParentRBean {
+public interface ParentRBean extends RBean {
     ChildRBean getChild();
 }

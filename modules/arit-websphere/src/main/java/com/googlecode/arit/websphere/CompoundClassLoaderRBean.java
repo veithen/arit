@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("com.ibm.ws.classloader.CompoundClassLoader")
-public interface CompoundClassLoaderRBean {
+public interface CompoundClassLoaderRBean extends RBean {
     @Accessor(name="name")
     String getName();
 }

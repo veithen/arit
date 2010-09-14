@@ -1,8 +1,9 @@
 Introduction to RBeans
 
   An RBean is a Java object that interacts with another Java object (the "target") using reflection.
-  The RBean corresponding to a given target class is specified by an interface annotated with
-  @RBean. Each method declared by that interface corresponds to a method or attribute of
+  The RBean corresponding to a given target class is specified by an interface extending RBean or
+  StaticRBean and annotated with @Target or @TargetClass.
+  Each method declared by that interface corresponds to a method or attribute of
   the target class. These methods and attributes may be private or protected. An RBean can
   therefore be used to get access to non public members of a class. While this is the most important
   use case for RBeans, there are a couple of others:
@@ -27,9 +28,8 @@ Introduction to RBeans
   reflection. To do this with an RBean, one would define the following interface:
 
 +------------+
-@RBean
 @TargetClass(ClassLoader.class)
-public interface ClassLoaderRBean {
+public interface ClassLoaderRBean extends RBean {
     Class<?> defineClass(String name,
                          byte[] b,
                          int off,

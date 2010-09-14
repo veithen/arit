@@ -20,8 +20,7 @@ import javax.management.MBeanServer;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("com.ibm.ws.management.PlatformMBeanServer")
-public interface PlatformMBeanServerRBean {
+public interface PlatformMBeanServerRBean extends RBean {
     MBeanServer getDefaultMBeanServer();
 }

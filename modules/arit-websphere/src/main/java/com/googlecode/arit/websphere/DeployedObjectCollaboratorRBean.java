@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("com.ibm.ws.runtime.deploy.DeployedObjectCollaborator")
-public interface DeployedObjectCollaboratorRBean {
+public interface DeployedObjectCollaboratorRBean extends RBean {
     @Accessor(name="deployedObj")
     DeployedObjectRBean getDeployedObject();
 }

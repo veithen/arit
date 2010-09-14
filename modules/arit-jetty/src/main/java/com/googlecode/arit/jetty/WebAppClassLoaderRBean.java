@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("org.mortbay.jetty.webapp.WebAppClassLoader")
 @SeeAlso(WebAppContextRBean.class)
-public interface WebAppClassLoaderRBean {
+public interface WebAppClassLoaderRBean extends RBean {
     ContextHandlerRBean getContext();
 }

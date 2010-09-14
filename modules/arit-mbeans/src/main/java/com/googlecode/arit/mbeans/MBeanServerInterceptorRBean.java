@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("com.sun.jmx.interceptor.MBeanServerInterceptor")
 @SeeAlso(DefaultMBeanServerInterceptorRBean.class)
-public interface MBeanServerInterceptorRBean {
+public interface MBeanServerInterceptorRBean extends RBean {
 
 }

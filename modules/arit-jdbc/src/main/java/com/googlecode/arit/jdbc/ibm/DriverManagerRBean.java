@@ -20,12 +20,11 @@ import java.sql.DriverManager;
 import java.util.List;
 
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(isStatic=true)
 @TargetClass(DriverManager.class)
-public interface DriverManagerRBean {
+public interface DriverManagerRBean extends StaticRBean {
     @Accessor(name="theDrivers")
     List<Driver> getDrivers();
 }

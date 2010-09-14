@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("java.sql.DriverInfo")
-public interface DriverInfoRBean {
+public interface DriverInfoRBean extends RBean {
     @Accessor(name="driverClass")
     Class<?> getDriverClass();
 }

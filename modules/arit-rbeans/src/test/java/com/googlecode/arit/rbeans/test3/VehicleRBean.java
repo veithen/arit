@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(Vehicle.class)
 @SeeAlso({CarRBean.class, TruckRBean.class})
-public interface VehicleRBean {
+public interface VehicleRBean extends RBean {
 
 }

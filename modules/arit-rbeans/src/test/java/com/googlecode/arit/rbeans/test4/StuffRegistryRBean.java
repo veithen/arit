@@ -18,12 +18,11 @@ package com.googlecode.arit.rbeans.test4;
 import java.util.List;
 
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean(isStatic=true)
 @TargetClass(StuffRegistry.class)
-public interface StuffRegistryRBean {
+public interface StuffRegistryRBean extends StaticRBean {
     @Accessor(name="registeredStuff")
     List<Stuff> getRegisteredStuff();
 }

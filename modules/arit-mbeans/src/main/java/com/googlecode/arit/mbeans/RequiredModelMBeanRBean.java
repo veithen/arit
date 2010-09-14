@@ -22,9 +22,8 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
 // TODO: need a unit test for this!
-@RBean
 @TargetClass(RequiredModelMBean.class)
-public interface RequiredModelMBeanRBean {
+public interface RequiredModelMBeanRBean extends RBean {
     @Accessor(name="managedResource")
     Object getManagedResource();
 }

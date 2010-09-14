@@ -18,7 +18,6 @@ package com.googlecode.arit.jetty;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("org.mortbay.jetty.webapp.WebAppContext")
 public interface WebAppContextRBean extends ContextHandlerRBean {
     String getContextPath();

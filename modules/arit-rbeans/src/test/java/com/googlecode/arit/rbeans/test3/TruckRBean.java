@@ -15,10 +15,8 @@
  */
 package com.googlecode.arit.rbeans.test3;
 
-import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(Truck.class)
 public interface TruckRBean extends VehicleRBean {
 

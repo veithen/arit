@@ -18,8 +18,7 @@ package com.googlecode.arit.rbeans.test5;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("non.existing.Class")
-public interface NonExistingClassRBean {
+public interface NonExistingClassRBean extends RBean {
 
 }

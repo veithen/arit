@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(DummyClass1.class)
-public interface DummyClass1RBean {
+public interface DummyClass1RBean extends RBean {
     @Accessor(name="value")
     String getValue();
     

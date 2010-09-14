@@ -92,9 +92,15 @@ public class RBeanFactory {
         if (rbeanInfoMap.containsKey(rbeanClass)) {
             return;
         }
-        RBean rbeanAnnotation = rbeanClass.getAnnotation(RBean.class);
-        if (rbeanAnnotation == null) {
-            throw new MissingRBeanAnnotationException("No RBean annotation found on class " + rbeanClass.getName());
+        boolean isStatic;
+        if (RBean.class.isAssignableFrom(rbeanClass)) {
+            isStatic = false;
+        } else if (StaticRBean.class.isAssignableFrom(rbeanClass)) {
+            isStatic = true;
+        } else {
+            // TODO: rename annotation
+            throw new MissingRBeanAnnotationException(rbeanClass.getName() + " neither implements "
+                    + RBean.class.getName() + " nor " + StaticRBean.class.getName());
         }
         Class<?> targetClass = getTargetClass(rbeanClass);
         Map<Method,MethodHandler> methodHandlers = new HashMap<Method,MethodHandler>();
@@ -141,7 +147,7 @@ public class RBeanFactory {
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }
-        rbeanInfoMap.put(rbeanClass, new RBeanInfo(rbeanClass, targetClass, rbeanAnnotation.isStatic(), methodHandlers));
+        rbeanInfoMap.put(rbeanClass, new RBeanInfo(rbeanClass, targetClass, isStatic, methodHandlers));
         SeeAlso seeAlso = rbeanClass.getAnnotation(SeeAlso.class);
         if (seeAlso != null) {
             for (Class<?> clazz : seeAlso.value()) {
@@ -166,7 +172,7 @@ public class RBeanFactory {
     private ObjectHandler getObjectHandler(Type toType, Type fromType) throws RBeanFactoryException {
         Class<?> toClass = getRawType(toType);
         Class<?> fromClass = getRawType(fromType);
-        if (toClass.getAnnotation(RBean.class) == null) {
+        if (!RBean.class.isAssignableFrom(toClass)) {
             Class<?> itemClass = null;
             boolean isArray = toClass.isArray();
             if (isArray) {
@@ -174,7 +180,7 @@ public class RBeanFactory {
             } else if (toClass.equals(Iterable.class)) {
                 itemClass = getRawType(((ParameterizedType)toType).getActualTypeArguments()[0]);
             }
-            if (itemClass != null && itemClass.getAnnotation(RBean.class) != null) {
+            if (itemClass != null && RBean.class.isAssignableFrom(itemClass)) {
                 load(itemClass);
                 return new CollectionWrapper(this, itemClass, fromClass.isArray());
             } else {

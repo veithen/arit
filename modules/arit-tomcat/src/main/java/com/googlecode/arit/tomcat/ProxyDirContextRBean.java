@@ -18,8 +18,7 @@ package com.googlecode.arit.tomcat;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("org.apache.naming.resources.ProxyDirContext")
-public interface ProxyDirContextRBean {
+public interface ProxyDirContextRBean extends RBean {
     String getContextName();
 }

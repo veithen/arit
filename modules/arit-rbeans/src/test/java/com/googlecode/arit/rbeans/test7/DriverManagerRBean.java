@@ -19,9 +19,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(DriverManager.class)
-public interface DriverManagerRBean {
+public interface DriverManagerRBean extends RBean {
     @Accessor(name="drivers")
     Iterable<DriverRBean> getDrivers();
 }

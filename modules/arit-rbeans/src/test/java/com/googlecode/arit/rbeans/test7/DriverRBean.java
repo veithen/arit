@@ -18,8 +18,7 @@ package com.googlecode.arit.rbeans.test7;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@RBean
 @TargetClass(Driver.class)
-public interface DriverRBean {
+public interface DriverRBean extends RBean {
     String getName();
 }

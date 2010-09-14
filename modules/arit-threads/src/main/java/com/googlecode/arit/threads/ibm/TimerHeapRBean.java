@@ -21,9 +21,8 @@ import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@RBean
 @Target("java.util.Timer$TimerImpl$TimerHeap")
-public interface TimerHeapRBean {
+public interface TimerHeapRBean extends RBean {
     @Accessor(name="timers")
     TimerTask[] getTimers();
 }
