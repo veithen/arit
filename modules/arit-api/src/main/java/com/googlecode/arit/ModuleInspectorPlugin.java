@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit;
 
-import java.util.List;
-
-public interface ModuleListerPlugin extends Plugin {
-    List<ModuleDescription> listModules();
+public interface ModuleInspectorPlugin extends Plugin {
+    ModuleInspector createModuleInspector();
 }

@@ -32,6 +32,7 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
@@ -41,10 +42,7 @@ import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 @Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
     @Requirement
-    private ModuleLister moduleLister;
-    
-    @Requirement
-    private ClassLoaderInspector classLoaderInspector;
+    private ModuleInspectorFactory moduleInspectorFactory;
     
     @Requirement(role=ResourceEnumeratorFactory.class)
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
@@ -75,7 +73,7 @@ public class InspectorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!classLoaderInspector.isAvailable()) {
+        if (!moduleInspectorFactory.isAvailable()) {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
@@ -83,8 +81,9 @@ public class InspectorServlet extends HttpServlet {
             List<Application> applications = new ArrayList<Application>();
             ThreadLocalLogger.setTarget(messages);
             try {
+                ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
                 
-                moduleLister.listModules();
+                moduleInspector.listModules();
                 
                 Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
                 for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
@@ -96,7 +95,7 @@ public class InspectorServlet extends HttpServlet {
                                 if (classLoaderMap.containsKey(classLoader)) {
                                     application = classLoaderMap.get(classLoader);
                                 } else {
-                                    ModuleDescription desc = classLoaderInspector.inspect(classLoader);
+                                    ModuleDescription desc = moduleInspector.inspect(classLoader);
                                     if (desc == null) {
                                         application = null;
                                     } else {

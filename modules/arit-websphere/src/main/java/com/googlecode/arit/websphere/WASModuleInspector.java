@@ -22,41 +22,25 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
 
 import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleListerPlugin;
+import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.mbeans.MBeanRepository;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ModuleListerPlugin.class, hint="websphere")
-public class WASModuleListerPlugin implements ModuleListerPlugin {
+public class WASModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;
+    private final MBeanServerInspector mbsInspector;
+    private final Logger log;
     
-    @Requirement
-    private MBeanServerInspector mbsInspector;
-    
-    @Requirement
-    private Logger log;
-    
-    public WASModuleListerPlugin() {
-        RBeanFactory rbf;
-        try {
-            rbf = new RBeanFactory(AdminServiceFactoryRBean.class, DeployedObjectCollaboratorRBean.class);
-        } catch (RBeanFactoryException ex) {
-            rbf = null;
-        }
+    public WASModuleInspector(RBeanFactory rbf, MBeanServerInspector mbsInspector, Logger log) {
         this.rbf = rbf;
+        this.mbsInspector = mbsInspector;
+        this.log = log;
     }
-    
-    public boolean isAvailable() {
-        return rbf != null;
-    }
-    
+
     public List<ModuleDescription> listModules() {
         // TODO: it should be sufficient to get the MBeanServer only once, not for every call to listModules
         MBeanServer mbs = rbf.createRBean(AdminServiceFactoryRBean.class).getMBeanFactory().getMBeanServer();
@@ -77,6 +61,14 @@ public class WASModuleListerPlugin implements ModuleListerPlugin {
                 log.info(deployedObject.getClassLoader().toString());
             }
             // TODO
+            return null;
+        }
+    }
+
+    public ModuleDescription inspect(ClassLoader classLoader) {
+        if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
+            return new ModuleDescription(null, rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName(), classLoader);
+        } else {
             return null;
         }
     }

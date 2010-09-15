@@ -17,13 +17,13 @@ package com.googlecode.arit.jetty;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorPlugin;
-import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ClassLoaderInspectorPlugin.class, hint="jetty")
-public class JettyClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
+@Component(role=ModuleInspectorPlugin.class, hint="jetty")
+public class JettyClassLoaderInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
     public JettyClassLoaderInspectorPlugin() {
@@ -40,13 +40,7 @@ public class JettyClassLoaderInspectorPlugin implements ClassLoaderInspectorPlug
         return rbf != null;
     }
 
-    public ModuleDescription inspect(ClassLoader classLoader) {
-        if (rbf.getRBeanInfo(WebAppClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            WebAppClassLoaderRBean wacl = rbf.createRBean(WebAppClassLoaderRBean.class, classLoader);
-            WebAppContextRBean context = (WebAppContextRBean)wacl.getContext();
-            return new ModuleDescription(null, context.getContextPath(), classLoader);
-        } else {
-            return null;
-        }
+    public ModuleInspector createModuleInspector() {
+        return new JettyModuleInspector(rbf);
     }
 }

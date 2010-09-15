@@ -16,20 +16,29 @@
 package com.googlecode.arit.websphere;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
+import org.codehaus.plexus.logging.Logger;
 
-import com.googlecode.arit.ClassLoaderInspectorPlugin;
-import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleInspectorPlugin;
+import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ClassLoaderInspectorPlugin.class, hint="websphere")
-public class WASClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
+@Component(role=ModuleInspectorPlugin.class, hint="websphere")
+public class WASModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public WASClassLoaderInspectorPlugin() {
+    @Requirement
+    private MBeanServerInspector mbsInspector;
+    
+    @Requirement
+    private Logger log;
+    
+    public WASModuleInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(CompoundClassLoaderRBean.class);
+            rbf = new RBeanFactory(AdminServiceFactoryRBean.class, DeployedObjectCollaboratorRBean.class, CompoundClassLoaderRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
@@ -40,11 +49,7 @@ public class WASClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin
         return rbf != null;
     }
 
-    public ModuleDescription inspect(ClassLoader classLoader) {
-        if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            return new ModuleDescription(null, rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName(), classLoader);
-        } else {
-            return null;
-        }
+    public ModuleInspector createModuleInspector() {
+        return new WASModuleInspector(rbf, mbsInspector, log);
     }
 }

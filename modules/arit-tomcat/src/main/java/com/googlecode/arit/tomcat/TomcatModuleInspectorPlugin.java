@@ -17,16 +17,16 @@ package com.googlecode.arit.tomcat;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ClassLoaderInspectorPlugin;
-import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ClassLoaderInspectorPlugin.class, hint="tomcat")
-public class TomcatClassLoaderInspectorPlugin implements ClassLoaderInspectorPlugin {
+@Component(role=ModuleInspectorPlugin.class, hint="tomcat")
+public class TomcatModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public TomcatClassLoaderInspectorPlugin() {
+    public TomcatModuleInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(WebappClassLoaderRBean.class);
@@ -40,14 +40,7 @@ public class TomcatClassLoaderInspectorPlugin implements ClassLoaderInspectorPlu
         return rbf != null;
     }
 
-    public ModuleDescription inspect(ClassLoader classLoader) {
-        if (rbf.getRBeanInfo(WebappClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
-            ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
-            // Tomcat removes the DirContext when stopping the application
-            return new ModuleDescription(null, context == null ? "<defunct>" : context.getContextName(), classLoader);
-        } else {
-            return null;
-        }
+    public ModuleInspector createModuleInspector() {
+        return new TomcatModuleInspector(rbf);
     }
 }
