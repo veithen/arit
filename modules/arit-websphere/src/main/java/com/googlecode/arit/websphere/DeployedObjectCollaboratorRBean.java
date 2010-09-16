@@ -23,4 +23,6 @@ import com.googlecode.arit.rbeans.Target;
 public interface DeployedObjectCollaboratorRBean extends RBean {
     @Accessor(name="deployedObj")
     DeployedObjectRBean getDeployedObject();
+    
+    String getName();
 }

@@ -15,41 +15,82 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
+import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
+import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.mbeans.MBeanRepository;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ModuleInspectorPlugin.class, hint="websphere")
-public class WASModuleInspectorPlugin implements ModuleInspectorPlugin {
-    private final RBeanFactory rbf;
-    
+public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initializable {
     @Requirement
     private MBeanServerInspector mbsInspector;
     
-    @Requirement
-    private Logger log;
+    @Requirement(hint="ear")
+    private ModuleType earModuleType;
     
-    public WASModuleInspectorPlugin() {
-        RBeanFactory rbf;
+    @Requirement(hint="ejb-jar")
+    private ModuleType ejbJarModuleType;
+    
+    @Requirement(hint="war")
+    private ModuleType warModuleType;
+    
+    private RBeanFactory rbf;
+    private MBeanServer mbs;
+    private MBeanRepository repository;
+    private Map<ModuleType,ObjectName> jmxNameMap = new HashMap<ModuleType,ObjectName>();
+    
+    public void initialize() throws InitializationException {
         try {
             rbf = new RBeanFactory(AdminServiceFactoryRBean.class, DeployedObjectCollaboratorRBean.class, CompoundClassLoaderRBean.class);
         } catch (RBeanFactoryException ex) {
-            rbf = null;
+            return;
         }
-        this.rbf = rbf;
+        mbs = rbf.createRBean(AdminServiceFactoryRBean.class).getMBeanFactory().getMBeanServer();
+        repository = mbsInspector.inspect(mbs);
+        if (repository == null) {
+            throw new InitializationException("Unable to inspect WebSphere's MBean server; this is unexpected because we are in a WebSphere specific plugin");
+        }
+        try {
+            jmxNameMap.put(earModuleType, new ObjectName("WebSphere:type=Application,*"));
+            jmxNameMap.put(ejbJarModuleType, new ObjectName("WebSphere:type=EJBModule,*"));
+            jmxNameMap.put(warModuleType, new ObjectName("WebSphere:type=WebModule,*"));
+        } catch (MalformedObjectNameException ex) {
+            throw new InitializationException("Failed to create object name", ex);
+        }
     }
 
     public boolean isAvailable() {
-        return rbf != null;
+        return rbf != null && repository != null;
     }
 
     public ModuleInspector createModuleInspector() {
-        return new WASModuleInspector(rbf, mbsInspector, log);
+        Map<ClassLoader,ModuleDescription> moduleMap = new HashMap<ClassLoader,ModuleDescription>();
+        for (Map.Entry<ModuleType,ObjectName> entry : jmxNameMap.entrySet()) {
+            Set<ObjectName> names = mbs.queryNames(entry.getValue(), null);
+            for (ObjectName name : names) {
+                DeployedObjectCollaboratorRBean collaborator = rbf.createRBean(DeployedObjectCollaboratorRBean.class, repository.retrieve(name)); 
+                DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
+                ClassLoader classLoader = deployedObject.getClassLoader();
+                moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader));
+            }
+        }
+        return new WASModuleInspector(rbf, moduleMap);
     }
 }
