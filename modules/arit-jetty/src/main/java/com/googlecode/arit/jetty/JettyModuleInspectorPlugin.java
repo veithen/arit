@@ -25,13 +25,13 @@ import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ModuleInspectorPlugin.class, hint="jetty")
-public class JettyClassLoaderInspectorPlugin implements ModuleInspectorPlugin {
+public class JettyModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
     @Requirement(hint="war")
     private ModuleType warModuleType;
     
-    public JettyClassLoaderInspectorPlugin() {
+    public JettyModuleInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(WebAppClassLoaderRBean.class);
