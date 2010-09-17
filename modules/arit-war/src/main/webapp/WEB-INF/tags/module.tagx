@@ -12,7 +12,7 @@
             </c:choose>
             <jsp:text> </jsp:text><c:out value="${module.name}"/>
             <c:if test="${module.defunct}">
-                <jsp:text> </jsp:text><span style="color: red">[defunct]</span>
+                <jsp:text> </jsp:text><img src="defunct.gif"/>
             </c:if>
         </div>
         <c:forEach items="${module.resources}" var="resource">
