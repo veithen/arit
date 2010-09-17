@@ -126,7 +126,7 @@ public class InspectorServlet extends HttpServlet {
                     }
                 }
                 for (Module module : moduleMap.values()) {
-                    if (module != null /*&& module.getParent() == null*/) {
+                    if (module != null && module.getParent() == null) {
                         rootModules.add(module);
                     }
                 }
