@@ -18,11 +18,13 @@ package com.googlecode.arit.servlet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Application {
+public class Module {
     private final String name;
     private final List<Resource> resources = new ArrayList<Resource>();
+    private Module parent;
+    private final List<Module> children = new ArrayList<Module>();
     
-    public Application(String name) {
+    public Module(String name) {
         this.name = name;
     }
 
@@ -32,5 +34,21 @@ public class Application {
 
     public List<Resource> getResources() {
         return resources;
+    }
+    
+    public void addChild(Module child) {
+        if (child.parent != null) {
+            throw new IllegalStateException();
+        }
+        child.parent = this;
+        children.add(child);
+    }
+
+    public Module getParent() {
+        return parent;
+    }
+
+    public List<Module> getChildren() {
+        return children;
     }
 }

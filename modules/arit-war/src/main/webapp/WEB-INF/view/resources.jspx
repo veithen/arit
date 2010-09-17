@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
-          xmlns:c="http://java.sun.com/jsp/jstl/core">
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:arit="urn:jsptagdir:/WEB-INF/tags">
     <jsp:directive.page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" />
     <jsp:text><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>]]></jsp:text>
     <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]></jsp:text>
@@ -18,13 +19,8 @@
                 </c:forEach>
             </ul>
             <h1>Resources by application</h1>
-            <c:forEach items="${applications}" var="app">
-                <div class="module">
-                    <div class="module-name"><c:out value="${app.name}"/></div>
-                    <c:forEach items="${app.resources}" var="resource">
-                        <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>
-                    </c:forEach>
-                </div>
+            <c:forEach items="${rootModules}" var="module">
+                <arit:module module="${module}"/>
             </c:forEach>
             <h1>Messages</h1>
             <ul>

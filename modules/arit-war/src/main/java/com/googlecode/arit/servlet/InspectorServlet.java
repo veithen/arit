@@ -70,7 +70,31 @@ public class InspectorServlet extends HttpServlet {
         availableResourceEnumeratorFactories.clear();
         unavailableResourceEnumeratorFactories.clear();
     }
-
+    
+    private Module getModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ClassLoader classLoader) {
+        if (moduleMap.containsKey(classLoader)) {
+            return moduleMap.get(classLoader);
+        } else {
+            ModuleDescription desc = moduleInspector.inspect(classLoader);
+            Module module;
+            if (desc == null) {
+                module = null;
+            } else {
+                module = new Module(desc.getDisplayName());
+                ClassLoader parentClassLoader = classLoader.getParent();
+                if (parentClassLoader != null) {
+                    // TODO: we should actually walk up the hierarchy until we identify a class loader
+                    Module parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
+                    if (parentModule != null) {
+                        parentModule.addChild(module);
+                    }
+                }
+            }
+            moduleMap.put(classLoader, module);
+            return module;
+        }
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!moduleInspectorFactory.isAvailable()) {
@@ -78,52 +102,46 @@ public class InspectorServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
             List<Message> messages = new ArrayList<Message>();
-            List<Application> applications = new ArrayList<Application>();
+            List<Module> rootModules = new ArrayList<Module>();
             ThreadLocalLogger.setTarget(messages);
             try {
                 ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
                 
                 moduleInspector.listModules();
                 
-                Map<ClassLoader,Application> classLoaderMap = new IdentityHashMap<ClassLoader,Application>();
+                Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
                 for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                     ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                     while (resourceEnumerator.next()) {
                         for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
                             if (classLoader != null) {
-                                Application application;
-                                if (classLoaderMap.containsKey(classLoader)) {
-                                    application = classLoaderMap.get(classLoader);
-                                } else {
-                                    ModuleDescription desc = moduleInspector.inspect(classLoader);
-                                    if (desc == null) {
-                                        application = null;
-                                    } else {
-                                        application = new Application(desc.getDisplayName());
-                                        applications.add(application);
-                                    }
-                                    classLoaderMap.put(classLoader, application);
-                                }
-                                if (application != null) {
-                                    application.getResources().add(new Resource(resourceEnumerator.getDescription()));
+                                Module module = getModule(moduleInspector, moduleMap, classLoader);
+                                // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
+                                if (module != null) {
+                                    module.getResources().add(new Resource(resourceEnumerator.getDescription()));
                                     break;
                                 }
                             }
                         }
                     }
                 }
+                for (Module module : moduleMap.values()) {
+                    if (module != null /*&& module.getParent() == null*/) {
+                        rootModules.add(module);
+                    }
+                }
             } finally {
                 ThreadLocalLogger.setTarget(null);
             }
-            Collections.sort(applications, new Comparator<Application>() {
-                public int compare(Application o1, Application o2) {
+            Collections.sort(rootModules, new Comparator<Module>() {
+                public int compare(Module o1, Module o2) {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
             // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
             request.setAttribute("factories", availableResourceEnumeratorFactories);
             request.setAttribute("messages", messages);
-            request.setAttribute("applications", applications);
+            request.setAttribute("rootModules", rootModules);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
     }
