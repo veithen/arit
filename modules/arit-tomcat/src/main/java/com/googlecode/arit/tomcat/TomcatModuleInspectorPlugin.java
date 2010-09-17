@@ -16,15 +16,20 @@
 package com.googlecode.arit.tomcat;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
+import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ModuleInspectorPlugin.class, hint="tomcat")
 public class TomcatModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
+    
+    @Requirement(hint="war")
+    private ModuleType warModuleType;
     
     public TomcatModuleInspectorPlugin() {
         RBeanFactory rbf;
@@ -41,6 +46,6 @@ public class TomcatModuleInspectorPlugin implements ModuleInspectorPlugin {
     }
 
     public ModuleInspector createModuleInspector() {
-        return new TomcatModuleInspector(rbf);
+        return new TomcatModuleInspector(rbf, warModuleType);
     }
 }

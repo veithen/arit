@@ -19,13 +19,16 @@ import java.util.List;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class JettyModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;
+    private final ModuleType warModuleType;
     
-    public JettyModuleInspector(RBeanFactory rbf) {
+    public JettyModuleInspector(RBeanFactory rbf, ModuleType warModuleType) {
         this.rbf = rbf;
+        this.warModuleType = warModuleType;
     }
 
     public List<ModuleDescription> listModules() {
@@ -36,7 +39,7 @@ public class JettyModuleInspector implements ModuleInspector {
         if (rbf.getRBeanInfo(WebAppClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
             WebAppClassLoaderRBean wacl = rbf.createRBean(WebAppClassLoaderRBean.class, classLoader);
             WebAppContextRBean context = (WebAppContextRBean)wacl.getContext();
-            return new ModuleDescription(null, context.getContextPath(), classLoader);
+            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader);
         } else {
             return null;
         }

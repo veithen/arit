@@ -16,15 +16,20 @@
 package com.googlecode.arit.jetty;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
+import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ModuleInspectorPlugin.class, hint="jetty")
 public class JettyClassLoaderInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
+    
+    @Requirement(hint="war")
+    private ModuleType warModuleType;
     
     public JettyClassLoaderInspectorPlugin() {
         RBeanFactory rbf;
@@ -41,6 +46,6 @@ public class JettyClassLoaderInspectorPlugin implements ModuleInspectorPlugin {
     }
 
     public ModuleInspector createModuleInspector() {
-        return new JettyModuleInspector(rbf);
+        return new JettyModuleInspector(rbf, warModuleType);
     }
 }
