@@ -7,6 +7,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+            <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
             <title>Resources</title>
         </head>
         <body>
@@ -18,12 +19,12 @@
             </ul>
             <h1>Resources by application</h1>
             <c:forEach items="${applications}" var="app">
-                <h2><c:out value="${app.name}"/></h2>
-                <ul>
+                <div class="module">
+                    <div class="module-name"><c:out value="${app.name}"/></div>
                     <c:forEach items="${app.resources}" var="resource">
-                        <li><c:out value="${resource.description}"/></li>
+                        <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>
                     </c:forEach>
-                </ul>
+                </div>
             </c:forEach>
             <h1>Messages</h1>
             <ul>

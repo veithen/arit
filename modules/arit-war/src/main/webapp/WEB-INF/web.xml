@@ -13,6 +13,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>InspectorServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/arit</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,0 +1,31 @@
+body {
+  background-color: #F5F5F5;
+  font-family: Verdana,Arial;
+}
+
+div.module {
+  border: 1px solid #D3E1F9;
+  background-color: white;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  padding: 6px;
+  margin: 8px;
+}
+
+div.module-name {
+  font-size: 14px;
+  border-bottom: 1px solid #C9D7F1;
+  padding-bottom: 4px;
+}
+
+img {
+  border: 0;
+  vertical-align: bottom;
+}
+
+div.resource {
+  font-size: 14px;
+  padding-left: 15px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
