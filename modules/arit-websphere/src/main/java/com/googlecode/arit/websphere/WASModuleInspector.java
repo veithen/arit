@@ -23,6 +23,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 
@@ -54,13 +55,19 @@ public class WASModuleInspector implements ModuleInspector {
             return desc;
         } else if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
             String name = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName();
+            ModuleType moduleType;
+            String moduleName;
             if (name.startsWith("app:")) {
-                return new ModuleDescription(earModuleType, name.substring(4), classLoader);
+                moduleType = earModuleType;
+                moduleName = name.substring(4);
             } else if (name.startsWith("war:")) {
-                return new ModuleDescription(warModuleType, name.substring(name.lastIndexOf('/')+1), classLoader);
+                moduleType = warModuleType;
+                moduleName = name.substring(name.lastIndexOf('/')+1);
             } else {
-                return new ModuleDescription(null, name, classLoader);
+                moduleType = null;
+                moduleName = name;
             }
+            return new ModuleDescription(moduleType, moduleName, classLoader, ModuleStatus.STOPPED);
         } else {
             return null;
         }

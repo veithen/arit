@@ -10,7 +10,11 @@
                 <c:when test="${empty module.icon}"><img src="unknown.png"/></c:when>
                 <c:otherwise><img src="icons/module/${module.icon}"/></c:otherwise>
             </c:choose>
-            <jsp:text> </jsp:text><c:out value="${module.name}"/></div>
+            <jsp:text> </jsp:text><c:out value="${module.name}"/>
+            <c:if test="${module.defunct}">
+                <jsp:text> </jsp:text><span style="color: red">[defunct]</span>
+            </c:if>
+        </div>
         <c:forEach items="${module.resources}" var="resource">
             <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>
         </c:forEach>

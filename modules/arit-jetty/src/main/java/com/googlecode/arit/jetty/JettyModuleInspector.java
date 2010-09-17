@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 
@@ -39,7 +40,8 @@ public class JettyModuleInspector implements ModuleInspector {
         if (rbf.getRBeanInfo(WebAppClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
             WebAppClassLoaderRBean wacl = rbf.createRBean(WebAppClassLoaderRBean.class, classLoader);
             WebAppContextRBean context = (WebAppContextRBean)wacl.getContext();
-            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader);
+            // TODO: it should be possible to determine the module status
+            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader, ModuleStatus.UNKNOWN);
         } else {
             return null;
         }

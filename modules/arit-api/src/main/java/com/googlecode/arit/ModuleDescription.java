@@ -19,11 +19,13 @@ public class ModuleDescription {
     private final ModuleType type;
     private final String displayName;
     private final ClassLoader classLoader;
+    private final ModuleStatus status;
     
-    public ModuleDescription(ModuleType type, String displayName, ClassLoader classLoader) {
+    public ModuleDescription(ModuleType type, String displayName, ClassLoader classLoader, ModuleStatus status) {
         this.type = type;
         this.displayName = displayName;
         this.classLoader = classLoader;
+        this.status = status;
     }
 
     public ModuleType getType() {
@@ -36,5 +38,9 @@ public class ModuleDescription {
 
     public ClassLoader getClassLoader() {
         return classLoader;
+    }
+
+    public ModuleStatus getStatus() {
+        return status;
     }
 }

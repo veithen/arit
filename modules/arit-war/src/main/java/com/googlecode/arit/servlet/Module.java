@@ -21,6 +21,7 @@ import java.util.List;
 public class Module {
     private final String name;
     private String icon;
+    private boolean defunct;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
@@ -39,6 +40,14 @@ public class Module {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public boolean isDefunct() {
+        return defunct;
+    }
+
+    public void setDefunct(boolean defunct) {
+        this.defunct = defunct;
     }
 
     public List<Resource> getResources() {

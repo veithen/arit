@@ -31,6 +31,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.mbeans.MBeanRepository;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
@@ -88,7 +89,7 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
                 DeployedObjectCollaboratorRBean collaborator = rbf.createRBean(DeployedObjectCollaboratorRBean.class, repository.retrieve(name)); 
                 DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
                 ClassLoader classLoader = deployedObject.getClassLoader();
-                moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader));
+                moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader, ModuleStatus.STARTED));
             }
         }
         return new WASModuleInspector(rbf, moduleMap, earModuleType, ejbJarModuleType, warModuleType);

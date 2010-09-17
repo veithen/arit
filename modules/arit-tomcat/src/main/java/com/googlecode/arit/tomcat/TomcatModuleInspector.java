@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 
@@ -40,7 +41,11 @@ public class TomcatModuleInspector implements ModuleInspector {
             WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
             ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
             // Tomcat removes the DirContext when stopping the application
-            return new ModuleDescription(warModuleType, context == null ? "<defunct>" : context.getContextName(), classLoader);
+            if (context == null) {
+                return new ModuleDescription(warModuleType, null, classLoader, ModuleStatus.STOPPED);
+            } else {
+                return new ModuleDescription(warModuleType, context.getContextName(), classLoader, ModuleStatus.STARTED);
+            }
         } else {
             return null;
         }
