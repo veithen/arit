@@ -91,6 +91,6 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
                 moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader));
             }
         }
-        return new WASModuleInspector(rbf, moduleMap);
+        return new WASModuleInspector(rbf, moduleMap, earModuleType, ejbJarModuleType, warModuleType);
     }
 }
