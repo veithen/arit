@@ -33,6 +33,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
@@ -83,7 +84,11 @@ public class InspectorServlet extends HttpServlet {
             if (desc == null) {
                 module = null;
             } else {
-                module = new Module(desc.getDisplayName(), moduleTypeIconManager.getFileName(desc.getType()));
+                module = new Module(desc.getDisplayName());
+                ModuleType moduleType = desc.getType();
+                if (moduleType != null) {
+                    module.setIcon(moduleTypeIconManager.getFileName(moduleType));
+                }
                 ClassLoader parentClassLoader = classLoader.getParent();
                 if (parentClassLoader != null) {
                     // TODO: we should actually walk up the hierarchy until we identify a class loader

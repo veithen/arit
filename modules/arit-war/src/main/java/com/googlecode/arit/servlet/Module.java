@@ -20,14 +20,13 @@ import java.util.List;
 
 public class Module {
     private final String name;
-    private final String icon;
+    private String icon;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(String name, String icon) {
+    public Module(String name) {
         this.name = name;
-        this.icon = icon;
     }
 
     public String getName() {
@@ -36,6 +35,10 @@ public class Module {
 
     public String getIcon() {
         return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public List<Resource> getResources() {
