@@ -20,16 +20,22 @@ import java.util.List;
 
 public class Module {
     private final String name;
+    private final String icon;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(String name) {
+    public Module(String name, String icon) {
         this.name = name;
+        this.icon = icon;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public List<Resource> getResources() {

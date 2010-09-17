@@ -5,7 +5,7 @@
                              type="com.googlecode.arit.servlet.Module"
                              required="true"/>
     <div class="module">
-        <div class="module-name"><c:out value="${module.name}"/></div>
+        <div class="module-name"><img src="icons/module/${module.icon}"/><jsp:text> </jsp:text><c:out value="${module.name}"/></div>
         <c:forEach items="${module.resources}" var="resource">
             <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>
         </c:forEach>

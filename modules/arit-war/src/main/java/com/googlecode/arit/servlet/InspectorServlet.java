@@ -47,6 +47,9 @@ public class InspectorServlet extends HttpServlet {
     @Requirement(role=ResourceEnumeratorFactory.class)
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
+    @Requirement(role=IconManager.class, hint="module")
+    private ModuleTypeIconManager moduleTypeIconManager;
+    
     private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     
@@ -80,7 +83,7 @@ public class InspectorServlet extends HttpServlet {
             if (desc == null) {
                 module = null;
             } else {
-                module = new Module(desc.getDisplayName());
+                module = new Module(desc.getDisplayName(), moduleTypeIconManager.getFileName(desc.getType()));
                 ClassLoader parentClassLoader = classLoader.getParent();
                 if (parentClassLoader != null) {
                     // TODO: we should actually walk up the hierarchy until we identify a class loader

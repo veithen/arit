@@ -11,8 +11,17 @@
         <servlet-name>InspectorServlet</servlet-name>
         <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <display-name>Icon servlet</display-name>
+        <servlet-name>IconServlet</servlet-name>
+        <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InspectorServlet</servlet-name>
         <url-pattern>/arit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IconServlet</servlet-name>
+        <url-pattern>/icons/*</url-pattern>
     </servlet-mapping>
 </web-app>
