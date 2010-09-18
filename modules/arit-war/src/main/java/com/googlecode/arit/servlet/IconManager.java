@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.servlet;
 
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -32,8 +33,11 @@ public abstract class IconManager<T extends IconProvider> implements Initializab
     @Requirement
     private PlexusContainer container;
     
-    private Map<String,T> iconProviderMap;
-    private Map<T,String> keyMap;
+    @Requirement(role=IconVariant.class)
+    private Map<String,IconVariant> variants;
+    
+    private final Map<T,Icon> iconByProvider = new IdentityHashMap<T,Icon>();
+    private final Map<String,Icon> iconByKey = new HashMap<String,Icon>();
 
     public IconManager(Class<T> iconProviderClass) {
         this.iconProviderClass = iconProviderClass;
@@ -41,30 +45,44 @@ public abstract class IconManager<T extends IconProvider> implements Initializab
 
     public void initialize() throws InitializationException {
         try {
-            iconProviderMap = container.lookupMap(iconProviderClass);
-            keyMap = new IdentityHashMap<T,String>();
+            Map<String,T> iconProviderMap = container.lookupMap(iconProviderClass);
             for (Map.Entry<String,T> entry : iconProviderMap.entrySet()) {
-                keyMap.put(entry.getValue(), entry.getKey());
+                Icon icon = new Icon(entry.getKey(), entry.getValue(), variants);
+                iconByProvider.put(entry.getValue(), icon);
+                iconByKey.put(entry.getKey(), icon);
             }
         } catch (ComponentLookupException ex) {
             throw new InitializationException("Failed to lookup components with role " + iconProviderClass, ex);
         }
     }
     
-    public String getFileName(T iconProvider) {
-        return keyMap.get(iconProvider) + "." + iconProvider.getIconFormat().getSuffix();
+    public Icon getIcon(T iconProvider) {
+        return iconByProvider.get(iconProvider);
     }
     
-    public T getByFileName(String fileName) {
-        int idx = fileName.indexOf('.');
-        if (idx == -1) {
+    public IconImage getByFileName(String fileName) {
+        int i = fileName.indexOf('/');
+        if (i == -1) {
             return null;
         } else {
-            T iconProvider = iconProviderMap.get(fileName.substring(0, idx));
-            if (iconProvider != null && fileName.substring(idx+1).equals(iconProvider.getIconFormat().getSuffix())) {
-                return iconProvider;
-            } else {
+            String variantName = fileName.substring(0, i);
+            int j = fileName.lastIndexOf('.');
+            if (j == -1) {
                 return null;
+            } else {
+                String key = fileName.substring(i+1, j);
+                String suffix = fileName.substring(j+1);
+                Icon icon = iconByKey.get(key);
+                if (icon == null) {
+                    return null;
+                } else {
+                    IconImage image = icon.getIconImage(variantName);
+                    if (image != null && image.getData().getFormat().getSuffix().equals(suffix)) {
+                        return image;
+                    } else {
+                        return null;
+                    }
+                }
             }
         }
     }

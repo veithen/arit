@@ -13,25 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.servlet;
 
-public enum ImageFormat {
-    GIF("image/gif", "gif"),
-    PNG("image/png", "png");
-    
-    private final String contentType;
-    private final String suffix;
+import java.io.IOException;
 
-    private ImageFormat(String contentType, String suffix) {
-        this.contentType = contentType;
-        this.suffix = suffix;
-    }
+import com.googlecode.arit.IconProvider;
 
-    public String getContentType() {
-        return contentType;
-    }
-
-    public String getSuffix() {
-        return suffix;
-    }
+public interface IconVariant {
+    ImageData createIconImage(IconProvider iconProvider);
 }

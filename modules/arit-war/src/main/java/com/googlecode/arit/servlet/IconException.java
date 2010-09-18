@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.servlet;
 
-public enum ImageFormat {
-    GIF("image/gif", "gif"),
-    PNG("image/png", "png");
-    
-    private final String contentType;
-    private final String suffix;
+public class IconException extends RuntimeException {
+    private static final long serialVersionUID = -2196231578258585299L;
 
-    private ImageFormat(String contentType, String suffix) {
-        this.contentType = contentType;
-        this.suffix = suffix;
+    public IconException() {
+        super();
     }
 
-    public String getContentType() {
-        return contentType;
+    public IconException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public String getSuffix() {
-        return suffix;
+    public IconException(String message) {
+        super(message);
+    }
+
+    public IconException(Throwable cause) {
+        super(cause);
     }
 }

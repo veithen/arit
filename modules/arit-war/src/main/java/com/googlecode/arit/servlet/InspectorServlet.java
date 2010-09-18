@@ -88,7 +88,7 @@ public class InspectorServlet extends HttpServlet {
                 module = new Module(desc.getDisplayName());
                 ModuleType moduleType = desc.getType();
                 if (moduleType != null) {
-                    module.setIcon(moduleTypeIconManager.getFileName(moduleType));
+                    module.setIcon(moduleTypeIconManager.getIcon(moduleType).getIconImage(desc.getStatus() == ModuleStatus.STOPPED ? "grayed" : "default").getFileName());
                 }
                 ClassLoader parentClassLoader = classLoader.getParent();
                 Module parentModule;
