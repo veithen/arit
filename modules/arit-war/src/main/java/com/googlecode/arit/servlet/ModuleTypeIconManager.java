@@ -18,6 +18,7 @@ package com.googlecode.arit.servlet;
 import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.icon.IconManager;
 
 @Component(role=IconManager.class, hint="module")
 public class ModuleTypeIconManager extends IconManager<ModuleType> {

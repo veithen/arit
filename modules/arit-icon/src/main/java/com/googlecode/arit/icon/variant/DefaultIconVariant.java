@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon.variant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,8 @@ import java.io.InputStream;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 
-import com.googlecode.arit.IconProvider;
+import com.googlecode.arit.icon.IconProvider;
+import com.googlecode.arit.icon.ImageData;
 
 @Component(role=IconVariant.class, hint="default")
 public class DefaultIconVariant implements IconVariant {

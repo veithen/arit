@@ -17,8 +17,8 @@ package com.googlecode.arit.jee;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.ImageFormat;
 import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.icon.ImageFormat;
 
 @Component(role=ModuleType.class, hint="ear")
 public class EarModuleType extends ModuleType {

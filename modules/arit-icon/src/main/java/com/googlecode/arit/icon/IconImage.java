@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon;
 
-import com.googlecode.arit.ImageFormat;
-
-public class ImageData {
-    private final ImageFormat format;
-    private final byte[] content;
+public class IconImage {
+    private final String variantName;
+    private final String key;
+    private final ImageData data;
     
-    public ImageData(ImageFormat format, byte[] content) {
-        this.format = format;
-        this.content = content;
+    IconImage(String variantName, String key, ImageData data) {
+        this.variantName = variantName;
+        this.key = key;
+        this.data = data;
+    }
+    
+    public String getFileName() {
+        return variantName + "/" + key + "." + data.getFormat().getSuffix();
     }
 
-    public ImageFormat getFormat() {
-        return format;
-    }
-
-    public byte[] getContent() {
-        return content;
+    public ImageData getData() {
+        return data;
     }
 }

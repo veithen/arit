@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon.variant;
 
 public class IconException extends RuntimeException {
     private static final long serialVersionUID = -2196231578258585299L;

@@ -17,6 +17,9 @@ package com.googlecode.arit;
 
 import java.net.URL;
 
+import com.googlecode.arit.icon.IconProvider;
+import com.googlecode.arit.icon.ImageFormat;
+
 public abstract class ModuleType implements IconProvider {
     private final ImageFormat iconFormat;
     private final URL iconResource;

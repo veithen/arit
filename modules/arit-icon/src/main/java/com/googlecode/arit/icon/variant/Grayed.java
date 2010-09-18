@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon.variant;
 
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
@@ -25,8 +25,9 @@ import javax.imageio.ImageIO;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.IconProvider;
-import com.googlecode.arit.ImageFormat;
+import com.googlecode.arit.icon.IconProvider;
+import com.googlecode.arit.icon.ImageData;
+import com.googlecode.arit.icon.ImageFormat;
 
 @Component(role=IconVariant.class, hint="grayed")
 public class Grayed implements IconVariant {

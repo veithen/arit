@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.arit.IconProvider;
+import com.googlecode.arit.icon.variant.IconVariant;
 
 public class Icon {
     private final String key;
@@ -26,20 +26,12 @@ public class Icon {
     private final Map<String,IconVariant> variants;
     private final Map<String,IconImage> images = new HashMap<String,IconImage>();
 
-    public Icon(String key, IconProvider provider, Map<String,IconVariant> variants) {
+    Icon(String key, IconProvider provider, Map<String,IconVariant> variants) {
         this.key = key;
         this.provider = provider;
         this.variants = variants;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public IconProvider getProvider() {
-        return provider;
-    }
-    
     public synchronized IconImage getIconImage(String variantName) {
         IconImage image = images.get(variantName);
         if (image == null) {

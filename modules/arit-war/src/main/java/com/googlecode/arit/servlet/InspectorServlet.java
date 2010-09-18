@@ -38,6 +38,7 @@ import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
+import com.googlecode.arit.icon.IconManager;
 import com.googlecode.arit.servlet.log.Message;
 import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 

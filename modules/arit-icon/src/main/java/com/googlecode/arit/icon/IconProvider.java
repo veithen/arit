@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon;
 
-import java.io.IOException;
+import java.net.URL;
 
-import com.googlecode.arit.IconProvider;
-
-public interface IconVariant {
-    ImageData createIconImage(IconProvider iconProvider);
+public interface IconProvider {
+    ImageFormat getIconFormat();
+    URL getIconResource();
 }

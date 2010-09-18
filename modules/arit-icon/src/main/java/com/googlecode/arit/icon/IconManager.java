@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon;
 
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -25,7 +25,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-import com.googlecode.arit.IconProvider;
+import com.googlecode.arit.icon.variant.IconVariant;
 
 public abstract class IconManager<T extends IconProvider> implements Initializable {
     private final Class<T> iconProviderClass;

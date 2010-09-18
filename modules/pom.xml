@@ -22,6 +22,7 @@
     <modules>
         <module>arit-api</module>
         <module>arit-ear</module>
+        <module>arit-icon</module>
         <module>arit-jdbc</module>
         <module>arit-jee</module>
         <module>arit-jetty</module>

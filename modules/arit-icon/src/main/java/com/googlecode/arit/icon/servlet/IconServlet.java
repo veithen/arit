@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.icon.servlet;
 
 import java.io.IOException;
 import java.util.Map;
@@ -25,6 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
+
+import com.googlecode.arit.icon.IconImage;
+import com.googlecode.arit.icon.IconManager;
+import com.googlecode.arit.icon.ImageData;
 
 @Component(role=HttpServlet.class, hint="IconServlet")
 public class IconServlet extends HttpServlet {
