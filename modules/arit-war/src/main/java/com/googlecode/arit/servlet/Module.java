@@ -18,20 +18,27 @@ package com.googlecode.arit.servlet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.googlecode.arit.ModuleStatus;
+
 public class Module {
     private final String name;
+    private final ModuleStatus status;
     private String icon;
-    private boolean defunct;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(String name) {
+    public Module(String name, ModuleStatus status) {
         this.name = name;
+        this.status = status;
     }
 
     public String getName() {
         return name;
+    }
+
+    public ModuleStatus getStatus() {
+        return status;
     }
 
     public String getIcon() {
@@ -40,14 +47,6 @@ public class Module {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public boolean isDefunct() {
-        return defunct;
-    }
-
-    public void setDefunct(boolean defunct) {
-        this.defunct = defunct;
     }
 
     public List<Resource> getResources() {

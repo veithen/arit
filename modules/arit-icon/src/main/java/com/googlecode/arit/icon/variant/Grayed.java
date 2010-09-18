@@ -18,29 +18,16 @@ package com.googlecode.arit.icon.variant;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
 
 import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.icon.IconProvider;
-import com.googlecode.arit.icon.ImageData;
-import com.googlecode.arit.icon.ImageFormat;
-
 @Component(role=IconVariant.class, hint="grayed")
-public class Grayed implements IconVariant {
-    public ImageData createIconImage(IconProvider iconProvider) {
-        try {
-            BufferedImage image = ImageIO.read(iconProvider.getIconResource());
-            ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-            op.filter(image, image);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "PNG", baos);
-            return new ImageData(ImageFormat.PNG, baos.toByteArray());
-        } catch (IOException ex) {
-            throw new IconException(ex);
-        }
+public class Grayed extends TransformationVariant {
+    @Override
+    protected RenderedImage transform(BufferedImage image) {
+        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        op.filter(image, image);
+        return image;
     }
 }

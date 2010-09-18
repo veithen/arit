@@ -11,9 +11,6 @@
                 <c:otherwise><img src="icons/module/${module.icon}"/></c:otherwise>
             </c:choose>
             <jsp:text> </jsp:text><c:out value="${module.name}"/>
-            <c:if test="${module.defunct}">
-                <jsp:text> </jsp:text><img src="defunct.gif"/>
-            </c:if>
         </div>
         <c:forEach items="${module.resources}" var="resource">
             <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>

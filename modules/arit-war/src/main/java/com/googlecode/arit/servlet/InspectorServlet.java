@@ -86,11 +86,8 @@ public class InspectorServlet extends HttpServlet {
             if (desc == null) {
                 module = null;
             } else {
-                module = new Module(desc.getDisplayName());
+                module = new Module(desc.getDisplayName(), desc.getStatus());
                 ModuleType moduleType = desc.getType();
-                if (moduleType != null) {
-                    module.setIcon(moduleTypeIconManager.getIcon(moduleType).getIconImage(desc.getStatus() == ModuleStatus.STOPPED ? "grayed" : "default").getFileName());
-                }
                 ClassLoader parentClassLoader = classLoader.getParent();
                 Module parentModule;
                 if (parentClassLoader != null) {
@@ -102,7 +99,20 @@ public class InspectorServlet extends HttpServlet {
                 } else {
                     parentModule = null;
                 }
-                module.setDefunct(desc.getStatus() == ModuleStatus.STOPPED && (parentModule == null || !parentModule.isDefunct()));
+                String variant;
+                if (desc.getStatus() == ModuleStatus.STOPPED) {
+                    if (parentModule == null || parentModule.getStatus() != ModuleStatus.STOPPED) {
+                        variant = "defunct";
+                    } else {
+                        variant = "grayed";
+                    }
+                } else {
+                    variant = "default";
+                }
+                // TODO: we should use a default module type
+                if (moduleType != null) {
+                    module.setIcon(moduleTypeIconManager.getIcon(moduleType).getIconImage(variant).getFileName());
+                }
             }
             moduleMap.put(classLoader, module);
             return module;
