@@ -15,11 +15,13 @@
  */
 package com.googlecode.arit;
 
-import java.util.Collection;
+import java.net.URL;
 
-public interface ResourceEnumerator {
-    ResourceType getType();
-    Collection<ClassLoader> getClassLoaders();
-    String getDescription();
-    boolean next();
+import com.googlecode.arit.icon.AbstractIconProvider;
+import com.googlecode.arit.icon.ImageFormat;
+
+public abstract class ResourceType extends AbstractIconProvider {
+    public ResourceType(ImageFormat iconFormat, URL iconResource) {
+        super(iconFormat, iconResource);
+    }
 }

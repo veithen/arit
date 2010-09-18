@@ -16,10 +16,16 @@
 package com.googlecode.arit.servlet;
 
 public class Resource {
+    private final String icon;
     private final String description;
 
-    public Resource(String description) {
+    public Resource(String icon, String description) {
+        this.icon = icon;
         this.description = description;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public String getDescription() {

@@ -21,13 +21,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceType;
 
 public class JdbcDriverEnumerator implements ResourceEnumerator {
+    private final ResourceType resourceType;
     private final Iterator<Class<?>> iterator;
     private Class<?> driverClass;
     
-    public JdbcDriverEnumerator(List<Class<?>> driverClasses) {
+    public JdbcDriverEnumerator(ResourceType resourceType, List<Class<?>> driverClasses) {
+        this.resourceType = resourceType;
         iterator = driverClasses.iterator();
+    }
+
+    public ResourceType getType() {
+        return resourceType;
     }
 
     public Collection<ClassLoader> getClassLoaders() {

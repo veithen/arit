@@ -21,13 +21,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceType;
 
 public class ShutdownHookEnumerator implements ResourceEnumerator {
+    private final ResourceType resourceType;
     private final Iterator<Thread> iterator;
     private Thread hook;
     
-    public ShutdownHookEnumerator(List<Thread> hooks) {
+    public ShutdownHookEnumerator(ResourceType resourceType, List<Thread> hooks) {
+        this.resourceType = resourceType;
         iterator = hooks.iterator();
+    }
+
+    public ResourceType getType() {
+        return resourceType;
     }
 
     public Collection<ClassLoader> getClassLoaders() {

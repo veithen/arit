@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.mbeans;
 
-import java.util.List;
-
 import javax.management.MBeanServerFactory;
 
 import org.codehaus.plexus.component.annotations.Component;
@@ -25,9 +23,13 @@ import org.codehaus.plexus.logging.Logger;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement(hint="mbean")
+    private ResourceType resourceType;
+
     @Requirement
     private MBeanServerInspector mbsInspector; 
     
@@ -43,6 +45,6 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new MBeanEnumerator(mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
+        return new MBeanEnumerator(resourceType, mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
     }
 }

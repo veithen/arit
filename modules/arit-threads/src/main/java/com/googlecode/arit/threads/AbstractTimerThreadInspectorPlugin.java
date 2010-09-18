@@ -19,7 +19,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
+import org.codehaus.plexus.component.annotations.Requirement;
+
+import com.googlecode.arit.ResourceType;
+
 public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspectorPlugin {
+    @Requirement(hint="timerthread")
+    private ResourceType resourceType;
+    
     protected abstract TimerTask[] getTimerTasks(Thread thread);
     
     public ThreadDescription getDescription(Thread thread) {
@@ -47,7 +54,7 @@ public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspec
             if (classLoaders.isEmpty()) {
                 classLoaders.add(thread.getContextClassLoader());
             }
-            return new ThreadDescription(description.toString(), classLoaders);
+            return new ThreadDescription(resourceType, description.toString(), classLoaders);
         } else {
             return null;
         }

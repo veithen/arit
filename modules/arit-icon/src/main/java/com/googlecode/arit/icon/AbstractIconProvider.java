@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.icon;
 
-import java.util.Collection;
+import java.net.URL;
 
-public interface ResourceEnumerator {
-    ResourceType getType();
-    Collection<ClassLoader> getClassLoaders();
-    String getDescription();
-    boolean next();
+public abstract class AbstractIconProvider implements IconProvider {
+    private final ImageFormat iconFormat;
+    private final URL iconResource;
+    
+    public AbstractIconProvider(ImageFormat iconFormat, URL iconResource) {
+        this.iconFormat = iconFormat;
+        this.iconResource = iconResource;
+    }
+
+    public ImageFormat getIconFormat() {
+        return iconFormat;
+    }
+
+    public URL getIconResource() {
+        return iconResource;
+    }
 }

@@ -19,7 +19,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
+import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
@@ -30,6 +32,9 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
  */
 @Component(role=ThreadInspectorPlugin.class)
 public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
+    @Requirement(hint="thread")
+    private ResourceType resourceType;
+    
     private final RBeanFactory rbf;
     
     public DefaultThreadInspectorPlugin() {
@@ -63,7 +68,7 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
             description.append(targetClass.getName());
             classLoaders.add(targetClass.getClassLoader());
         }
-        return new ThreadDescription(description.toString(), classLoaders);
+        return new ThreadDescription(resourceType, description.toString(), classLoaders);
     }
 
     public int getPriority() {

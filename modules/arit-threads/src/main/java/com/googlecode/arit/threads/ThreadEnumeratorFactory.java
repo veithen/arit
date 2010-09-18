@@ -20,10 +20,14 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="thread")
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement(hint="thread")
+    private ResourceType defaultResourceType;
+    
     @Requirement
     private ThreadInspector inspectorManager;
     
@@ -36,6 +40,6 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ThreadEnumerator(inspectorManager, ThreadUtils.getAllThreads());
+        return new ThreadEnumerator(defaultResourceType, inspectorManager, ThreadUtils.getAllThreads());
     }
 }

@@ -17,13 +17,21 @@ package com.googlecode.arit.threads;
 
 import java.util.Set;
 
+import com.googlecode.arit.ResourceType;
+
 public class ThreadDescription {
+    private final ResourceType resourceType;
     private final String description;
     private final Set<ClassLoader> classLoaders;
     
-    public ThreadDescription(String description, Set<ClassLoader> classLoaders) {
+    public ThreadDescription(ResourceType resourceType, String description, Set<ClassLoader> classLoaders) {
+        this.resourceType = resourceType;
         this.description = description;
         this.classLoaders = classLoaders;
+    }
+
+    public ResourceType getResourceType() {
+        return resourceType;
     }
 
     public String getDescription() {

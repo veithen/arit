@@ -19,17 +19,24 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceType;
 
 public class ThreadEnumerator implements ResourceEnumerator {
+    private final ResourceType defaultResourceType;
     private final ThreadInspector inspectorManager;
     private final Thread[] threads;
     private int current = -1;
     private Thread thread;
     private ThreadDescription description;
 
-    public ThreadEnumerator(ThreadInspector inspectorManager, Thread[] threads) {
+    public ThreadEnumerator(ResourceType defaultResourceType, ThreadInspector inspectorManager, Thread[] threads) {
+        this.defaultResourceType = defaultResourceType;
         this.inspectorManager = inspectorManager;
         this.threads = threads;
+    }
+
+    public ResourceType getType() {
+        return description == null ? defaultResourceType : description.getResourceType();
     }
 
     public Collection<ClassLoader> getClassLoaders() {

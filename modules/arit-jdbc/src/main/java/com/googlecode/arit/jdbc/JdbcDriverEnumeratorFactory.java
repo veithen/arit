@@ -20,12 +20,16 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="jdbc")
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement(hint="jdbc")
+    private ResourceType resourceType;
+
     @Requirement
     private DriverManagerInspector inspector;
-
+    
     public boolean isAvailable() {
         return inspector.isAvailable();
     }
@@ -35,6 +39,6 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new JdbcDriverEnumerator(inspector.getDriverClasses());
+        return new JdbcDriverEnumerator(resourceType, inspector.getDriverClasses());
     }
 }

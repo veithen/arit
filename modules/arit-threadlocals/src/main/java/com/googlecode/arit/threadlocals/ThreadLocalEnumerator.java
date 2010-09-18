@@ -22,13 +22,20 @@ import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceType;
 
 public class ThreadLocalEnumerator implements ResourceEnumerator {
+    private final ResourceType resourceType;
     private final Iterator<Set<Class<?>>> iterator;
     private Set<Class<?>> classes;
 
-    public ThreadLocalEnumerator(Map<ThreadLocal<?>,Set<Class<?>>> threadLocals) {
+    public ThreadLocalEnumerator(ResourceType resourceType, Map<ThreadLocal<?>,Set<Class<?>>> threadLocals) {
+        this.resourceType = resourceType;
         iterator = threadLocals.values().iterator();
+    }
+
+    public ResourceType getType() {
+        return resourceType;
     }
 
     public Collection<ClassLoader> getClassLoaders() {

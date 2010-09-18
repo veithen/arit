@@ -26,8 +26,10 @@ import javax.management.ObjectName;
 import org.codehaus.plexus.logging.Logger;
 
 import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceType;
 
 public class MBeanEnumerator implements ResourceEnumerator {
+    private final ResourceType resourceType;
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
     private final Logger logger;
@@ -36,10 +38,15 @@ public class MBeanEnumerator implements ResourceEnumerator {
     private ObjectName name;
     private Object mbean;
 
-    public MBeanEnumerator(MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator, Logger logger) {
+    public MBeanEnumerator(ResourceType resourceType, MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator, Logger logger) {
+        this.resourceType = resourceType;
         this.mbsInspector = mbsInspector;
         this.mbsIterator = mbsIterator;
         this.logger = logger;
+    }
+
+    public ResourceType getType() {
+        return resourceType;
     }
 
     public Collection<ClassLoader> getClassLoaders() {

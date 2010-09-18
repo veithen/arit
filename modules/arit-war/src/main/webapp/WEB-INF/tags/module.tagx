@@ -13,7 +13,7 @@
             <jsp:text> </jsp:text><c:out value="${module.name}"/>
         </div>
         <c:forEach items="${module.resources}" var="resource">
-            <div class="resource"><img src="dot.gif"/><c:out value="${resource.description}"/></div>
+            <div class="resource"><img src="icons/resource/${resource.icon}"/><jsp:text> </jsp:text><c:out value="${resource.description}"/></div>
         </c:forEach>
         <c:forEach items="${module.children}" var="child">
             <arit:module module="${child}"/>

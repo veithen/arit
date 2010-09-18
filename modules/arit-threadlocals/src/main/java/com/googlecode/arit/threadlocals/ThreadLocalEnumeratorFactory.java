@@ -25,10 +25,14 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement(hint="threadlocal")
+    private ResourceType resourceType;
+    
     @Requirement
     private ThreadLocalInspector inspector;
     
@@ -56,6 +60,6 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
                 }
             }
         }
-        return new ThreadLocalEnumerator(threadLocals);
+        return new ThreadLocalEnumerator(resourceType, threadLocals);
     }
 }

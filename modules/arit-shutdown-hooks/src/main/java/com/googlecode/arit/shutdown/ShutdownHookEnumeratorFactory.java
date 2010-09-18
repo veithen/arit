@@ -20,9 +20,13 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
+    @Requirement(hint="shutdown")
+    private ResourceType resourceType;
+
     @Requirement
     private ShutdownHookInspector inspector;
 
@@ -35,6 +39,6 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ShutdownHookEnumerator(inspector.getShutdownHooks());
+        return new ShutdownHookEnumerator(resourceType, inspector.getShutdownHooks());
     }
 }

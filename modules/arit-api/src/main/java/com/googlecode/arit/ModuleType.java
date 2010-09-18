@@ -17,23 +17,11 @@ package com.googlecode.arit;
 
 import java.net.URL;
 
-import com.googlecode.arit.icon.IconProvider;
+import com.googlecode.arit.icon.AbstractIconProvider;
 import com.googlecode.arit.icon.ImageFormat;
 
-public abstract class ModuleType implements IconProvider {
-    private final ImageFormat iconFormat;
-    private final URL iconResource;
-    
+public abstract class ModuleType extends AbstractIconProvider {
     public ModuleType(ImageFormat iconFormat, URL iconResource) {
-        this.iconFormat = iconFormat;
-        this.iconResource = iconResource;
-    }
-
-    public ImageFormat getIconFormat() {
-        return iconFormat;
-    }
-
-    public URL getIconResource() {
-        return iconResource;
+        super(iconFormat, iconResource);
     }
 }
