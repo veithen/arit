@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans.sun;
+package com.googlecode.arit.mbeans.sun.java6;
 
+import com.googlecode.arit.mbeans.sun.MBeanServerInterceptorRBean;
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("com.sun.jmx.interceptor.DefaultMBeanServerInterceptor")
 public interface DefaultMBeanServerInterceptorRBean extends MBeanServerInterceptorRBean {
     @Accessor(name="repository")
-    Object getRepository();
+    RepositoryRBean getRepository();
 }

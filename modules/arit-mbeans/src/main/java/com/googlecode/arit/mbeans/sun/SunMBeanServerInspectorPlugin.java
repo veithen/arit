@@ -17,28 +17,25 @@ package com.googlecode.arit.mbeans.sun;
 
 import javax.management.MBeanServer;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.sun.jmx.mbeanserver.Repository;
 
-@Component(role=MBeanServerInspectorPlugin.class, hint="sun")
-public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
-    private final RBeanFactory rbf;
-    private final boolean isJava6;
+public abstract class SunMBeanServerInspectorPlugin<T extends MBeanServerInterceptorRBean> implements MBeanServerInspectorPlugin {
+    private final Class<T> defaultMBeanServerInterceptorClass;
+    // TODO: should be private
+    protected final RBeanFactory rbf;
     
-    public SunMBeanServerInspectorPlugin() {
+    public SunMBeanServerInspectorPlugin(Class<T> defaultMBeanServerInterceptorClass) {
+        this.defaultMBeanServerInterceptorClass = defaultMBeanServerInterceptorClass;
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(JmxMBeanServerRBean.class, RequiredModelMBeanRBean.class);
+            rbf = new RBeanFactory(JmxMBeanServerRBean.class, RequiredModelMBeanRBean.class, defaultMBeanServerInterceptorClass);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
         this.rbf = rbf;
-        isJava6 = !System.getProperty("java.version").startsWith("1.5");
     }
 
     public boolean isAvailable() {
@@ -48,10 +45,11 @@ public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
     public MBeanAccessor inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(JmxMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
             MBeanServerInterceptorRBean interceptor = rbf.createRBean(JmxMBeanServerRBean.class, mbs).getInterceptor();
-            Repository repository = (Repository)((DefaultMBeanServerInterceptorRBean)interceptor).getRepository();
-            return isJava6 ? new SunJava6MBeanRepository(repository, rbf) : new SunJava5MBeanRepository(repository);
+            return createAccessor(defaultMBeanServerInterceptorClass.cast(interceptor));
         } else {
             return null;
         }
     }
+    
+    protected abstract MBeanAccessor createAccessor(T defaultMBeanServerInterceptorRBean);
 }

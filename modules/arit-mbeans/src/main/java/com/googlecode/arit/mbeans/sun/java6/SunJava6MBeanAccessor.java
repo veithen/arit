@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans.sun;
+package com.googlecode.arit.mbeans.sun.java6;
 
 import javax.management.ObjectName;
 import javax.management.modelmbean.RequiredModelMBean;
 
 import com.googlecode.arit.mbeans.MBeanAccessor;
+import com.googlecode.arit.mbeans.sun.RequiredModelMBeanRBean;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.sun.jmx.mbeanserver.DynamicMBean2;
-import com.sun.jmx.mbeanserver.Repository;
 
-public class SunJava6MBeanRepository implements MBeanAccessor {
-    private final Repository repository;
+public class SunJava6MBeanAccessor implements MBeanAccessor {
+    private final RepositoryRBean repository;
     private final RBeanFactory rbf;
 
-    public SunJava6MBeanRepository(Repository repository, RBeanFactory rbf) {
+    public SunJava6MBeanAccessor(RepositoryRBean repository, RBeanFactory rbf) {
         this.repository = repository;
         this.rbf = rbf;
     }

@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans.sun;
+package com.googlecode.arit.mbeans.sun.java5;
 
 import javax.management.ObjectName;
 
-import com.googlecode.arit.mbeans.MBeanAccessor;
-import com.sun.jmx.mbeanserver.Repository;
+import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-public class SunJava5MBeanRepository implements MBeanAccessor {
-    private final Repository repository;
-
-    public SunJava5MBeanRepository(Repository repository) {
-        this.repository = repository;
-    }
-
-    public Object retrieve(ObjectName name) {
-        return repository.retrieve(name);
-    }
+@Target("com.sun.jmx.mbeanserver.Repository")
+public interface RepositoryRBean extends RBean {
+    Object retrieve(ObjectName name);
 }
