@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans;
+package com.googlecode.arit.mbeans.sun;
 
+import javax.management.modelmbean.RequiredModelMBean;
+
+import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.Target;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@Target("com.sun.jmx.interceptor.MBeanServerInterceptor")
-@SeeAlso(DefaultMBeanServerInterceptorRBean.class)
-public interface MBeanServerInterceptorRBean extends RBean {
-
+// TODO: need a unit test for this!
+@TargetClass(RequiredModelMBean.class)
+public interface RequiredModelMBeanRBean extends RBean {
+    @Accessor(name="managedResource")
+    Object getManagedResource();
 }

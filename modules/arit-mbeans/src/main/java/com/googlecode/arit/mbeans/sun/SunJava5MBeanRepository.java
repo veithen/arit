@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans;
+package com.googlecode.arit.mbeans.sun;
 
 import javax.management.ObjectName;
 
+import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.sun.jmx.mbeanserver.Repository;
 
 public class SunJava5MBeanRepository implements MBeanAccessor {

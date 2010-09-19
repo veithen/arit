@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.mbeans;
+package com.googlecode.arit.mbeans.sun;
 
 import javax.management.MBeanServer;
 
 import org.codehaus.plexus.component.annotations.Component;
 
+import com.googlecode.arit.mbeans.MBeanAccessor;
+import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.sun.jmx.mbeanserver.Repository;
