@@ -33,7 +33,7 @@ public class MBeanEnumerator implements ResourceEnumerator {
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
     private final Logger logger;
-    private MBeanRepository repository;
+    private MBeanAccessor mbeanAccessor;
     private Iterator<ObjectName> mbeanIterator;
     private ObjectName name;
     private Object mbean;
@@ -61,13 +61,13 @@ public class MBeanEnumerator implements ResourceEnumerator {
         while (true) {
             if (mbeanIterator != null && mbeanIterator.hasNext()) {
                 name = mbeanIterator.next();
-                mbean = repository.retrieve(name);
+                mbean = mbeanAccessor.retrieve(name);
                 return true;
             } else if (mbsIterator.hasNext()) {
                 mbeanIterator = null;
                 MBeanServer mbs = mbsIterator.next();
-                repository = mbsInspector.inspect(mbs);
-                if (repository == null) {
+                mbeanAccessor = mbsInspector.inspect(mbs);
+                if (mbeanAccessor == null) {
                     logger.error("Unable to inspect MBeanServer of type " + mbs.getClass().getName());
                 } else {
                     try {

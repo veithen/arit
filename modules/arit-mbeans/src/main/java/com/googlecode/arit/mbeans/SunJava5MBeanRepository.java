@@ -19,7 +19,7 @@ import javax.management.ObjectName;
 
 import com.sun.jmx.mbeanserver.Repository;
 
-public class SunJava5MBeanRepository implements MBeanRepository {
+public class SunJava5MBeanRepository implements MBeanAccessor {
     private final Repository repository;
 
     public SunJava5MBeanRepository(Repository repository) {

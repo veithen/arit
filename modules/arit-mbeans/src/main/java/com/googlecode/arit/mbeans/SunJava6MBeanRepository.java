@@ -22,7 +22,7 @@ import com.googlecode.arit.rbeans.RBeanFactory;
 import com.sun.jmx.mbeanserver.DynamicMBean2;
 import com.sun.jmx.mbeanserver.Repository;
 
-public class SunJava6MBeanRepository implements MBeanRepository {
+public class SunJava6MBeanRepository implements MBeanAccessor {
     private final Repository repository;
     private final RBeanFactory rbf;
 

@@ -43,7 +43,7 @@ public class SunMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
         return rbf != null;
     }
 
-    public MBeanRepository inspect(MBeanServer mbs) {
+    public MBeanAccessor inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(JmxMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
             MBeanServerInterceptorRBean interceptor = rbf.createRBean(JmxMBeanServerRBean.class, mbs).getInterceptor();
             Repository repository = (Repository)((DefaultMBeanServerInterceptorRBean)interceptor).getRepository();

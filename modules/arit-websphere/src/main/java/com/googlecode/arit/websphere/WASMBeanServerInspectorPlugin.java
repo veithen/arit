@@ -20,7 +20,7 @@ import javax.management.MBeanServer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
-import com.googlecode.arit.mbeans.MBeanRepository;
+import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
@@ -46,7 +46,7 @@ public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
         return rbf != null;
     }
 
-    public MBeanRepository inspect(MBeanServer mbs) {
+    public MBeanAccessor inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(PlatformMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
             return sunMbsInspector.inspect(rbf.createRBean(PlatformMBeanServerRBean.class, mbs).getDefaultMBeanServer());
         } else {

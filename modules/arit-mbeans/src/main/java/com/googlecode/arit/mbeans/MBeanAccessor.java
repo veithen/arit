@@ -17,6 +17,6 @@ package com.googlecode.arit.mbeans;
 
 import javax.management.ObjectName;
 
-public interface MBeanRepository {
+public interface MBeanAccessor {
     Object retrieve(ObjectName name);
 }

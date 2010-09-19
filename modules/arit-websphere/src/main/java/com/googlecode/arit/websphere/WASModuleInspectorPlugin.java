@@ -33,7 +33,7 @@ import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
 import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.mbeans.MBeanRepository;
+import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
@@ -54,7 +54,7 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     
     private RBeanFactory rbf;
     private MBeanServer mbs;
-    private MBeanRepository repository;
+    private MBeanAccessor mbeanAccessor;
     private Map<ModuleType,ObjectName> jmxNameMap = new HashMap<ModuleType,ObjectName>();
     
     public void initialize() throws InitializationException {
@@ -64,8 +64,8 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
             return;
         }
         mbs = rbf.createRBean(AdminServiceFactoryRBean.class).getMBeanFactory().getMBeanServer();
-        repository = mbsInspector.inspect(mbs);
-        if (repository == null) {
+        mbeanAccessor = mbsInspector.inspect(mbs);
+        if (mbeanAccessor == null) {
             throw new InitializationException("Unable to inspect WebSphere's MBean server; this is unexpected because we are in a WebSphere specific plugin");
         }
         try {
@@ -78,7 +78,7 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     }
 
     public boolean isAvailable() {
-        return rbf != null && repository != null;
+        return rbf != null && mbeanAccessor != null;
     }
 
     public ModuleInspector createModuleInspector() {
@@ -86,7 +86,7 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         for (Map.Entry<ModuleType,ObjectName> entry : jmxNameMap.entrySet()) {
             Set<ObjectName> names = mbs.queryNames(entry.getValue(), null);
             for (ObjectName name : names) {
-                DeployedObjectCollaboratorRBean collaborator = rbf.createRBean(DeployedObjectCollaboratorRBean.class, repository.retrieve(name)); 
+                DeployedObjectCollaboratorRBean collaborator = rbf.createRBean(DeployedObjectCollaboratorRBean.class, mbeanAccessor.retrieve(name)); 
                 DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
                 ClassLoader classLoader = deployedObject.getClassLoader();
                 moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader, ModuleStatus.STARTED));

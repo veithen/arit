@@ -20,5 +20,5 @@ import javax.management.MBeanServer;
 import com.googlecode.arit.Plugin;
 
 public interface MBeanServerInspectorPlugin extends Plugin {
-    MBeanRepository inspect(MBeanServer mbs);
+    MBeanAccessor inspect(MBeanServer mbs);
 }

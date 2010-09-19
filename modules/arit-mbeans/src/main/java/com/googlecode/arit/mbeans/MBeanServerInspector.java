@@ -27,11 +27,11 @@ public class MBeanServerInspector extends PluginManager<MBeanServerInspectorPlug
         super(MBeanServerInspectorPlugin.class);
     }
     
-    public MBeanRepository inspect(MBeanServer mbs) {
+    public MBeanAccessor inspect(MBeanServer mbs) {
         for (MBeanServerInspectorPlugin plugin : getPlugins()) {
-            MBeanRepository repository = plugin.inspect(mbs);
-            if (repository != null) {
-                return repository;
+            MBeanAccessor accessor = plugin.inspect(mbs);
+            if (accessor != null) {
+                return accessor;
             }
         }
         return null;
