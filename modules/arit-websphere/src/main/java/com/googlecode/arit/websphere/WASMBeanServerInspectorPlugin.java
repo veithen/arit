@@ -29,7 +29,7 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
     
-    @Requirement(hint="sun")
+    @Requirement(hint="sun-java6")
     private MBeanServerInspectorPlugin sunMbsInspector;
     
     public WASMBeanServerInspectorPlugin() {
