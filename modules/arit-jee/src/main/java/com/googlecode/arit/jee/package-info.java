@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Contains the module types for J2EE applications. Note that there is no module type
+ * for EJB-JARs. The reason is that an EJB-JAR doesn't have its own class loader. Instead
+ * all EJB-JARs and utility JARs in the EAR are loaded from the same class loader. This
+ * implies that Arit will not be able to distinguish between individual EJB-JARs in the
+ * application.
+ */
 package com.googlecode.arit.jee;
-
-import org.codehaus.plexus.component.annotations.Component;
-
-import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.icon.ImageFormat;
-
-@Component(role=ModuleType.class, hint="ejb-jar")
-public class EjbJarModuleType extends ModuleType {
-    public EjbJarModuleType() {
-        super(ImageFormat.GIF, EjbJarModuleType.class.getResource("ejb-jar.gif"));
-    }
-}

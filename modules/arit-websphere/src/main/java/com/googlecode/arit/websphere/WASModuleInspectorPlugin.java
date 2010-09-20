@@ -46,9 +46,6 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     @Requirement(hint="ear")
     private ModuleType earModuleType;
     
-    @Requirement(hint="ejb-jar")
-    private ModuleType ejbJarModuleType;
-    
     @Requirement(hint="war")
     private ModuleType warModuleType;
     
@@ -70,8 +67,6 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         }
         try {
             jmxNameMap.put(earModuleType, new ObjectName("WebSphere:type=Application,*"));
-            // TODO: excluding this for now; EJB modules don't have a separate class loader
-//            jmxNameMap.put(ejbJarModuleType, new ObjectName("WebSphere:type=EJBModule,*"));
             jmxNameMap.put(warModuleType, new ObjectName("WebSphere:type=WebModule,*"));
         } catch (MalformedObjectNameException ex) {
             throw new InitializationException("Failed to create object name", ex);
@@ -93,6 +88,6 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
                 moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader, ModuleStatus.STARTED));
             }
         }
-        return new WASModuleInspector(rbf, moduleMap, earModuleType, ejbJarModuleType, warModuleType);
+        return new WASModuleInspector(rbf, moduleMap, earModuleType, warModuleType);
     }
 }

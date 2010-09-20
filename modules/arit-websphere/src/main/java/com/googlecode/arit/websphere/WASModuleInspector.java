@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.plexus.component.annotations.Requirement;
-
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleStatus;
@@ -31,17 +29,14 @@ public class WASModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;
     private final Map<ClassLoader,ModuleDescription> moduleMap;
     private final ModuleType earModuleType;
-    private final ModuleType ejbJarModuleType;
     private final ModuleType warModuleType;
 
     public WASModuleInspector(RBeanFactory rbf,
             Map<ClassLoader, ModuleDescription> moduleMap,
-            ModuleType earModuleType, ModuleType ejbJarModuleType,
-            ModuleType warModuleType) {
+            ModuleType earModuleType, ModuleType warModuleType) {
         this.rbf = rbf;
         this.moduleMap = moduleMap;
         this.earModuleType = earModuleType;
-        this.ejbJarModuleType = ejbJarModuleType;
         this.warModuleType = warModuleType;
     }
 
