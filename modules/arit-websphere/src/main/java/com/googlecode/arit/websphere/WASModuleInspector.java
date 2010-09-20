@@ -29,14 +29,17 @@ public class WASModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;
     private final Map<ClassLoader,ModuleDescription> moduleMap;
     private final ModuleType earModuleType;
+    private final ModuleType appWarModuleType;
     private final ModuleType warModuleType;
 
     public WASModuleInspector(RBeanFactory rbf,
             Map<ClassLoader, ModuleDescription> moduleMap,
-            ModuleType earModuleType, ModuleType warModuleType) {
+            ModuleType earModuleType, ModuleType appWarModuleType,
+            ModuleType warModuleType) {
         this.rbf = rbf;
         this.moduleMap = moduleMap;
         this.earModuleType = earModuleType;
+        this.appWarModuleType = appWarModuleType;
         this.warModuleType = warModuleType;
     }
 
@@ -55,6 +58,9 @@ public class WASModuleInspector implements ModuleInspector {
             if (name.startsWith("app:")) {
                 moduleType = earModuleType;
                 moduleName = name.substring(4);
+            } else if (name.startsWith("appwar:")) {
+                moduleType = appWarModuleType;
+                moduleName = name.substring(7);
             } else if (name.startsWith("war:")) {
                 moduleType = warModuleType;
                 moduleName = name.substring(name.lastIndexOf('/')+1);

@@ -15,7 +15,10 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +48,9 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     
     @Requirement(hint="ear")
     private ModuleType earModuleType;
+    
+    @Requirement(hint="appwar")
+    private ModuleType appWarModuleType;
     
     @Requirement(hint="war")
     private ModuleType warModuleType;
@@ -76,18 +82,52 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     public boolean isAvailable() {
         return rbf != null && mbeanAccessor != null;
     }
-
+    
+    private List<DeployedObjectCollaboratorRBean> getCollaborators(ObjectName query) {
+        Set<ObjectName> names = mbs.queryNames(query, null);
+        List<DeployedObjectCollaboratorRBean> collaborators = new ArrayList<DeployedObjectCollaboratorRBean>(names.size());
+        for (ObjectName name : names) {
+            collaborators.add(rbf.createRBean(DeployedObjectCollaboratorRBean.class, mbeanAccessor.retrieve(name))); 
+        }
+        return collaborators;
+    }
+    
     public ModuleInspector createModuleInspector() {
-        Map<ClassLoader,ModuleDescription> moduleMap = new HashMap<ClassLoader,ModuleDescription>();
-        for (Map.Entry<ModuleType,ObjectName> entry : jmxNameMap.entrySet()) {
-            Set<ObjectName> names = mbs.queryNames(entry.getValue(), null);
-            for (ObjectName name : names) {
-                DeployedObjectCollaboratorRBean collaborator = rbf.createRBean(DeployedObjectCollaboratorRBean.class, mbeanAccessor.retrieve(name)); 
-                DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
-                ClassLoader classLoader = deployedObject.getClassLoader();
-                moduleMap.put(classLoader, new ModuleDescription(entry.getKey(), collaborator.getName(), classLoader, ModuleStatus.STARTED));
+        List<DeployedObjectCollaboratorRBean> earCollaborators;
+        List<DeployedObjectCollaboratorRBean> warCollaborators;
+        try {
+            earCollaborators = getCollaborators(new ObjectName("WebSphere:type=Application,*"));
+            warCollaborators = getCollaborators(new ObjectName("WebSphere:type=WebModule,*"));
+        } catch (MalformedObjectNameException ex) {
+            throw new Error("Failed to create object name", ex);
+        }
+        
+        // In WebSphere it is possible to configure an application with a common class loader for all
+        // WARs. We need to identify these cases and represent them using a distinct module type.
+        Set<ClassLoader> earClassLoaders = new HashSet<ClassLoader>();
+        for (DeployedObjectCollaboratorRBean collaborator : earCollaborators) {
+            earClassLoaders.add(collaborator.getDeployedObject().getClassLoader());
+        }
+        Set<ClassLoader> appWarClassLoaders = new HashSet<ClassLoader>();
+        for (DeployedObjectCollaboratorRBean collaborator : warCollaborators) {
+            ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
+            if (earClassLoaders.contains(classLoader)) {
+                appWarClassLoaders.add(classLoader);
             }
         }
-        return new WASModuleInspector(rbf, moduleMap, earModuleType, warModuleType);
+        
+        Map<ClassLoader,ModuleDescription> moduleMap = new HashMap<ClassLoader,ModuleDescription>();
+        for (DeployedObjectCollaboratorRBean collaborator : earCollaborators) {
+            ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
+            moduleMap.put(classLoader, new ModuleDescription(appWarClassLoaders.contains(classLoader) ? appWarModuleType : earModuleType, collaborator.getName(), classLoader, ModuleStatus.STARTED));
+        }
+        for (DeployedObjectCollaboratorRBean collaborator : warCollaborators) {
+            ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
+            if (!appWarClassLoaders.contains(classLoader)) {
+                moduleMap.put(classLoader, new ModuleDescription(warModuleType, collaborator.getName(), classLoader, ModuleStatus.STARTED));
+            }
+        }
+        
+        return new WASModuleInspector(rbf, moduleMap, earModuleType, appWarModuleType, warModuleType);
     }
 }
