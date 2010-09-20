@@ -70,7 +70,8 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         }
         try {
             jmxNameMap.put(earModuleType, new ObjectName("WebSphere:type=Application,*"));
-            jmxNameMap.put(ejbJarModuleType, new ObjectName("WebSphere:type=EJBModule,*"));
+            // TODO: excluding this for now; EJB modules don't have a separate class loader
+//            jmxNameMap.put(ejbJarModuleType, new ObjectName("WebSphere:type=EJBModule,*"));
             jmxNameMap.put(warModuleType, new ObjectName("WebSphere:type=WebModule,*"));
         } catch (MalformedObjectNameException ex) {
             throw new InitializationException("Failed to create object name", ex);
