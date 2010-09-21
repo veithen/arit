@@ -24,6 +24,8 @@
                 <artifactId>maven-ear-plugin</artifactId>
                 <version>2.4.1</version>
                 <configuration>
+                    <displayName>Arit</displayName>
+                    <description>J2EE Application Resource Inspection Tool [http://code.google.com/p/arit/]</description>
                     <modules>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
