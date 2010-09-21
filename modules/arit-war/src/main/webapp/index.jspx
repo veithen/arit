@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- It's silly to use a JSP page to redirect to report.html, but this
+     seems to be the only way that works on all servlet containers. -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <jsp:directive.page session="false"/>
+    <c:redirect url="report.html"/>
+</jsp:root>
