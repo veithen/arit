@@ -18,7 +18,6 @@ package com.googlecode.arit.shutdown.ibm;
 import java.util.IdentityHashMap;
 
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.Target;
 
