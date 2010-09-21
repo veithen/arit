@@ -50,6 +50,9 @@ public class InspectorServlet extends HttpServlet {
     @Requirement(role=ResourceEnumeratorFactory.class)
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
+    @Requirement(hint="unknown")
+    private ModuleType unknownModuleType;
+    
     @Requirement(role=IconManager.class, hint="module")
     private ModuleTypeIconManager moduleTypeIconManager;
     
@@ -112,10 +115,7 @@ public class InspectorServlet extends HttpServlet {
                 } else {
                     variant = "default";
                 }
-                // TODO: we should use a default module type
-                if (moduleType != null) {
-                    module.setIcon(moduleTypeIconManager.getIcon(moduleType).getIconImage(variant).getFileName());
-                }
+                module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
             }
             moduleMap.put(classLoader, module);
             return module;
