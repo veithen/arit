@@ -105,6 +105,7 @@ public class RBeanFactory {
         Class<?> targetClass = getTargetClass(rbeanClass);
         Map<Method,MethodHandler> methodHandlers = new HashMap<Method,MethodHandler>();
         for (Method proxyMethod : rbeanClass.getMethods()) {
+            boolean optional = proxyMethod.getAnnotation(Optional.class) != null;
             MethodHandler methodHandler;
             Accessor accessorAnnotation = proxyMethod.getAnnotation(Accessor.class);
             if (accessorAnnotation != null) {
@@ -122,28 +123,41 @@ public class RBeanFactory {
                     }
                 }
                 if (valueHandler == null) {
-                    throw new TargetMemberNotFoundException("The class " + targetClass.getClass()
-                            + " doesn't contain any attribute assignment compatible with "
-                            + proxyMethod.getGenericReturnType()
-                            + " and with one of the following names: "
-                            + Arrays.asList(accessorAnnotation.name()));
+                    if (optional) {
+                        methodHandler = NullHandler.INSTANCE;
+                    } else {
+                        throw new TargetMemberNotFoundException("The class " + targetClass.getClass()
+                                + " doesn't contain any attribute assignment compatible with "
+                                + proxyMethod.getGenericReturnType()
+                                + " and with one of the following names: "
+                                + Arrays.asList(accessorAnnotation.name()));
+                    }
+                } else {
+                    field.setAccessible(true);
+                    methodHandler = new AccessorHandler(field, valueHandler);
                 }
-                field.setAccessible(true);
-                methodHandler = new AccessorHandler(field, valueHandler);
             } else {
                 Method targetMethod;
                 try {
                     targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
                 } catch (NoSuchMethodException ex) {
-                    throw new TargetMemberNotFoundException(ex.getMessage());
+                    targetMethod = null;
                 }
-                ObjectHandler returnHandler = getObjectHandler(proxyMethod.getGenericReturnType(), targetMethod.getGenericReturnType());
-                if (returnHandler == null) {
-                    // TODO: create new exception class
-                    throw new RBeanFactoryException("The RBean method " + proxyMethod + " is not compatible with the target method "
-                            + targetMethod + " because the return types are incompatible");
+                if (targetMethod == null) {
+                    if (optional) {
+                        methodHandler = NullHandler.INSTANCE;
+                    } else {
+                        throw new TargetMemberNotFoundException("No corresponding target method found for " + proxyMethod);
+                    }
+                } else {
+                    ObjectHandler returnHandler = getObjectHandler(proxyMethod.getGenericReturnType(), targetMethod.getGenericReturnType());
+                    if (returnHandler == null) {
+                        // TODO: create new exception class
+                        throw new RBeanFactoryException("The RBean method " + proxyMethod + " is not compatible with the target method "
+                                + targetMethod + " because the return types are incompatible");
+                    }
+                    methodHandler = new SimpleMethodHandler(targetMethod, returnHandler);
                 }
-                methodHandler = new SimpleMethodHandler(targetMethod, returnHandler);
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }

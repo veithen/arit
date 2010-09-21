@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere;
+package com.googlecode.arit.rbeans;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.Optional;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+public class TargetMemberUnavailableException extends Exception {
+    private static final long serialVersionUID = -8775532451450766731L;
 
-@Target("com.ibm.ws.classloader.CompoundClassLoader")
-public interface CompoundClassLoaderRBean extends RBean {
-    @Optional
-    @Accessor(name="name")
-    String getName();
+    public TargetMemberUnavailableException() {
+        super();
+    }
 }

@@ -55,7 +55,12 @@ public class WASModuleInspector implements ModuleInspector {
             String name = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName();
             ModuleType moduleType;
             String moduleName;
-            if (name.startsWith("app:")) {
+            if (name == null) {
+                // This case occurs on WAS 6, which doesn't have a "name" field in CompoundClassLoader
+                moduleType = null;
+                // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
+                moduleName = "<unknown>";
+            } else if (name.startsWith("app:")) {
                 moduleType = earModuleType;
                 moduleName = name.substring(4);
             } else if (name.startsWith("appwar:")) {

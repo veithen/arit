@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere;
+package com.googlecode.arit.rbeans;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.Optional;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+/**
+ * {@link MethodHandler} implementation that always returns <code>null</code>.
+ * This handler is used for methods annotated with {@link Optional}.
+ */
+public class NullHandler implements MethodHandler {
+    public static final NullHandler INSTANCE = new NullHandler();
+    
+    private NullHandler() {}
 
-@Target("com.ibm.ws.classloader.CompoundClassLoader")
-public interface CompoundClassLoaderRBean extends RBean {
-    @Optional
-    @Accessor(name="name")
-    String getName();
+    public Object invoke(Object target, Object[] args) throws Throwable {
+        return null;
+    }
 }

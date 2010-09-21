@@ -29,8 +29,12 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
     
+    // TODO: we can't have a requirment on MBeanServerInspector because this would cause a cyclic dependency; maybe it's possible to do this with Initializable
+    @Requirement(hint="sun-java5")
+    private MBeanServerInspectorPlugin sunJava5MbsInspector;
+    
     @Requirement(hint="sun-java6")
-    private MBeanServerInspectorPlugin sunMbsInspector;
+    private MBeanServerInspectorPlugin sunJava6MbsInspector;
     
     public WASMBeanServerInspectorPlugin() {
         RBeanFactory rbf;
@@ -43,12 +47,19 @@ public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin
     }
     
     public boolean isAvailable() {
-        return rbf != null;
+        // TODO: we should issue a warning if we are able to create the RBeanFactory, but no MBeanServerInspector is available
+        return rbf != null && (sunJava5MbsInspector.isAvailable() || sunJava6MbsInspector.isAvailable());
     }
 
     public MBeanAccessor inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(PlatformMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
-            return sunMbsInspector.inspect(rbf.createRBean(PlatformMBeanServerRBean.class, mbs).getDefaultMBeanServer());
+            MBeanServerInspectorPlugin mbsInspector;
+            if (sunJava5MbsInspector.isAvailable()) {
+                mbsInspector = sunJava5MbsInspector;
+            } else {
+                mbsInspector = sunJava6MbsInspector;
+            }
+            return mbsInspector.inspect(rbf.createRBean(PlatformMBeanServerRBean.class, mbs).getDefaultMBeanServer());
         } else {
             return null;
         }
