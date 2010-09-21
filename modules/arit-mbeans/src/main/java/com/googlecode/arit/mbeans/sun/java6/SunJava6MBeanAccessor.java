@@ -37,7 +37,6 @@ public class SunJava6MBeanAccessor implements MBeanAccessor {
         if (object instanceof DynamicMBean2) {
             return ((DynamicMBean2)object).getResource();
         } else if (object instanceof RequiredModelMBean) {
-            // TODO: also implement this for Java 5
             return rbf.createRBean(RequiredModelMBeanRBean.class, object).getManagedResource();
         } else {
             return object;

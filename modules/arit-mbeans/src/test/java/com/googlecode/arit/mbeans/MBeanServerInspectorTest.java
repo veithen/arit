@@ -19,11 +19,13 @@ import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.modelmbean.ModelMBeanInfoSupport;
+import javax.management.modelmbean.RequiredModelMBean;
 
 import org.codehaus.plexus.PlexusTestCase;
 
 public class MBeanServerInspectorTest extends PlexusTestCase {
-    public void test() throws Exception {
+    public void testDynamicMBean() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Object mbean = new Dummy();
         ObjectName name = new ObjectName("Test:type=Dummy");
@@ -35,6 +37,31 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
                     MBeanAccessor accessor = inspector.inspect(mbs);
                     if (accessor != null) {
                         assertSame(mbean, accessor.retrieve(name));
+                        found = true;
+                    }
+                }
+            }
+        } finally {
+            mbs.unregisterMBean(name);
+        }
+        assertTrue(found);
+    }
+    
+    public void testRequiredModelMBean() throws Exception {
+        Object resource = new Dummy();
+        RequiredModelMBean mbean = new RequiredModelMBean();
+        mbean.setManagedResource(resource, "ObjectReference");
+        mbean.setModelMBeanInfo(new ModelMBeanInfoSupport(Dummy.class.getName(), "Dummy", null, null, null, null));
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        ObjectName name = new ObjectName("Test:type=Dummy");
+        mbs.registerMBean(mbean, name);
+        boolean found = false;
+        try {
+            for (MBeanServerInspectorPlugin inspector : getContainer().lookupList(MBeanServerInspectorPlugin.class)) {
+                if (inspector.isAvailable()) {
+                    MBeanAccessor accessor = inspector.inspect(mbs);
+                    if (accessor != null) {
+                        assertSame(resource, accessor.retrieve(name));
                         found = true;
                     }
                 }
