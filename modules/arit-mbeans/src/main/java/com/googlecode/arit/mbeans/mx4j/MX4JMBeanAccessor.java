@@ -16,17 +16,26 @@
 package com.googlecode.arit.mbeans.mx4j;
 
 import javax.management.ObjectName;
+import javax.management.modelmbean.RequiredModelMBean;
 
 import com.googlecode.arit.mbeans.MBeanAccessor;
+import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class MX4JMBeanAccessor implements MBeanAccessor {
     private final MBeanRepositoryRBean repository;
+    private final RBeanFactory rbf;
 
-    public MX4JMBeanAccessor(MBeanRepositoryRBean repository) {
+    public MX4JMBeanAccessor(MBeanRepositoryRBean repository, RBeanFactory rbf) {
         this.repository = repository;
+        this.rbf = rbf;
     }
 
     public Object retrieve(ObjectName name) {
-        return repository.get(name).getMBean();
+        Object object = repository.get(name).getMBean();
+        if (object instanceof RequiredModelMBean) {
+            return rbf.createRBean(RequiredModelMBeanRBean.class, object).getManagedResource();
+        } else {
+            return object;
+        }
     }
 }

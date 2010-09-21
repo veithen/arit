@@ -31,7 +31,7 @@ public class MX4JMBeanServerInspectorPlugin implements MBeanServerInspectorPlugi
     public MX4JMBeanServerInspectorPlugin() {
         RBeanFactory rbf;
         try {
-            rbf = new RBeanFactory(MX4JMBeanServerRBean.class);
+            rbf = new RBeanFactory(MX4JMBeanServerRBean.class, RequiredModelMBeanRBean.class);
         } catch (RBeanFactoryException ex) {
             rbf = null;
         }
@@ -44,7 +44,7 @@ public class MX4JMBeanServerInspectorPlugin implements MBeanServerInspectorPlugi
 
     public MBeanAccessor inspect(MBeanServer mbs) {
         if (rbf.getRBeanInfo(MX4JMBeanServerRBean.class).getTargetClass().isInstance(mbs)) {
-            return new MX4JMBeanAccessor(rbf.createRBean(MX4JMBeanServerRBean.class, mbs).getMBeanRepository());
+            return new MX4JMBeanAccessor(rbf.createRBean(MX4JMBeanServerRBean.class, mbs).getMBeanRepository(), rbf);
         } else {
             return null;
         }
