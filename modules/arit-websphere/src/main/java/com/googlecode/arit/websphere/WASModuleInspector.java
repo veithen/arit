@@ -52,7 +52,8 @@ public class WASModuleInspector implements ModuleInspector {
         if (desc != null) {
             return desc;
         } else if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
-            String name = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader).getName();
+            CompoundClassLoaderRBean ccl = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader);
+            String name = ccl.getName();
             ModuleType moduleType;
             String moduleName;
             ModuleStatus moduleStatus;
@@ -62,6 +63,15 @@ public class WASModuleInspector implements ModuleInspector {
                 // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
                 moduleName = "<unknown>";
                 moduleStatus = ModuleStatus.UNKNOWN;
+                for (String path : ccl.getPaths()) {
+                    path = path.replace('\\', '/');
+                    if (path.endsWith("/WEB-INF/classes")) {
+                        moduleType = warModuleType;
+                        moduleName = path.substring(path.lastIndexOf('/', path.length()-17)+1, path.length()-16);
+                        moduleStatus = ModuleStatus.STOPPED;
+                        break;
+                    }
+                }
             } else if (name.startsWith("app:")) {
                 moduleType = earModuleType;
                 moduleName = name.substring(4);

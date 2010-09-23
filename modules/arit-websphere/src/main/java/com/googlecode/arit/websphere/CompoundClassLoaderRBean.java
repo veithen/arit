@@ -25,4 +25,6 @@ public interface CompoundClassLoaderRBean extends RBean {
     @Optional
     @Accessor(name="name")
     String getName();
+    
+    String[] getPaths();
 }
