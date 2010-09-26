@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit.threadlocals.sun;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -22,12 +22,13 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threadlocals.ThreadLocalInspectorPlugin;
 
-@Component(role=ThreadLocalInspectorPlugin.class)
-public class DefaultThreadLocalInspectorPlugin implements ThreadLocalInspectorPlugin {
+@Component(role=ThreadLocalInspectorPlugin.class, hint="sun")
+public class SunThreadLocalInspectorPlugin implements ThreadLocalInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public DefaultThreadLocalInspectorPlugin() {
+    public SunThreadLocalInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(ThreadRBean.class);

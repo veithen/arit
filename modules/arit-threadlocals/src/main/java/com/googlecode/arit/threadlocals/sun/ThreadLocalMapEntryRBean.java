@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads.ibm;
+package com.googlecode.arit.threadlocals.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("java.util.Timer$TimerImpl")
-public interface TimerImplRBean extends RBean {
-    @Accessor(name="tasks")
-    TimerHeapRBean getTasks();
+@Target("java.lang.ThreadLocal$ThreadLocalMap$Entry")
+public interface ThreadLocalMapEntryRBean extends RBean {
+    // TODO: should actually be ThreadLocal<?>
+    Object get();
+    
+    @Accessor(name="value")
+    Object getValue();
 }

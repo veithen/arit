@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jdbc.ibm;
+package com.googlecode.arit.jdbc.harmony;
 
 import java.sql.Driver;
 import java.util.ArrayList;
@@ -25,11 +25,11 @@ import com.googlecode.arit.jdbc.DriverManagerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=DriverManagerInspectorPlugin.class, hint="ibm")
-public class IBMDriverManagerInspectorPlugin implements DriverManagerInspectorPlugin {
+@Component(role=DriverManagerInspectorPlugin.class, hint="harmony")
+public class HarmonyDriverManagerInspectorPlugin implements DriverManagerInspectorPlugin {
     private final List<Driver> drivers;
     
-    public IBMDriverManagerInspectorPlugin() {
+    public HarmonyDriverManagerInspectorPlugin() {
         List<Driver> drivers;
         try {
             RBeanFactory rbf = new RBeanFactory(DriverManagerRBean.class);

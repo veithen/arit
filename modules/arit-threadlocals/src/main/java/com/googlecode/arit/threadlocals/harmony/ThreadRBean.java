@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit.threadlocals.harmony;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@Target("java.lang.ThreadLocal$ThreadLocalMap$Entry")
-public interface ThreadLocalMapEntryRBean extends RBean {
-    // TODO: should actually be ThreadLocal<?>
-    Object get();
+@TargetClass(Thread.class)
+public interface ThreadRBean extends RBean {
+    @Accessor(name="localValues")
+    ValuesRBean getLocalValues();
     
-    @Accessor(name="value")
-    Object getValue();
+    @Accessor(name="inheritableValues")
+    ValuesRBean getInheritableValues();
 }

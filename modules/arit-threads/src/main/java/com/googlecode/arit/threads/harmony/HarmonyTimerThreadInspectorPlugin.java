@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads.ibm;
+package com.googlecode.arit.threads.harmony;
 
 import java.util.TimerTask;
 
@@ -24,11 +24,11 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threads.AbstractTimerThreadInspectorPlugin;
 import com.googlecode.arit.threads.ThreadInspectorPlugin;
 
-@Component(role=ThreadInspectorPlugin.class, hint="ibm-timer")
-public class IBMTimerThreadInspectorPlugin extends AbstractTimerThreadInspectorPlugin {
+@Component(role=ThreadInspectorPlugin.class, hint="harmony-timer")
+public class HarmonyTimerThreadInspectorPlugin extends AbstractTimerThreadInspectorPlugin {
     private final RBeanFactory rbf;
 
-    public IBMTimerThreadInspectorPlugin() {
+    public HarmonyTimerThreadInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(TimerImplRBean.class);

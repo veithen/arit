@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads.ibm;
-
-import java.util.TimerTask;
+package com.googlecode.arit.threads.harmony;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("java.util.Timer$TimerImpl$TimerHeap")
-public interface TimerHeapRBean extends RBean {
-    @Accessor(name="timers")
-    TimerTask[] getTimers();
+@Target("java.util.Timer$TimerImpl")
+public interface TimerImplRBean extends RBean {
+    @Accessor(name="tasks")
+    TimerHeapRBean getTasks();
 }

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threadlocals;
+package com.googlecode.arit.threadlocals.harmony;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("java.lang.ThreadLocal$ThreadLocalMap")
-public interface ThreadLocalMapRBean extends RBean {
+@Target("java.lang.ThreadLocal$Values")
+public interface ValuesRBean extends RBean {
     @Accessor(name="table")
-    Iterable<ThreadLocalMapEntryRBean> getTable();
+    Object[] getTable();
 }

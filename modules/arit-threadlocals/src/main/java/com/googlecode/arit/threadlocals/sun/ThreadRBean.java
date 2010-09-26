@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jdbc.ibm;
-
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.util.List;
+package com.googlecode.arit.threadlocals.sun;
 
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
+import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
-@TargetClass(DriverManager.class)
-public interface DriverManagerRBean extends StaticRBean {
-    @Accessor(name="theDrivers")
-    List<Driver> getDrivers();
+@TargetClass(Thread.class)
+public interface ThreadRBean extends RBean {
+    @Accessor(name="threadLocals")
+    ThreadLocalMapRBean getThreadLocals();
+    
+    @Accessor(name="inheritableThreadLocals")
+    ThreadLocalMapRBean getInheritableThreadLocals();
 }
