@@ -1,0 +1,15 @@
+grant codeBase "file:${webComponent}" {
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "setContextClassLoader";
+  // Arit actually doesn't modify anything in the ThreadGroup, but this permission
+  // is necessary to invoke ThreadGroup#enumerate
+  permission java.lang.RuntimePermission "modifyThreadGroup";
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission javax.management.MBeanServerPermission "findMBeanServer";
+  permission javax.management.MBeanPermission "*", "queryNames";
+  
+  permission com.ibm.websphere.security.WebSphereRuntimePermission "AdminPermission";
+  permission com.ibm.websphere.security.WebSphereRuntimePermission "accessRuntimeClasses";
+};
