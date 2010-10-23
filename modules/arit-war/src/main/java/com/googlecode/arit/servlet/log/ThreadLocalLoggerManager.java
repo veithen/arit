@@ -15,10 +15,8 @@
  */
 package com.googlecode.arit.servlet.log;
 
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.BaseLoggerManager;
 import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.LoggerManager;
 
 public class ThreadLocalLoggerManager extends BaseLoggerManager {
     @Override
