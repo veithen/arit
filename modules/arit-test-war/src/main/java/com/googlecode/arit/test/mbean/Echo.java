@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.test;
+package com.googlecode.arit.test.mbean;
 
 public class Echo implements EchoMBean {
     public String sayHello() {

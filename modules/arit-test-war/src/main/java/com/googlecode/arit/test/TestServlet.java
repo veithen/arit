@@ -16,6 +16,8 @@
 package com.googlecode.arit.test;
 
 import java.lang.management.ManagementFactory;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,8 +28,15 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
+import com.googlecode.arit.test.mbean.Echo;
+import com.googlecode.arit.test.rmi.HelloWorld;
+import com.googlecode.arit.test.rmi.HelloWorldServer;
+
 public class TestServlet extends HttpServlet {
     private final static ThreadLocal<HttpServlet> threadLocal = new ThreadLocal<HttpServlet>();
+    
+    @SuppressWarnings("unused")
+    private HelloWorld helloWorldStub;
     
     @Override
     public void init() throws ServletException {
@@ -43,6 +52,11 @@ public class TestServlet extends HttpServlet {
             ManagementFactory.getPlatformMBeanServer().registerMBean(new Echo(), new ObjectName("Test:type=Echo"));
         } catch (JMException ex) {
             throw new ServletException(ex);
-        } 
+        }
+        try {
+            helloWorldStub = (HelloWorld)UnicastRemoteObject.exportObject(new HelloWorldServer(), 0);
+        } catch (RemoteException ex) {
+            throw new ServletException(ex);
+        }
     }
 }
