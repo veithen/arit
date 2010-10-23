@@ -20,18 +20,17 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import com.googlecode.arit.icon.IconProvider;
 import com.googlecode.arit.icon.ImageData;
 import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.icon.imageio.ImageIO;
 
 public abstract class TransformationVariant implements IconVariant {
     public final ImageData createIconImage(IconProvider iconProvider) {
         try {
             BufferedImage image = ImageIO.read(iconProvider.getIconResource());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(transform(image), "PNG", baos);
+            javax.imageio.ImageIO.write(transform(image), "PNG", baos);
             return new ImageData(ImageFormat.PNG, baos.toByteArray());
         } catch (IOException ex) {
             throw new IconException(ex);

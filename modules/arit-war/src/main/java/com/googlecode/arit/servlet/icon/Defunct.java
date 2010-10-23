@@ -22,12 +22,11 @@ import java.awt.image.ColorConvertOp;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
+import com.googlecode.arit.icon.imageio.ImageIO;
 import com.googlecode.arit.icon.variant.IconVariant;
 import com.googlecode.arit.icon.variant.TransformationVariant;
 
