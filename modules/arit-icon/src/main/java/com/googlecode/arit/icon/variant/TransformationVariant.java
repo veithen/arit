@@ -30,7 +30,7 @@ public abstract class TransformationVariant implements IconVariant {
         try {
             BufferedImage image = ImageIO.read(iconProvider.getIconResource());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            javax.imageio.ImageIO.write(transform(image), "PNG", baos);
+            ImageIO.write(transform(image), "PNG", baos);
             return new ImageData(ImageFormat.PNG, baos.toByteArray());
         } catch (IOException ex) {
             throw new IconException(ex);

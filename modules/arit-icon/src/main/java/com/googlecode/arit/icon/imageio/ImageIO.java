@@ -16,14 +16,18 @@
 package com.googlecode.arit.icon.imageio;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Iterator;
 
 import javax.imageio.spi.IIORegistry;
 import javax.imageio.spi.ImageInputStreamSpi;
+import javax.imageio.spi.ImageOutputStreamSpi;
 import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 
 /**
  * Replacement for {@link javax.imageio.ImageIO} with better support for Web application
@@ -69,5 +73,24 @@ public class ImageIO {
         } finally {
             in.close();
         }
+    }
+
+    public static boolean write(RenderedImage im, String format, OutputStream out) throws IOException {
+        ImageOutputStream stream = createImageOutputStream(out);
+        try {
+            return javax.imageio.ImageIO.write(im, format, stream);
+        } finally {
+            stream.close();
+        }
+    }
+
+    private static ImageOutputStream createImageOutputStream(OutputStream out) throws IOException {
+        for (Iterator<ImageOutputStreamSpi> it = registry.getServiceProviders(ImageOutputStreamSpi.class, true); it.hasNext(); ) {
+            ImageOutputStreamSpi spi = it.next();
+            if (spi.getOutputClass().isInstance(out)) {
+                return spi.createOutputStreamInstance(out, false, null);
+            }
+        }
+        return null;
     }
 }
