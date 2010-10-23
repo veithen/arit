@@ -12,4 +12,7 @@ grant codeBase "file:${webComponent}" {
   
   permission com.ibm.websphere.security.WebSphereRuntimePermission "AdminPermission";
   permission com.ibm.websphere.security.WebSphereRuntimePermission "accessRuntimeClasses";
+  
+  // This permission is necessary to allow the custom classloaders in Plexus to share classes
+  permission com.ibm.oti.shared.SharedClassPermission "org.codehaus.plexus.*", "read,write";
 };
