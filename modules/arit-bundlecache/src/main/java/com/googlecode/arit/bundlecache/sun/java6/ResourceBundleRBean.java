@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.bundlecache.sun;
+package com.googlecode.arit.bundlecache.sun.java6;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.googlecode.arit.rbeans.StaticRBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@Target("java.util.ResourceBundle$ResourceCacheKey")
-public interface ResourceCacheKeyRBean extends RBean {
-    @Accessor(name="loaderRef")
-    WeakReference<ClassLoader> getLoaderRef();
-    
-    @Accessor(name="searchName")
-    String getSearchName();
+@TargetClass(ResourceBundle.class)
+public interface ResourceBundleRBean extends StaticRBean {
+    @Accessor(name="cacheList")
+    Map<?,? extends SoftReference<ResourceBundle>> getCache();
 }

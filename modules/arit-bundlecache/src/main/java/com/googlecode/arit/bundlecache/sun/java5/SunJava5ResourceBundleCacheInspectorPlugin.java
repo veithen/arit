@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.bundlecache.sun;
+package com.googlecode.arit.bundlecache.sun.java5;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +27,11 @@ import com.googlecode.arit.bundlecache.ResourceBundleCacheInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ResourceBundleCacheInspectorPlugin.class, hint="sun")
-public class SunResourceBundleCacheInspectorPlugin implements ResourceBundleCacheInspectorPlugin {
+@Component(role=ResourceBundleCacheInspectorPlugin.class, hint="sun-java5")
+public class SunJava5ResourceBundleCacheInspectorPlugin implements ResourceBundleCacheInspectorPlugin {
     private final RBeanFactory rbf;
     
-    public SunResourceBundleCacheInspectorPlugin() {
+    public SunJava5ResourceBundleCacheInspectorPlugin() {
         RBeanFactory rbf;
         try {
             rbf = new RBeanFactory(ResourceBundleRBean.class, ResourceCacheKeyRBean.class);
@@ -46,11 +46,11 @@ public class SunResourceBundleCacheInspectorPlugin implements ResourceBundleCach
     }
 
     public List<CachedResourceBundle> getCachedResourceBundles() {
-        Map<?,?> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
+        Map<?,ResourceBundle> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
         List<CachedResourceBundle> result = new ArrayList<CachedResourceBundle>(cache.size());
-        for (Map.Entry<?,?> entry : cache.entrySet()) {
+        for (Map.Entry<?,ResourceBundle> entry : cache.entrySet()) {
             ResourceCacheKeyRBean cacheKey = rbf.createRBean(ResourceCacheKeyRBean.class, entry.getKey());
-            result.add(new CachedResourceBundle(cacheKey.getLoaderRef().get(), cacheKey.getSearchName(), (ResourceBundle)entry.getValue()));
+            result.add(new CachedResourceBundle(cacheKey.getLoaderRef().get(), cacheKey.getSearchName(), entry.getValue()));
         }
         return result;
     }

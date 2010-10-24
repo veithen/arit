@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.bundlecache.sun;
+package com.googlecode.arit.bundlecache.harmony;
 
-import java.util.Map;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
+import java.util.WeakHashMap;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.StaticRBean;
@@ -24,6 +25,6 @@ import com.googlecode.arit.rbeans.TargetClass;
 
 @TargetClass(ResourceBundle.class)
 public interface ResourceBundleRBean extends StaticRBean {
-    @Accessor(name="cacheList")
-    Map<?,?> getCache();
+    @Accessor(name="cache")
+    WeakHashMap<Object,Hashtable<String,ResourceBundle>> getCache();
 }
