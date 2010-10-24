@@ -18,6 +18,7 @@ package com.googlecode.arit.test;
 import java.lang.management.ManagementFactory;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.Security;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.googlecode.arit.test.mbean.Echo;
 import com.googlecode.arit.test.rmi.HelloWorld;
@@ -58,5 +60,6 @@ public class TestServlet extends HttpServlet {
         } catch (RemoteException ex) {
             throw new ServletException(ex);
         }
+        Security.addProvider(new BouncyCastleProvider());
     }
 }

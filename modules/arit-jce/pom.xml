@@ -7,20 +7,26 @@
         <version>0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>arit-test-war</artifactId>
-    <description>Test Web application that deliberately leaks resources.</description>
-    <packaging>war</packaging>
-    <name>Arit :: Test WAR</name>
+    <artifactId>arit-jce</artifactId>
+    <packaging>jar</packaging>
+    <name>Arit :: JCE provider enumerator</name>
     <dependencies>
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>10.3.2.1</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>arit-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>bouncycastle</groupId>
-            <artifactId>bcprov-jdk15</artifactId>
-            <version>140</version>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-component-annotations</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-component-metadata</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
