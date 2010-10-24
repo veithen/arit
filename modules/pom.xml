@@ -21,6 +21,7 @@
     </dependencies>
     <modules>
         <module>arit-api</module>
+        <module>arit-bundlecache</module>
         <module>arit-ear</module>
         <module>arit-icon</module>
         <module>arit-jdbc</module>
