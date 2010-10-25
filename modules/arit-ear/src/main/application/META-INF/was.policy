@@ -1,5 +1,6 @@
 grant codeBase "file:${webComponent}" {
   permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.lang.RuntimePermission "accessClassInPackage.*";
   permission java.lang.RuntimePermission "getClassLoader";
   permission java.lang.RuntimePermission "createClassLoader";
   permission java.lang.RuntimePermission "setContextClassLoader";
