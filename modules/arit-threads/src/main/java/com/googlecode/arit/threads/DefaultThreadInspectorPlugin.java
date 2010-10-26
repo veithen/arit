@@ -53,7 +53,8 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
 
     public ThreadDescription getDescription(Thread thread) {
         Runnable target = rbf.createRBean(ThreadRBean.class, thread).getTarget();
-        StringBuilder description = new StringBuilder("Thread");
+        StringBuilder description = new StringBuilder("Thread; name=");
+        description.append(thread.getName());
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
         classLoaders.add(thread.getContextClassLoader());
         Class<?> threadClass = thread.getClass();
