@@ -21,6 +21,7 @@ import java.util.List;
 import com.googlecode.arit.ModuleStatus;
 
 public class Module {
+    private final Integer id;
     private final String name;
     private final ModuleStatus status;
     private String icon;
@@ -28,9 +29,14 @@ public class Module {
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(String name, ModuleStatus status) {
+    public Module(Integer id, String name, ModuleStatus status) {
+        this.id = id;
         this.name = name;
         this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {

@@ -50,6 +50,9 @@ public class InspectorServlet extends HttpServlet {
     @Requirement(role=ResourceEnumeratorFactory.class)
     private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
+    @Requirement
+    private ClassLoaderIdProvider classLoaderIdProvider;
+    
     @Requirement(hint="unknown")
     private ModuleType unknownModuleType;
     
@@ -92,7 +95,7 @@ public class InspectorServlet extends HttpServlet {
             if (desc == null) {
                 module = null;
             } else {
-                module = new Module(desc.getDisplayName(), desc.getStatus());
+                module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus());
                 ModuleType moduleType = desc.getType();
                 ClassLoader parentClassLoader = classLoader.getParent();
                 Module parentModule;
