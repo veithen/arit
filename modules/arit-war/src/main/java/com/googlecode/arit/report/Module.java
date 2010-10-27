@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet;
+package com.googlecode.arit.report;
 
 import java.util.ArrayList;
 import java.util.List;

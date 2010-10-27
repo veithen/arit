@@ -20,4 +20,7 @@ grant codeBase "file:${webComponent}" {
   // Permissions necessary to allow Arit to register its own MBeans
   permission javax.management.MBeanPermission "[com.googlecode.arit:*]", "*";
   permission javax.management.MBeanTrustPermission "*";
+  
+  // The leak detector uses java.util.Timer
+  permission java.lang.RuntimePermission "modifyThread";
 };

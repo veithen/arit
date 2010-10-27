@@ -14,17 +14,17 @@
         <body>
             <h1>Supported resource types</h1>
             <ul>
-                <c:forEach items="${factories}" var="factory">
+                <c:forEach items="${report.factories}" var="factory">
                     <li><c:out value="${factory.description}"/></li>
                 </c:forEach>
             </ul>
             <h1>Resources by application</h1>
-            <c:forEach items="${rootModules}" var="module">
+            <c:forEach items="${report.rootModules}" var="module">
                 <arit:module module="${module}"/>
             </c:forEach>
             <h1>Messages</h1>
             <ul>
-                <c:forEach items="${messages}" var="message">
+                <c:forEach items="${report.messages}" var="message">
                     <li><c:out value="${message.text}"/></li>
                 </c:forEach>
             </ul>

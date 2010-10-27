@@ -16,12 +16,6 @@
 package com.googlecode.arit.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,147 +25,28 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ServerContext;
-import com.googlecode.arit.icon.IconManager;
-import com.googlecode.arit.servlet.log.Message;
-import com.googlecode.arit.servlet.log.ThreadLocalLogger;
+import com.googlecode.arit.report.Report;
+import com.googlecode.arit.report.ReportGenerator;
 
 @Component(role=HttpServlet.class, hint="InspectorServlet")
 public class InspectorServlet extends HttpServlet {
     @Requirement
-    private ModuleInspectorFactory moduleInspectorFactory;
-    
-    @Requirement(role=ResourceEnumeratorFactory.class)
-    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
-    
-    @Requirement
-    private ClassLoaderIdProvider classLoaderIdProvider;
-    
-    @Requirement(hint="unknown")
-    private ModuleType unknownModuleType;
-    
-    @Requirement(role=IconManager.class, hint="module")
-    private ModuleTypeIconManager moduleTypeIconManager;
-    
-    @Requirement(role=IconManager.class, hint="resource")
-    private ResourceTypeIconManager resourceTypeIconManager;
-    
-    private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
-    private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
+    private ReportGenerator reportGenerator;
     
     private ServerContext getServerContext() {
         return new ServerContext(getServletContext(), getClass().getClassLoader());
     }
     
     @Override
-    public void init() throws ServletException {
-        for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
-            if (resourceEnumeratorFactory.isAvailable()) {
-                availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            } else {
-                unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            }
-        }
-    }
-
-    @Override
-    public void destroy() {
-        availableResourceEnumeratorFactories.clear();
-        unavailableResourceEnumeratorFactories.clear();
-    }
-    
-    private Module getModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ClassLoader classLoader) {
-        if (moduleMap.containsKey(classLoader)) {
-            return moduleMap.get(classLoader);
-        } else {
-            ModuleDescription desc = moduleInspector.inspect(classLoader);
-            Module module;
-            if (desc == null) {
-                module = null;
-            } else {
-                module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus());
-                ModuleType moduleType = desc.getType();
-                ClassLoader parentClassLoader = classLoader.getParent();
-                Module parentModule;
-                if (parentClassLoader != null) {
-                    // TODO: we should actually walk up the hierarchy until we identify a class loader
-                    parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
-                    if (parentModule != null) {
-                        parentModule.addChild(module);
-                    }
-                } else {
-                    parentModule = null;
-                }
-                String variant;
-                if (desc.getStatus() == ModuleStatus.STOPPED) {
-                    if (parentModule == null || parentModule.getStatus() != ModuleStatus.STOPPED) {
-                        variant = "defunct";
-                    } else {
-                        variant = "grayed";
-                    }
-                } else {
-                    variant = "default";
-                }
-                module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
-            }
-            moduleMap.put(classLoader, module);
-            return module;
-        }
-    }
-    
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!moduleInspectorFactory.isAvailable()) {
+        if (!reportGenerator.isAvailable()) {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
-            List<Message> messages = new ArrayList<Message>();
-            List<Module> rootModules = new ArrayList<Module>();
-            ThreadLocalLogger.setTarget(messages);
-            try {
-                ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
-                
-                moduleInspector.listModules();
-                
-                Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
-                for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
-                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
-                    while (resourceEnumerator.next()) {
-                        for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
-                            if (classLoader != null) {
-                                Module module = getModule(moduleInspector, moduleMap, classLoader);
-                                // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
-                                if (module != null) {
-                                    module.getResources().add(new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getType()).getIconImage("default").getFileName(), resourceEnumerator.getDescription()));
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                for (Module module : moduleMap.values()) {
-                    if (module != null && module.getParent() == null) {
-                        rootModules.add(module);
-                    }
-                }
-            } finally {
-                ThreadLocalLogger.setTarget(null);
-            }
-            Collections.sort(rootModules, new Comparator<Module>() {
-                public int compare(Module o1, Module o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
+            Report report = reportGenerator.generateReport();
             // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
-            request.setAttribute("factories", availableResourceEnumeratorFactories);
-            request.setAttribute("messages", messages);
-            request.setAttribute("rootModules", rootModules);
+            request.setAttribute("report", report);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
     }
