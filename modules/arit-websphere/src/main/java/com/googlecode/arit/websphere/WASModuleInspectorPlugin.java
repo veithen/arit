@@ -15,6 +15,9 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,13 +121,24 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         
         Map<ClassLoader,ModuleDescription> moduleMap = new HashMap<ClassLoader,ModuleDescription>();
         for (DeployedObjectCollaboratorRBean collaborator : earCollaborators) {
-            ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
-            moduleMap.put(classLoader, new ModuleDescription(appWarClassLoaders.contains(classLoader) ? appWarModuleType : earModuleType, collaborator.getName(), classLoader, ModuleStatus.STARTED));
+            DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
+            ClassLoader classLoader = deployedObject.getClassLoader();
+            URL url;
+            if (deployedObject instanceof DeployedApplicationRBean) {
+                try {
+                    url = new File(((DeployedApplicationRBean)deployedObject).getBinariesURL()).toURL();
+                } catch (MalformedURLException ex) {
+                    url = null;
+                }
+            } else {
+                url = null;
+            }
+            moduleMap.put(classLoader, new ModuleDescription(appWarClassLoaders.contains(classLoader) ? appWarModuleType : earModuleType, collaborator.getName(), classLoader, url, ModuleStatus.STARTED));
         }
         for (DeployedObjectCollaboratorRBean collaborator : warCollaborators) {
             ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
             if (!appWarClassLoaders.contains(classLoader)) {
-                moduleMap.put(classLoader, new ModuleDescription(warModuleType, collaborator.getName(), classLoader, ModuleStatus.STARTED));
+                moduleMap.put(classLoader, new ModuleDescription(warModuleType, collaborator.getName(), classLoader, null, ModuleStatus.STARTED));
             }
         }
         

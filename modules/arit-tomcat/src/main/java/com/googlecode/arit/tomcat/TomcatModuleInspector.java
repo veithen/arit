@@ -41,10 +41,11 @@ public class TomcatModuleInspector implements ModuleInspector {
             WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
             ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
             // Tomcat removes the DirContext when stopping the application
+            // TODO: maybe we can get the module URL?
             if (context == null) {
-                return new ModuleDescription(warModuleType, null, classLoader, ModuleStatus.STOPPED);
+                return new ModuleDescription(warModuleType, null, classLoader, null, ModuleStatus.STOPPED);
             } else {
-                return new ModuleDescription(warModuleType, context.getContextName(), classLoader, ModuleStatus.STARTED);
+                return new ModuleDescription(warModuleType, context.getContextName(), classLoader, null, ModuleStatus.STARTED);
             }
         } else {
             return null;

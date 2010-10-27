@@ -41,7 +41,8 @@ public class JettyModuleInspector implements ModuleInspector {
             WebAppClassLoaderRBean wacl = rbf.createRBean(WebAppClassLoaderRBean.class, classLoader);
             WebAppContextRBean context = (WebAppContextRBean)wacl.getContext();
             // TODO: it should be possible to determine the module status
-            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader, ModuleStatus.UNKNOWN);
+            // TODO: maybe it's possible to determine the URL?
+            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader, null, ModuleStatus.UNKNOWN);
         } else {
             return null;
         }

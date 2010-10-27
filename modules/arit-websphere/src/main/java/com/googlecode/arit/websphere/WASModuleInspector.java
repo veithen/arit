@@ -89,7 +89,7 @@ public class WASModuleInspector implements ModuleInspector {
                 moduleName = name;
                 moduleStatus = ModuleStatus.UNKNOWN;
             }
-            return new ModuleDescription(moduleType, moduleName, classLoader, moduleStatus);
+            return new ModuleDescription(moduleType, moduleName, classLoader, null, moduleStatus);
         } else {
             return null;
         }

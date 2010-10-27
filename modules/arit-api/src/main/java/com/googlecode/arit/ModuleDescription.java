@@ -15,16 +15,20 @@
  */
 package com.googlecode.arit;
 
+import java.net.URL;
+
 public class ModuleDescription {
     private final ModuleType type;
     private final String displayName;
     private final ClassLoader classLoader;
+    private final URL url;
     private final ModuleStatus status;
     
-    public ModuleDescription(ModuleType type, String displayName, ClassLoader classLoader, ModuleStatus status) {
+    public ModuleDescription(ModuleType type, String displayName, ClassLoader classLoader, URL url, ModuleStatus status) {
         this.type = type;
         this.displayName = displayName;
         this.classLoader = classLoader;
+        this.url = url;
         this.status = status;
     }
 
@@ -38,6 +42,10 @@ public class ModuleDescription {
 
     public ClassLoader getClassLoader() {
         return classLoader;
+    }
+
+    public URL getUrl() {
+        return url;
     }
 
     public ModuleStatus getStatus() {
