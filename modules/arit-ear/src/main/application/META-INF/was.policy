@@ -9,11 +9,15 @@ grant codeBase "file:${webComponent}" {
   permission java.lang.RuntimePermission "modifyThreadGroup";
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission javax.management.MBeanServerPermission "findMBeanServer";
-  permission javax.management.MBeanPermission "*", "queryNames";
+  permission javax.management.MBeanPermission "*", "queryNames,getAttribute,getMBeanInfo";
   
   permission com.ibm.websphere.security.WebSphereRuntimePermission "AdminPermission";
   permission com.ibm.websphere.security.WebSphereRuntimePermission "accessRuntimeClasses";
   
   // This permission is necessary to allow the custom classloaders in Plexus to share classes
   permission com.ibm.oti.shared.SharedClassPermission "org.codehaus.plexus.*", "read,write";
+
+  // Permissions necessary to allow Arit to register its own MBeans
+  permission javax.management.MBeanPermission "[com.googlecode.arit:*]", "*";
+  permission javax.management.MBeanTrustPermission "*";
 };

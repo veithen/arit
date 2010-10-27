@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <plexus>
-  <components>
-    <component>
-      <role>org.codehaus.plexus.logging.LoggerManager</role>
-      <implementation>com.googlecode.arit.servlet.log.ThreadLocalLoggerManager</implementation>
-      <isolated-realm>false</isolated-realm>
-    </component>
-  </components>
+    <components>
+        <component>
+            <role>org.codehaus.plexus.logging.LoggerManager</role>
+            <implementation>com.googlecode.arit.servlet.log.ThreadLocalLoggerManager</implementation>
+            <isolated-realm>false</isolated-realm>
+        </component>
+    </components>
+    <load-on-start>
+        <component>
+            <role>com.googlecode.arit.jmx.LeakDetector</role>
+        </component>
+    </load-on-start>
 </plexus>
