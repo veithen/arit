@@ -25,6 +25,7 @@ public class Module {
     private final String name;
     private final ModuleStatus status;
     private String icon;
+    private List<String> identities;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
@@ -53,6 +54,14 @@ public class Module {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public List<String> getIdentities() {
+        return identities;
+    }
+
+    public void setIdentities(List<String> identities) {
+        this.identities = identities;
     }
 
     public List<Resource> getResources() {

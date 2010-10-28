@@ -11,6 +11,10 @@ grant codeBase "file:${webComponent}" {
   permission javax.management.MBeanServerPermission "findMBeanServer";
   permission javax.management.MBeanPermission "*", "queryNames,getAttribute,getMBeanInfo";
   
+  // The Maven module identity provider needs this permission:
+  permission java.io.FilePermission "${user.install.root}${/}installedApps${/}-", "read";
+  permission java.io.FilePermission "${was.install.root}${/}systemApps${/}-", "read";
+  
   permission com.ibm.websphere.security.WebSphereRuntimePermission "AdminPermission";
   permission com.ibm.websphere.security.WebSphereRuntimePermission "accessRuntimeClasses";
   

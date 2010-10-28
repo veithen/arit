@@ -58,6 +58,9 @@ public class ReportGenerator implements Initializable, Disposable {
     @Requirement(role=IconManager.class, hint="module")
     private ModuleTypeIconManager moduleTypeIconManager;
     
+    @Requirement
+    private ModuleIdentityProvider moduleIdentityProvider;
+    
     @Requirement(role=IconManager.class, hint="resource")
     private ResourceTypeIconManager resourceTypeIconManager;
     
@@ -116,6 +119,7 @@ public class ReportGenerator implements Initializable, Disposable {
                     variant = "default";
                 }
                 module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
+                module.setIdentities(moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader));
             }
             moduleMap.put(classLoader, module);
             return module;

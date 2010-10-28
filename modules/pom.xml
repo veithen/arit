@@ -28,6 +28,7 @@
         <module>arit-jdbc</module>
         <module>arit-jee</module>
         <module>arit-jetty</module>
+        <module>arit-maven</module>
         <module>arit-mbeans</module>
         <module>arit-rbeans</module>
         <module>arit-rmi</module>

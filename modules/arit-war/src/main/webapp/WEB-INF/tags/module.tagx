@@ -5,7 +5,17 @@
                              type="com.googlecode.arit.report.Module"
                              required="true"/>
     <div class="module">
-        <div class="module-name"><img src="icons/module/${module.icon}"/><jsp:text> </jsp:text><c:out value="${module.name}"/></div>
+        <div class="module-name">
+            <img src="icons/module/${module.icon}"/><jsp:text> </jsp:text><c:out value="${module.name}"/>
+            <c:if test="${not empty module.identities}">
+                <jsp:text> (</jsp:text>
+                <c:forEach items="${module.identities}" var="identity" varStatus="status">
+                    <c:if test="${!status.first}">, </c:if>
+                    <c:out value="${identity}"/>
+                </c:forEach>
+                <jsp:text>)</jsp:text>
+            </c:if>
+        </div>
         <c:forEach items="${module.resources}" var="resource">
             <div class="resource"><img src="icons/resource/${resource.icon}"/><jsp:text> </jsp:text><c:out value="${resource.description}"/></div>
         </c:forEach>
