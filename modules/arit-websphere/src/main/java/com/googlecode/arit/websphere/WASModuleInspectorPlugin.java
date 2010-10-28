@@ -123,15 +123,17 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         for (DeployedObjectCollaboratorRBean collaborator : earCollaborators) {
             DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
             ClassLoader classLoader = deployedObject.getClassLoader();
-            URL url;
+            URL url = null;
             if (deployedObject instanceof DeployedApplicationRBean) {
-                try {
-                    url = new File(((DeployedApplicationRBean)deployedObject).getBinariesURL()).toURL();
-                } catch (MalformedURLException ex) {
-                    url = null;
+                String dir = ((DeployedApplicationRBean)deployedObject).getBinariesURL();
+                // The getBinariesURL method doesn't exist on WAS 6.1
+                if (dir != null) {
+                    try {
+                        url = new File(dir).toURL();
+                    } catch (MalformedURLException ex) {
+                        // Just continue
+                    }
                 }
-            } else {
-                url = null;
             }
             moduleMap.put(classLoader, new ModuleDescription(appWarClassLoaders.contains(classLoader) ? appWarModuleType : earModuleType, collaborator.getName(), classLoader, url, ModuleStatus.STARTED));
         }

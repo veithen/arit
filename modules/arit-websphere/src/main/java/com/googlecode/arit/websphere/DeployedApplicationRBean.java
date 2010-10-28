@@ -15,9 +15,11 @@
  */
 package com.googlecode.arit.websphere;
 
+import com.googlecode.arit.rbeans.Optional;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("com.ibm.ws.runtime.deploy.DeployedApplication")
 public interface DeployedApplicationRBean extends DeployedObjectRBean {
+    @Optional
     String getBinariesURL();
 }
