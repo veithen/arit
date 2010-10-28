@@ -16,6 +16,7 @@
 package com.googlecode.arit.bundlecache;
 
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -34,5 +35,18 @@ public class ResourceBundleCacheInspectorTest extends PlexusTestCase {
             }
         }
         assertTrue(found);
+    }
+
+    public void testNotFound() throws Exception {
+        ResourceBundleCacheInspector inspector = lookup(ResourceBundleCacheInspector.class);
+        assertTrue(inspector.isAvailable());
+        try {
+            ResourceBundle.getBundle("non.existing.bundle");
+        } catch (MissingResourceException ex) {
+            // This exception is expected; continue
+        }
+        // Some JREs use a special value for negative caching; the inspector must be prepared
+        // to handle this, i.e. it must not throw any exception here
+        inspector.getCachedResourceBundles();
     }
 }

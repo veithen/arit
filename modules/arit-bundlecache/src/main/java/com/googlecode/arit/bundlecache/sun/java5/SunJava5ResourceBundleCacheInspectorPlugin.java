@@ -46,11 +46,15 @@ public class SunJava5ResourceBundleCacheInspectorPlugin implements ResourceBundl
     }
 
     public List<CachedResourceBundle> getCachedResourceBundles() {
-        Map<?,ResourceBundle> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
+        Map<?,Object> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
         List<CachedResourceBundle> result = new ArrayList<CachedResourceBundle>(cache.size());
-        for (Map.Entry<?,ResourceBundle> entry : cache.entrySet()) {
-            ResourceCacheKeyRBean cacheKey = rbf.createRBean(ResourceCacheKeyRBean.class, entry.getKey());
-            result.add(new CachedResourceBundle(cacheKey.getLoaderRef().get(), cacheKey.getSearchName(), entry.getValue()));
+        for (Map.Entry<?,Object> entry : cache.entrySet()) {
+            Object value = entry.getValue();
+            // Java 5 uses an instance of Object (NOT_FOUND in the code) for negative caching
+            if (value instanceof ResourceBundle) {
+                ResourceCacheKeyRBean cacheKey = rbf.createRBean(ResourceCacheKeyRBean.class, entry.getKey());
+                result.add(new CachedResourceBundle(cacheKey.getLoaderRef().get(), cacheKey.getSearchName(), (ResourceBundle)value));
+            }
         }
         return result;
     }

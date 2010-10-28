@@ -25,5 +25,5 @@ import com.googlecode.arit.rbeans.TargetClass;
 @TargetClass(ResourceBundle.class)
 public interface ResourceBundleRBean extends StaticRBean {
     @Accessor(name="cacheList")
-    Map<?,ResourceBundle> getCache();
+    Map<?,Object> getCache();
 }
