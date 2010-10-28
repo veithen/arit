@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Iterator;
 
 import javax.imageio.spi.IIORegistry;
@@ -46,14 +48,43 @@ import javax.imageio.stream.ImageOutputStream;
  * <p>
  * This class provides methods that disable disk based caching without the need to change the thread
  * group wide configuration.
+ * <p>
+ * The code in this class also works around a potential memory leak caused by the Java 2D disposer
+ * thread. This is a known issue in the JRE, described by bug
+ * <a href="http://bugs.sun.com/view_bug.do?bug_id=6489540">6489540</a>.
  * 
  * @author Andreas Veithen
  */
 public class ImageIO {
     private static final IIORegistry registry = IIORegistry.getDefaultInstance();
     
+    private static ClassLoader switchClassLoader() {
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                Thread currentThread = Thread.currentThread();
+                ClassLoader classLoader = currentThread.getContextClassLoader();
+                currentThread.setContextClassLoader(javax.imageio.ImageIO.class.getClassLoader());
+                return classLoader;
+            }
+        });
+    }
+    
+    private static void resetClassLoader(final ClassLoader classLoader) {
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            public Object run() {
+                Thread.currentThread().setContextClassLoader(classLoader);
+                return null;
+            }
+        });
+    }
+    
     public static BufferedImage read(InputStream in) throws IOException {
-        return javax.imageio.ImageIO.read(createImageInputStream(in));
+        ClassLoader classLoader = switchClassLoader();
+        try {
+            return javax.imageio.ImageIO.read(createImageInputStream(in));
+        } finally {
+            resetClassLoader(classLoader);
+        }
     }
 
     private static ImageInputStream createImageInputStream(InputStream in) throws IOException {
@@ -76,11 +107,16 @@ public class ImageIO {
     }
 
     public static boolean write(RenderedImage im, String format, OutputStream out) throws IOException {
-        ImageOutputStream stream = createImageOutputStream(out);
+        ClassLoader classLoader = switchClassLoader();
         try {
-            return javax.imageio.ImageIO.write(im, format, stream);
+            ImageOutputStream stream = createImageOutputStream(out);
+            try {
+                return javax.imageio.ImageIO.write(im, format, stream);
+            } finally {
+                stream.close();
+            }
         } finally {
-            stream.close();
+            resetClassLoader(classLoader);
         }
     }
 
