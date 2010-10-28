@@ -63,8 +63,8 @@ public class WASModuleInspector implements ModuleInspector {
                 // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
                 moduleName = "<unknown>";
                 moduleStatus = ModuleStatus.UNKNOWN;
-                for (String path : ccl.getPaths()) {
-                    path = path.replace('\\', '/');
+                for (SinglePathClassProviderRBean provider : ccl.getProviders()) {
+                    String path = provider.getPath().replace('\\', '/');
                     if (path.endsWith("/WEB-INF/classes")) {
                         moduleType = warModuleType;
                         moduleName = path.substring(path.lastIndexOf('/', path.length()-17)+1, path.length()-16);
