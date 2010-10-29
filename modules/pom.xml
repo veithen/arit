@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.googlecode.arit</groupId>
         <artifactId>arit</artifactId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>modules</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <packaging>pom</packaging>
     <name>Arit :: Modules</name>
     <dependencies>
