@@ -25,29 +25,29 @@ import javax.management.modelmbean.RequiredModelMBean;
 import org.codehaus.plexus.PlexusTestCase;
 
 public class MBeanServerInspectorTest extends PlexusTestCase {
+    private MBeanAccessor getAccessor(MBeanServer mbs) throws Exception {
+        MBeanServerInspector inspector = lookup(MBeanServerInspector.class);
+        assertTrue(inspector.isAvailable());
+        MBeanAccessor accessor = inspector.inspect(mbs);
+        assertNotNull(accessor);
+        return accessor;
+    }
+    
     public void testDynamicMBean() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Object mbean = new Dummy();
         ObjectName name = new ObjectName("Test:type=Dummy");
         mbs.registerMBean(mbean, name);
-        boolean found = false;
         try {
-            for (MBeanServerInspectorPlugin inspector : getContainer().lookupList(MBeanServerInspectorPlugin.class)) {
-                if (inspector.isAvailable()) {
-                    MBeanAccessor accessor = inspector.inspect(mbs);
-                    if (accessor != null) {
-                        assertSame(mbean, accessor.retrieve(name));
-                        found = true;
-                    }
-                }
-            }
+            assertSame(mbean, getAccessor(mbs).retrieve(name));
         } finally {
             mbs.unregisterMBean(name);
         }
-        assertTrue(found);
     }
     
     public void testRequiredModelMBean() throws Exception {
+        MBeanServerInspector inspector = lookup(MBeanServerInspector.class);
+        assertTrue(inspector.isAvailable());
         Object resource = new Dummy();
         RequiredModelMBean mbean = new RequiredModelMBean();
         mbean.setManagedResource(resource, "ObjectReference");
@@ -55,20 +55,10 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("Test:type=Dummy");
         mbs.registerMBean(mbean, name);
-        boolean found = false;
         try {
-            for (MBeanServerInspectorPlugin inspector : getContainer().lookupList(MBeanServerInspectorPlugin.class)) {
-                if (inspector.isAvailable()) {
-                    MBeanAccessor accessor = inspector.inspect(mbs);
-                    if (accessor != null) {
-                        assertSame(resource, accessor.retrieve(name));
-                        found = true;
-                    }
-                }
-            }
+            assertSame(resource, getAccessor(mbs).retrieve(name));
         } finally {
             mbs.unregisterMBean(name);
         }
-        assertTrue(found);
     }
 }
