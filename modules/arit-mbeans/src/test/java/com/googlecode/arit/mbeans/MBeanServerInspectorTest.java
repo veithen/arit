@@ -17,11 +17,15 @@ package com.googlecode.arit.mbeans;
 
 import java.lang.management.ManagementFactory;
 
+import javax.management.DynamicMBean;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.StandardMBean;
 import javax.management.modelmbean.ModelMBeanInfoSupport;
 import javax.management.modelmbean.RequiredModelMBean;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.jmx.LoggerDynamicMBean;
 import org.codehaus.plexus.PlexusTestCase;
 
 public class MBeanServerInspectorTest extends PlexusTestCase {
@@ -33,13 +37,25 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
         return accessor;
     }
     
-    public void testDynamicMBean() throws Exception {
+    public void testStandardMBean() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        Object mbean = new Dummy();
-        ObjectName name = new ObjectName("Test:type=Dummy");
-        mbs.registerMBean(mbean, name);
+        Dummy impl = new Dummy();
+        ObjectName name = mbs.registerMBean(impl, new ObjectName("Test:type=Dummy")).getObjectName();
         try {
-            assertSame(mbean, getAccessor(mbs).retrieve(name));
+            assertSame(impl, getAccessor(mbs).retrieve(name));
+        } finally {
+            mbs.unregisterMBean(name);
+        }
+    }
+    
+    // TODO: not working yet
+    public void _testStandardMBean2() throws Exception {
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        Dummy impl = new Dummy();
+        StandardMBean mbean = new StandardMBean(impl, DummyMBean.class);
+        ObjectName name = mbs.registerMBean(mbean, new ObjectName("Test:type=Dummy")).getObjectName();
+        try {
+            assertSame(impl, getAccessor(mbs).retrieve(name));
         } finally {
             mbs.unregisterMBean(name);
         }
@@ -48,15 +64,25 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
     public void testRequiredModelMBean() throws Exception {
         MBeanServerInspector inspector = lookup(MBeanServerInspector.class);
         assertTrue(inspector.isAvailable());
-        Object resource = new Dummy();
+        Dummy impl = new Dummy();
         RequiredModelMBean mbean = new RequiredModelMBean();
-        mbean.setManagedResource(resource, "ObjectReference");
+        mbean.setManagedResource(impl, "ObjectReference");
         mbean.setModelMBeanInfo(new ModelMBeanInfoSupport(Dummy.class.getName(), "Dummy", null, null, null, null));
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("Test:type=Dummy");
-        mbs.registerMBean(mbean, name);
+        ObjectName name = mbs.registerMBean(mbean, new ObjectName("Test:type=Dummy")).getObjectName();
         try {
-            assertSame(resource, getAccessor(mbs).retrieve(name));
+            assertSame(impl, getAccessor(mbs).retrieve(name));
+        } finally {
+            mbs.unregisterMBean(name);
+        }
+    }
+    
+    public void testDynamicMBean() throws Exception {
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        DynamicMBean mbean = new LoggerDynamicMBean(Logger.getLogger("test"));
+        ObjectName name = mbs.registerMBean(mbean, new ObjectName("Test:name=test")).getObjectName();
+        try {
+            assertSame(mbean, getAccessor(mbs).retrieve(name));
         } finally {
             mbs.unregisterMBean(name);
         }
