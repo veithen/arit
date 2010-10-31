@@ -17,10 +17,12 @@ package com.googlecode.arit.mbeans.sun.java5;
 
 import javax.management.ObjectName;
 
+import com.googlecode.arit.rbeans.Mapped;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("com.sun.jmx.mbeanserver.Repository")
 public interface RepositoryRBean extends RBean {
+    @Mapped
     Object retrieve(ObjectName name);
 }

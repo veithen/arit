@@ -35,6 +35,6 @@ public class SunJava5MBeanServerInspectorPlugin extends SunMBeanServerInspectorP
 
     @Override
     protected MBeanAccessor createAccessor(DefaultMBeanServerInterceptorRBean defaultMBeanServerInterceptorRBean) {
-        return new SunJava5MBeanAccessor(defaultMBeanServerInterceptorRBean.getRepository(), rbf);
+        return new SunJava5MBeanAccessor(defaultMBeanServerInterceptorRBean.getRepository());
     }
 }

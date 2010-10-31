@@ -114,7 +114,7 @@ public class RBeanFactory {
                 for (String name : accessorAnnotation.name()) {
                     try {
                         field = targetClass.getDeclaredField(name);
-                        valueHandler = getObjectHandler(proxyMethod.getGenericReturnType(), field.getGenericType());
+                        valueHandler = getObjectHandler(proxyMethod.getGenericReturnType(), field.getGenericType(), proxyMethod.getAnnotation(Mapped.class) != null);
                         if (valueHandler != null) {
                             break;
                         }
@@ -150,7 +150,7 @@ public class RBeanFactory {
                         throw new TargetMemberNotFoundException("No corresponding target method found for " + proxyMethod);
                     }
                 } else {
-                    ObjectHandler returnHandler = getObjectHandler(proxyMethod.getGenericReturnType(), targetMethod.getGenericReturnType());
+                    ObjectHandler returnHandler = getObjectHandler(proxyMethod.getGenericReturnType(), targetMethod.getGenericReturnType(), proxyMethod.getAnnotation(Mapped.class) != null);
                     if (returnHandler == null) {
                         // TODO: create new exception class
                         throw new RBeanFactoryException("The RBean method " + proxyMethod + " is not compatible with the target method "
@@ -183,10 +183,15 @@ public class RBeanFactory {
         }
     }
     
-    private ObjectHandler getObjectHandler(Type toType, Type fromType) throws RBeanFactoryException {
+    private ObjectHandler getObjectHandler(Type toType, Type fromType, boolean mapped) throws RBeanFactoryException {
         Class<?> toClass = getRawType(toType);
         Class<?> fromClass = getRawType(fromType);
-        if (!RBean.class.isAssignableFrom(toClass)) {
+        if (mapped || RBean.class.isAssignableFrom(toClass)) {
+            if (!mapped) {
+                load(toClass);
+            }
+            return new ObjectWrapper(this);
+        } else {
             Class<?> itemClass = null;
             boolean isArray = toClass.isArray();
             if (isArray) {
@@ -200,9 +205,6 @@ public class RBeanFactory {
             } else {
                 return toClass.isAssignableFrom(fromClass) ? PassThroughHandler.INSTANCE : null;
             }
-        } else {
-            load(toClass);
-            return new ObjectWrapper(this);
         }
     }
     

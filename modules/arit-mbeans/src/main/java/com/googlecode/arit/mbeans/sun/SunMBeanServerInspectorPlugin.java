@@ -24,8 +24,7 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public abstract class SunMBeanServerInspectorPlugin<T extends MBeanServerInterceptorRBean> implements MBeanServerInspectorPlugin {
     private final Class<T> defaultMBeanServerInterceptorClass;
-    // TODO: should be private
-    protected final RBeanFactory rbf;
+    private final RBeanFactory rbf;
     
     public SunMBeanServerInspectorPlugin(Class<T> defaultMBeanServerInterceptorClass) {
         this.defaultMBeanServerInterceptorClass = defaultMBeanServerInterceptorClass;

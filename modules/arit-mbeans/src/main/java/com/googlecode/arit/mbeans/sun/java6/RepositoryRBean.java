@@ -18,10 +18,14 @@ package com.googlecode.arit.mbeans.sun.java6;
 import javax.management.DynamicMBean;
 import javax.management.ObjectName;
 
+import com.googlecode.arit.rbeans.Mapped;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("com.sun.jmx.mbeanserver.Repository")
+@SeeAlso(DynamicMBean2RBean.class)
 public interface RepositoryRBean extends RBean {
+    @Mapped
     DynamicMBean retrieve(ObjectName name);
 }

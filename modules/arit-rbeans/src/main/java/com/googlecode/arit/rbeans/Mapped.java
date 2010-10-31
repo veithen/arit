@@ -15,19 +15,17 @@
  */
 package com.googlecode.arit.rbeans;
 
-public class ObjectWrapper implements ObjectHandler {
-    private final RBeanFactory rbf;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public ObjectWrapper(RBeanFactory rbf) {
-        this.rbf = rbf;
-    }
-
-    public Object handle(Object object) {
-        if (object == null) {
-            return null;
-        } else {
-            RBeanInfo rbeanInfo = rbf.getRBeanInfoForTargetClass(object.getClass());
-            return rbeanInfo == null ? object : rbf.createRBean(rbeanInfo, object);
-        }
-    }
+/**
+ * Indicates that the result of a method should be mapped to RBeans.
+ * 
+ * @author Andreas Veithen
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Mapped {
 }

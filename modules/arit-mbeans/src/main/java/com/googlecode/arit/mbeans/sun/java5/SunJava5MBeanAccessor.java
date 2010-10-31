@@ -16,25 +16,21 @@
 package com.googlecode.arit.mbeans.sun.java5;
 
 import javax.management.ObjectName;
-import javax.management.modelmbean.RequiredModelMBean;
 
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.sun.RequiredModelMBeanRBean;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class SunJava5MBeanAccessor implements MBeanAccessor {
     private final RepositoryRBean repository;
-    private final RBeanFactory rbf;
 
-    public SunJava5MBeanAccessor(RepositoryRBean repository, RBeanFactory rbf) {
+    public SunJava5MBeanAccessor(RepositoryRBean repository) {
         this.repository = repository;
-        this.rbf = rbf;
     }
 
     public Object retrieve(ObjectName name) {
         Object object = repository.retrieve(name);
-        if (object instanceof RequiredModelMBean) {
-            return rbf.createRBean(RequiredModelMBeanRBean.class, object).getManagedResource();
+        if (object instanceof RequiredModelMBeanRBean) {
+            return ((RequiredModelMBeanRBean)object).getManagedResource();
         } else {
             return object;
         }

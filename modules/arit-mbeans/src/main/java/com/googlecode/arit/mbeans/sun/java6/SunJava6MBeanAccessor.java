@@ -16,28 +16,23 @@
 package com.googlecode.arit.mbeans.sun.java6;
 
 import javax.management.ObjectName;
-import javax.management.modelmbean.RequiredModelMBean;
 
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.sun.RequiredModelMBeanRBean;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.sun.jmx.mbeanserver.DynamicMBean2;
 
 public class SunJava6MBeanAccessor implements MBeanAccessor {
     private final RepositoryRBean repository;
-    private final RBeanFactory rbf;
 
-    public SunJava6MBeanAccessor(RepositoryRBean repository, RBeanFactory rbf) {
+    public SunJava6MBeanAccessor(RepositoryRBean repository) {
         this.repository = repository;
-        this.rbf = rbf;
     }
 
     public Object retrieve(ObjectName name) {
         Object object = repository.retrieve(name);
-        if (object instanceof DynamicMBean2) {
-            return ((DynamicMBean2)object).getResource();
-        } else if (object instanceof RequiredModelMBean) {
-            return rbf.createRBean(RequiredModelMBeanRBean.class, object).getManagedResource();
+        if (object instanceof DynamicMBean2RBean) {
+            return ((DynamicMBean2RBean)object).getResource();
+        } else if (object instanceof RequiredModelMBeanRBean) {
+            return ((RequiredModelMBeanRBean)object).getManagedResource();
         } else {
             return object;
         }

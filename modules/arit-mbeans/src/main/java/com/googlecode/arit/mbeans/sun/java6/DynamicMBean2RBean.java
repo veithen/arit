@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.mbeans.sun.java6;
 
-public class ObjectWrapper implements ObjectHandler {
-    private final RBeanFactory rbf;
+import javax.management.DynamicMBean;
 
-    public ObjectWrapper(RBeanFactory rbf) {
-        this.rbf = rbf;
-    }
+import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
 
-    public Object handle(Object object) {
-        if (object == null) {
-            return null;
-        } else {
-            RBeanInfo rbeanInfo = rbf.getRBeanInfoForTargetClass(object.getClass());
-            return rbeanInfo == null ? object : rbf.createRBean(rbeanInfo, object);
-        }
-    }
+@Target("com.sun.jmx.mbeanserver.DynamicMBean2")
+public interface DynamicMBean2RBean extends RBean, DynamicMBean {
+    Object getResource();
 }

@@ -33,7 +33,6 @@
         <module>arit-rbeans</module>
         <module>arit-rmi</module>
         <module>arit-shutdown-hooks</module>
-        <module>arit-sun-apis</module>
         <module>arit-test-war</module>
         <module>arit-threadlocals</module>
         <module>arit-threads</module>

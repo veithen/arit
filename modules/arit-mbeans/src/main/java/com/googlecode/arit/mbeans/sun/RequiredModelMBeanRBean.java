@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.mbeans.sun;
 
+import javax.management.DynamicMBean;
 import javax.management.modelmbean.RequiredModelMBean;
 
 import com.googlecode.arit.rbeans.Accessor;
@@ -22,7 +23,7 @@ import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.TargetClass;
 
 @TargetClass(RequiredModelMBean.class)
-public interface RequiredModelMBeanRBean extends RBean {
+public interface RequiredModelMBeanRBean extends RBean, DynamicMBean {
     @Accessor(name="managedResource")
     Object getManagedResource();
 }

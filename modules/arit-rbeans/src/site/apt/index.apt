@@ -73,6 +73,21 @@ Invoking methods through an RBean
   RBeanFactory. To ensure this, specify the RBean types in the list passed to the constructor
   of the RBeanFactory or use the @SeeAlso annotation.
 
+  In some cases, it is useful to replace objects returned by a method with their corresponding
+  RBeans, while passing through objects for which no RBean exists. Consider for example a
+  method with return type <<<Object>>>. At runtime, if the method returns a <<<String>>>,
+  then no substitution is necessary. However, one might still want to substitute the returned
+  object by an RBean for particular types of instances. To achieve this, add the @Mapped
+  annotation to the method. Note however that this only works if one of the following
+  conditions is satisfied:
+  
+  * The return type of the method is <<<Object>>>.
+  
+  * The return type of the method is an interface and the relevant RBeans extend this
+    interface.
+  
+  []
+
   Automatically wrapping returned objects as RBeans is also supported for collections.
   To enable this, declare the return type as Iterable\<T\>, where T is an RBean interface.
 
