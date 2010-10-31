@@ -15,7 +15,6 @@
  */
 package com.googlecode.arit.jetty;
 
-import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("org.mortbay.jetty.webapp.WebAppContext")
