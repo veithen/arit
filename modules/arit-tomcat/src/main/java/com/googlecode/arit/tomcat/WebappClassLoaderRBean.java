@@ -15,6 +15,10 @@
  */
 package com.googlecode.arit.tomcat;
 
+import javax.naming.directory.DirContext;
+
+import com.googlecode.arit.rbeans.Mapped;
+import com.googlecode.arit.rbeans.Optional;
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
@@ -22,5 +26,9 @@ import com.googlecode.arit.rbeans.Target;
 @Target("org.apache.catalina.loader.WebappClassLoader")
 @SeeAlso(ProxyDirContextRBean.class)
 public interface WebappClassLoaderRBean extends RBean {
-    DirContextRBean getResources(); 
+    @Optional // Doesn't exist in all versions of Tomcat 6.0
+    String getContextName();
+    
+    @Mapped
+    DirContext getResources(); 
 }

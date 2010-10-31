@@ -15,10 +15,12 @@
  */
 package com.googlecode.arit.tomcat;
 
+import javax.naming.directory.DirContext;
+
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("org.apache.naming.resources.ProxyDirContext")
-public interface ProxyDirContextRBean extends RBean {
+public interface ProxyDirContextRBean extends RBean, DirContext {
     String getContextName();
 }

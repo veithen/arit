@@ -17,6 +17,8 @@ package com.googlecode.arit.tomcat;
 
 import java.util.List;
 
+import javax.naming.directory.DirContext;
+
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleStatus;
@@ -39,14 +41,15 @@ public class TomcatModuleInspector implements ModuleInspector {
     public ModuleDescription inspect(ClassLoader classLoader) {
         if (rbf.getRBeanInfo(WebappClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
             WebappClassLoaderRBean wacl = rbf.createRBean(WebappClassLoaderRBean.class, classLoader);
-            ProxyDirContextRBean context = (ProxyDirContextRBean)wacl.getResources();
+            DirContext context = wacl.getResources();
+            String contextName = wacl.getContextName();
+            if (contextName == null && context instanceof ProxyDirContextRBean) {
+                contextName = ((ProxyDirContextRBean)context).getContextName();
+            }
             // Tomcat removes the DirContext when stopping the application
             // TODO: maybe we can get the module URL?
-            if (context == null) {
-                return new ModuleDescription(warModuleType, null, classLoader, null, ModuleStatus.STOPPED);
-            } else {
-                return new ModuleDescription(warModuleType, context.getContextName(), classLoader, null, ModuleStatus.STARTED);
-            }
+            return new ModuleDescription(warModuleType, contextName, classLoader, null,
+                    context == null ? ModuleStatus.STOPPED : ModuleStatus.STARTED);
         } else {
             return null;
         }
