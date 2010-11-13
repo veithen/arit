@@ -26,7 +26,6 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ServerContext;
-import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
 
 @Component(role=HttpServlet.class, hint="InspectorServlet")
@@ -44,9 +43,9 @@ public class InspectorServlet extends HttpServlet {
             request.setAttribute("serverContext", getServerContext());
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
-            Report report = reportGenerator.generateReport();
             // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
-            request.setAttribute("report", report);
+            request.setAttribute("factories", reportGenerator.getAvailableResourceEnumeratorFactories());
+            request.setAttribute("report", reportGenerator.generateReport());
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
     }

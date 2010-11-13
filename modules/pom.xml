@@ -31,6 +31,7 @@
         <module>arit-maven</module>
         <module>arit-mbeans</module>
         <module>arit-rbeans</module>
+        <module>arit-report</module>
         <module>arit-rmi</module>
         <module>arit-shutdown-hooks</module>
         <module>arit-test-war</module>

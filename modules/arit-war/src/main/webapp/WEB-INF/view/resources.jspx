@@ -14,7 +14,7 @@
         <body>
             <h1>Supported resource types</h1>
             <ul>
-                <c:forEach items="${report.factories}" var="factory">
+                <c:forEach items="${factories}" var="factory">
                     <li><c:out value="${factory.description}"/></li>
                 </c:forEach>
             </ul>

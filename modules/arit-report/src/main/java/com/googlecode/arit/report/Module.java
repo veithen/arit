@@ -15,12 +15,15 @@
  */
 package com.googlecode.arit.report;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.arit.ModuleStatus;
 
-public class Module {
+public class Module implements Serializable {
+    private static final long serialVersionUID = -6336260718480054351L;
+    
     private final Integer id;
     private final String name;
     private final ModuleStatus status;

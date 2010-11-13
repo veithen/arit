@@ -38,7 +38,6 @@ import com.googlecode.arit.icon.IconManager;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
-import com.googlecode.arit.servlet.log.Message;
 import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 
 @Component(role=ReportGenerator.class)
@@ -164,6 +163,10 @@ public class ReportGenerator implements Initializable, Disposable {
                 return o1.getName().compareTo(o2.getName());
             }
         });
-        return new Report(availableResourceEnumeratorFactories, messages, rootModules);
+        return new Report(messages, rootModules);
+    }
+
+    public List<ResourceEnumeratorFactory> getAvailableResourceEnumeratorFactories() {
+        return Collections.unmodifiableList(availableResourceEnumeratorFactories);
     }
 }

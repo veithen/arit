@@ -15,24 +15,18 @@
  */
 package com.googlecode.arit.report;
 
+import java.io.Serializable;
 import java.util.List;
 
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.servlet.log.Message;
-
-public class Report {
-    private final List<ResourceEnumeratorFactory> factories;
+public class Report implements Serializable {
+    private static final long serialVersionUID = -2805274881611907802L;
+    
     private final List<Message> messages;
     private final List<Module> rootModules;
     
-    public Report(List<ResourceEnumeratorFactory> factories, List<Message> messages, List<Module> rootModules) {
-        this.factories = factories;
+    public Report(List<Message> messages, List<Module> rootModules) {
         this.messages = messages;
         this.rootModules = rootModules;
-    }
-
-    public List<ResourceEnumeratorFactory> getFactories() {
-        return factories;
     }
 
     public List<Message> getMessages() {

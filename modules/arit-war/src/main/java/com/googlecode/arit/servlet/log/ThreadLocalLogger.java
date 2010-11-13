@@ -20,6 +20,8 @@ import java.util.List;
 import org.codehaus.plexus.logging.AbstractLogger;
 import org.codehaus.plexus.logging.Logger;
 
+import com.googlecode.arit.report.Message;
+
 public class ThreadLocalLogger extends AbstractLogger {
     private static ThreadLocal<List<Message>> targetTL = new ThreadLocal<List<Message>>();
     

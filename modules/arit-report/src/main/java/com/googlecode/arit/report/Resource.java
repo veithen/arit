@@ -15,7 +15,11 @@
  */
 package com.googlecode.arit.report;
 
-public class Resource {
+import java.io.Serializable;
+
+public class Resource implements Serializable {
+    private static final long serialVersionUID = -3572748920334331705L;
+    
     private final String icon;
     private final String description;
 

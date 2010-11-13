@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.servlet.log;
+package com.googlecode.arit.report;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
+    private static final long serialVersionUID = 6135791922182025514L;
+    
     private String text;
 
     public Message(String text) {
