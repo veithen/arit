@@ -15,9 +15,7 @@
  */
 package com.googlecode.arit.jmx;
 
-import java.lang.management.ManagementFactory;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,7 +23,6 @@ import java.util.TimerTask;
 import javax.management.JMException;
 import javax.management.MBeanNotificationInfo;
 import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectInstance;
@@ -41,15 +38,13 @@ import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
 
-@Component(role=LeakDetector.class)
-public class LeakDetector extends NotificationBroadcasterSupport implements LeakDetectorMBean, Initializable, Disposable {
+@Component(role=MBeanProvider.class, hint="LeakDetector")
+public class LeakDetector extends NotificationBroadcasterSupport implements LeakDetectorMBean, Initializable, Disposable, MBeanProvider {
     private final static String LEAK_DETECTED = "arit.leak.detected";
     
     @Requirement
     private ReportGenerator reportGenerator;
     
-    private MBeanServer mbs;
-    private ObjectName registeredObjectName;
     private Timer timer;
     private final Set<Integer> reportedModules = new HashSet<Integer>();
     private long notificationSequence;
@@ -61,19 +56,6 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
     }
 
     public void initialize() throws InitializationException {
-        // TODO: the agent ID should not be hardcoded
-        List<MBeanServer> servers = MBeanServerFactory.findMBeanServer("WebSphere");
-        if (servers.isEmpty()) {
-            mbs = ManagementFactory.getPlatformMBeanServer();
-        } else {
-            mbs = servers.get(0);
-        }
-        try {
-            ObjectInstance inst = mbs.registerMBean(this, new ObjectName("com.googlecode.arit:type=" + LeakDetector.class.getSimpleName()));
-            registeredObjectName = inst.getObjectName();
-        } catch (JMException ex) {
-            throw new InitializationException("Unable to register MBean", ex);
-        }
         timer = new Timer("LeakDetectorTimer");
         timer.schedule(new TimerTask() {
             @Override
@@ -83,6 +65,10 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
         }, 0, 60000);
     }
     
+    public ObjectInstance registerMBean(MBeanServer server, ObjectName name) throws JMException {
+        return server.registerMBean(this, name);
+    }
+
     private void runDetection() {
         for (Module module : reportGenerator.generateReport().getRootModules()) {
             if (module.getStatus() == ModuleStatus.STOPPED) {
@@ -97,13 +83,6 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
     public void dispose() {
         if (timer != null) {
             timer.cancel();
-        }
-        if (mbs != null && registeredObjectName != null) {
-            try {
-                mbs.unregisterMBean(registeredObjectName);
-            } catch (JMException ex) {
-                throw new RuntimeException(ex);
-            }
         }
     }
 }

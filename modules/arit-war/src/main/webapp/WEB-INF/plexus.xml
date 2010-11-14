@@ -9,7 +9,7 @@
     </components>
     <load-on-start>
         <component>
-            <role>com.googlecode.arit.jmx.LeakDetector</role>
+            <role>com.googlecode.arit.jmx.MBeanRegistrar</role>
         </component>
     </load-on-start>
 </plexus>
