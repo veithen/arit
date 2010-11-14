@@ -19,24 +19,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.arit.ModuleStatus;
-
 public class Module implements Serializable {
     private static final long serialVersionUID = -6336260718480054351L;
     
     private final Integer id;
     private final String name;
-    private final ModuleStatus status;
+    private final boolean stopped;
     private String icon;
     private List<String> identities;
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(Integer id, String name, ModuleStatus status) {
+    public Module(Integer id, String name, boolean stopped) {
         this.id = id;
         this.name = name;
-        this.status = status;
+        this.stopped = stopped;
     }
 
     public Integer getId() {
@@ -47,8 +45,8 @@ public class Module implements Serializable {
         return name;
     }
 
-    public ModuleStatus getStatus() {
-        return status;
+    public boolean isStopped() {
+        return stopped;
     }
 
     public String getIcon() {

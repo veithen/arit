@@ -71,7 +71,7 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
 
     private void runDetection() {
         for (Module module : reportGenerator.generateReport().getRootModules()) {
-            if (module.getStatus() == ModuleStatus.STOPPED) {
+            if (module.isStopped()) {
                 if (reportedModules.add(module.getId())) {
                     sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
                             "Resource leak detected in application " + module.getName()));

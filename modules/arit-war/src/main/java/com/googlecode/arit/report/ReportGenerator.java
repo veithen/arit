@@ -94,7 +94,7 @@ public class ReportGenerator implements Initializable, Disposable {
             if (desc == null) {
                 module = null;
             } else {
-                module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus());
+                module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
                 ModuleType moduleType = desc.getType();
                 ClassLoader parentClassLoader = classLoader.getParent();
                 Module parentModule;
@@ -109,7 +109,7 @@ public class ReportGenerator implements Initializable, Disposable {
                 }
                 String variant;
                 if (desc.getStatus() == ModuleStatus.STOPPED) {
-                    if (parentModule == null || parentModule.getStatus() != ModuleStatus.STOPPED) {
+                    if (parentModule == null || !parentModule.isStopped()) {
                         variant = "defunct";
                     } else {
                         variant = "grayed";
