@@ -4,7 +4,6 @@ import org.apache.catalina.Context;
 import org.apache.catalina.Engine;
 import org.apache.catalina.Host;
 import org.apache.catalina.connector.Connector;
-import org.apache.catalina.realm.MemoryRealm;
 import org.apache.catalina.startup.Embedded;
 
 public class Test {
@@ -28,6 +27,11 @@ public class Test {
         container.addConnector(httpConnector);
 //        container.setAwait(true);
         container.start();
+        
+//        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+//        ObjectName reportGeneratorName = (ObjectName)mbs.queryNames(new ObjectName("com.googlecode.arit:type=ReportGenerator"), null).iterator().next();
+//        Report report = (Report)mbs.invoke(reportGeneratorName, "generateReport", new Object[0], new String[0]);
+        
         Object object = new Object();
         synchronized (object) {
             object.wait();
