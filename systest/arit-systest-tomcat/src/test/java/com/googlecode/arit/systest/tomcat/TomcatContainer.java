@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.systest;
+package com.googlecode.arit.systest.tomcat;
 
-import java.io.File;
+import com.googlecode.arit.systest.Application;
+import com.googlecode.arit.systest.Container;
 
-import junit.framework.TestCase;
+public class TomcatContainer implements Container {
 
-public abstract class Systest extends TestCase {
-    public static void main(String[] args) throws Exception {
-        File targetDir = new File("target").getAbsoluteFile();
-        if (!targetDir.exists()) {
-            // TODO
-            throw new RuntimeException(targetDir + " doesn't exist");
-        }
-        File tmpDir = new File(targetDir, "systest-tmp");
-        tmpDir.mkdir();
-        System.out.println(new Application(Systest.class.getResource("arit-war.war"), tmpDir).getExplodedWAR());
+    public String deployApplication(Application app) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void start() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void stop() {
+        // TODO Auto-generated method stub
+        
     }
 }

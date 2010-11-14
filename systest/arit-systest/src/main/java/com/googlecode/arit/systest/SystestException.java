@@ -15,19 +15,18 @@
  */
 package com.googlecode.arit.systest;
 
-import java.io.File;
+public class SystestException extends RuntimeException {
+    private static final long serialVersionUID = 8742834288011718541L;
 
-import junit.framework.TestCase;
+    public SystestException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-public abstract class Systest extends TestCase {
-    public static void main(String[] args) throws Exception {
-        File targetDir = new File("target").getAbsoluteFile();
-        if (!targetDir.exists()) {
-            // TODO
-            throw new RuntimeException(targetDir + " doesn't exist");
-        }
-        File tmpDir = new File(targetDir, "systest-tmp");
-        tmpDir.mkdir();
-        System.out.println(new Application(Systest.class.getResource("arit-war.war"), tmpDir).getExplodedWAR());
+    public SystestException(String message) {
+        super(message);
+    }
+
+    public SystestException(Throwable cause) {
+        super(cause);
     }
 }

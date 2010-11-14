@@ -16,7 +16,15 @@
 package com.googlecode.arit.systest;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+
+import org.apache.commons.io.IOUtils;
 
 public class Application {
     private final URL url;
@@ -30,9 +38,35 @@ public class Application {
     
     public File getExplodedWAR() {
         if (explodedWAR == null) {
+            File explodedDir = new File(tmpDir, "exploded");
+            explodedDir.mkdir();
             String file = url.getFile();
-            explodedWAR = new File(tmpDir, file.substring(file.lastIndexOf('/')));
-            // TODO: actually explode the WAR
+            explodedWAR = new File(explodedDir, file.substring(file.lastIndexOf('/')));
+            try {
+                InputStream in = url.openStream();
+                try {
+                    JarInputStream jar = new JarInputStream(in);
+                    JarEntry jarEntry;
+                    while ((jarEntry = jar.getNextJarEntry()) != null) {
+                        File dest = new File(explodedWAR, jarEntry.getName());
+                        if (jarEntry.isDirectory()) {
+                            dest.mkdir();
+                        } else {
+                            dest.getParentFile().mkdirs();
+                            OutputStream out = new FileOutputStream(dest);
+                            try {
+                                IOUtils.copy(jar, out);
+                            } finally {
+                                out.close();
+                            }
+                        }
+                    }
+                } finally {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                throw new SystestException("Failed to explode WAR", ex);
+            }
         }
         return explodedWAR;
     }

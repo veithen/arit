@@ -15,19 +15,8 @@
  */
 package com.googlecode.arit.systest;
 
-import java.io.File;
-
-import junit.framework.TestCase;
-
-public abstract class Systest extends TestCase {
-    public static void main(String[] args) throws Exception {
-        File targetDir = new File("target").getAbsoluteFile();
-        if (!targetDir.exists()) {
-            // TODO
-            throw new RuntimeException(targetDir + " doesn't exist");
-        }
-        File tmpDir = new File(targetDir, "systest-tmp");
-        tmpDir.mkdir();
-        System.out.println(new Application(Systest.class.getResource("arit-war.war"), tmpDir).getExplodedWAR());
-    }
+public interface Container {
+    String deployApplication(Application app);
+    void start();
+    void stop();
 }
