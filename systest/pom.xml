@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <name>Arit :: Systests</name>
     <modules>
+        <module>arit-systest</module>
         <module>arit-systest-tomcat</module>
     </modules>
 </project>
