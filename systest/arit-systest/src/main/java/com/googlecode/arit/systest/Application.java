@@ -29,13 +29,19 @@ import org.apache.commons.io.IOUtils;
 public class Application {
     private final URL url;
     private final File tmpDir;
+    private final String contextPath;
     private File explodedWAR;
     
-    Application(URL url, File tmpDir) {
+    Application(URL url, File tmpDir, String contextPath) {
         this.url = url;
         this.tmpDir = tmpDir;
+        this.contextPath = contextPath;
     }
     
+    public String getContextPath() {
+        return contextPath;
+    }
+
     public File getExplodedWAR() {
         if (explodedWAR == null) {
             File explodedDir = new File(tmpDir, "exploded");

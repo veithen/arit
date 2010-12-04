@@ -17,6 +17,6 @@ package com.googlecode.arit.systest;
 
 public interface Container {
     String deployApplication(Application app);
-    void start();
-    void stop();
+    void start() throws Exception;
+    void stop() throws Exception;
 }

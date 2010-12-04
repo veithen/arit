@@ -15,8 +15,14 @@
  */
 package com.googlecode.arit.systest.tomcat;
 
+import java.io.File;
+
+import com.googlecode.arit.systest.Container;
 import com.googlecode.arit.systest.Systest;
 
-public class TomcatSystest extends Systest {
-
+public class TomcatTest extends Systest {
+    @Override
+    protected Container createContainer(File workDir) {
+        return new TomcatContainer(workDir);
+    }
 }

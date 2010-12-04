@@ -16,18 +16,69 @@
 package com.googlecode.arit.systest;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
 import junit.framework.TestCase;
 
+import com.googlecode.arit.report.Module;
+import com.googlecode.arit.report.Report;
+import com.googlecode.arit.report.Resource;
+
 public abstract class Systest extends TestCase {
-    public static void main(String[] args) throws Exception {
+    private Container container;
+    private Application aritApp;
+    private Application aritTestApp;
+    
+    protected abstract Container createContainer(File workDir);
+    
+    @Override
+    protected void setUp() throws Exception {
         File targetDir = new File("target").getAbsoluteFile();
         if (!targetDir.exists()) {
-            // TODO
-            throw new RuntimeException(targetDir + " doesn't exist");
+            fail(targetDir + " doesn't exist");
         }
         File tmpDir = new File(targetDir, "systest-tmp");
         tmpDir.mkdir();
-        System.out.println(new Application(Systest.class.getResource("arit-war.war"), tmpDir).getExplodedWAR());
+        container = createContainer(new File(targetDir, "systest-container"));
+        aritApp = new Application(Systest.class.getResource("arit-war.war"), tmpDir, "/arit");
+        aritTestApp = new Application(Systest.class.getResource("arit-test-war.war"), tmpDir, "/arit-test");
+    }
+
+    public void test() throws Exception {
+        container.deployApplication(aritApp);
+        String testAppName = container.deployApplication(aritTestApp);
+        container.start();
+        try {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            ObjectName reportGeneratorName = (ObjectName)mbs.queryNames(new ObjectName("com.googlecode.arit:type=ReportGenerator"), null).iterator().next();
+            Report report = (Report)mbs.invoke(reportGeneratorName, "generateReport", new Object[0], new String[0]);
+            List<Module> modules = report.getRootModules();
+            Module testAppModule = null;
+            for (Module module : modules) {
+                if (module.getName().equals(testAppName)) {
+                    testAppModule = module;
+                    break;
+                }
+            }
+            assertNotNull(testAppModule);
+            Set<String> icons = new HashSet<String>();
+            for (Resource resource : testAppModule.getResources()) {
+                icons.add(resource.getIcon());
+            }
+            assertTrue(icons.contains("default/threadlocal.gif"));
+            assertTrue(icons.contains("default/timerthread.png"));
+            assertTrue(icons.contains("default/thread.gif"));
+            assertTrue(icons.contains("default/jce.png"));
+            assertTrue(icons.contains("default/mbean.gif"));
+            assertTrue(icons.contains("default/jdbc.gif"));
+        } finally {
+            container.stop();
+        }
     }
 }
