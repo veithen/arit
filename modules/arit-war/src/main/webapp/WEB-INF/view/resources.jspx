@@ -12,6 +12,7 @@
             <title>Resources</title>
         </head>
         <body>
+            <p>Powered by Arit version <c:out value="${version}"/></p>
             <h1>Supported resource types</h1>
             <ul>
                 <c:forEach items="${factories}" var="factory">
