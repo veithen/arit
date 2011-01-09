@@ -160,7 +160,17 @@ public class ReportGenerator implements Initializable, Disposable {
         }
         Collections.sort(rootModules, new Comparator<Module>() {
             public int compare(Module o1, Module o2) {
-                return o1.getName().compareTo(o2.getName());
+                String name1 = o1.getName();
+                String name2 = o2.getName();
+                if (name1 == null && name2 == null) {
+                    return 0;
+                } else if (name1 == null) {
+                    return -1;
+                } else if (name2 == null) {
+                    return 1;
+                } else {
+                    return name1.compareTo(name2);
+                }
             }
         });
         return new Report(messages, rootModules);
