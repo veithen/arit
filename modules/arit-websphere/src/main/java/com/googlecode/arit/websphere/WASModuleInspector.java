@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,17 +62,26 @@ public class WASModuleInspector implements ModuleInspector {
             URL url = null;
             if (name == null) {
                 // This case occurs on WAS 6, which doesn't have a "name" field in CompoundClassLoader
-                String webAppRoot = Utils.getWebAppRoot(ccl);
+                File webAppRoot = Utils.getWebAppRoot(ccl);
                 if (webAppRoot != null) {
                     moduleType = warModuleType;
-                    moduleName = webAppRoot.substring(webAppRoot.lastIndexOf('/')+1);
+                    moduleName = webAppRoot.getName();
                     moduleStatus = ModuleStatus.STOPPED;
                     url = Utils.dirToURL(webAppRoot);
                 } else {
-                    moduleType = null;
-                    // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
-                    moduleName = "<unknown>";
-                    moduleStatus = ModuleStatus.UNKNOWN;
+                    File earRoot = Utils.getEARRoot(ccl);
+                    if (earRoot != null) {
+                        moduleType = earModuleType;
+                        String dirName = earRoot.getName();
+                        // Strip the ".ear" suffix
+                        moduleName = dirName.substring(0, dirName.length()-4);
+                        moduleStatus = ModuleStatus.STOPPED;
+                    } else {
+                        moduleType = null;
+                        // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
+                        moduleName = "<unknown>";
+                        moduleStatus = ModuleStatus.UNKNOWN;
+                    }
                 }
             } else if (name.startsWith("app:")) {
                 moduleType = earModuleType;

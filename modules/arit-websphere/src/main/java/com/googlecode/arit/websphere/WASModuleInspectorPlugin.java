@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,9 +124,17 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
             ClassLoader classLoader = deployedObject.getClassLoader();
             URL url;
             if (deployedObject instanceof DeployedApplicationRBean) {
+                String binariesURL = ((DeployedApplicationRBean)deployedObject).getBinariesURL();
                 // The getBinariesURL method doesn't exist on WAS 6.1. In this case, the RBean will
-                // return null, which is supported by Utils#dirToURL
-                url = Utils.dirToURL(((DeployedApplicationRBean)deployedObject).getBinariesURL());
+                // return null.
+                if (binariesURL != null) {
+                    url = Utils.dirToURL(new File(binariesURL));
+                } else {
+                    // On WAS 6.1, try to identify the location of the EAR content based on the entries
+                    // of the class path.
+                    // TODO: we could also achieve this by accessing the private applicationArchive attribute
+                    url = Utils.dirToURL(Utils.getEARRoot(rbf.createRBean(CompoundClassLoaderRBean.class, classLoader)));
+                }
             } else {
                 url = null;
             }

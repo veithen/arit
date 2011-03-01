@@ -22,20 +22,34 @@ import java.net.URL;
 public final class Utils {
     private Utils() {}
     
-    public static String getWebAppRoot(CompoundClassLoaderRBean ccl) {
+    public static File getWebAppRoot(CompoundClassLoaderRBean ccl) {
         for (SinglePathClassProviderRBean provider : ccl.getProviders()) {
-            String path = provider.getPath().replace('\\', '/');
-            if (path.endsWith("/WEB-INF/classes")) {
-                return path.substring(0, path.length()-16);
+            File path = new File(provider.getPath());
+            File parent = path.getParentFile();
+            if (parent != null && path.getName().equals("classes") && parent.getName().equals("WEB-INF")) {
+                return parent.getParentFile();
             }
         }
         return null;
     }
     
-    public static URL dirToURL(String dir) {
+    public static File getEARRoot(CompoundClassLoaderRBean ccl) {
+        for (SinglePathClassProviderRBean provider : ccl.getProviders()) {
+            File path = new File(provider.getPath());
+            do {
+                if (path.getName().endsWith(".ear") && new File(new File(path, "META-INF"), "application.xml").exists()) {
+                    return path;
+                }
+                path = path.getParentFile();
+            } while (path != null);
+        }
+        return null;
+    }
+    
+    public static URL dirToURL(File dir) {
         if (dir != null) {
             try {
-                return new File(dir).toURL();
+                return dir.toURL();
             } catch (MalformedURLException ex) {
                 return null;
             }
