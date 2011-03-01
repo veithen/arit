@@ -18,6 +18,14 @@ div.module-name {
   padding-bottom: 4px;
 }
 
+div.module-info {
+  font-size: .8em;
+  font-style: italic;
+  padding-left: 32px;
+  margin-top: 7px;
+  margin-bottom: 2px;
+}
+
 img {
   border: 0;
   vertical-align: bottom;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.websphere;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,24 +121,21 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         for (DeployedObjectCollaboratorRBean collaborator : earCollaborators) {
             DeployedObjectRBean deployedObject = collaborator.getDeployedObject();
             ClassLoader classLoader = deployedObject.getClassLoader();
-            URL url = null;
+            URL url;
             if (deployedObject instanceof DeployedApplicationRBean) {
-                String dir = ((DeployedApplicationRBean)deployedObject).getBinariesURL();
-                // The getBinariesURL method doesn't exist on WAS 6.1
-                if (dir != null) {
-                    try {
-                        url = new File(dir).toURL();
-                    } catch (MalformedURLException ex) {
-                        // Just continue
-                    }
-                }
+                // The getBinariesURL method doesn't exist on WAS 6.1. In this case, the RBean will
+                // return null, which is supported by Utils#dirToURL
+                url = Utils.dirToURL(((DeployedApplicationRBean)deployedObject).getBinariesURL());
+            } else {
+                url = null;
             }
             moduleMap.put(classLoader, new ModuleDescription(appWarClassLoaders.contains(classLoader) ? appWarModuleType : earModuleType, collaborator.getName(), classLoader, url, ModuleStatus.STARTED));
         }
         for (DeployedObjectCollaboratorRBean collaborator : warCollaborators) {
             ClassLoader classLoader = collaborator.getDeployedObject().getClassLoader();
             if (!appWarClassLoaders.contains(classLoader)) {
-                moduleMap.put(classLoader, new ModuleDescription(warModuleType, collaborator.getName(), classLoader, null, ModuleStatus.STARTED));
+                moduleMap.put(classLoader, new ModuleDescription(warModuleType, collaborator.getName(), classLoader,
+                        Utils.dirToURL(Utils.getWebAppRoot(rbf.createRBean(CompoundClassLoaderRBean.class, classLoader))), ModuleStatus.STARTED));
             }
         }
         

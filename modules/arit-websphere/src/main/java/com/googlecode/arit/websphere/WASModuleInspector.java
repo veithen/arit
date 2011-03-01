@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.websphere;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,20 +58,20 @@ public class WASModuleInspector implements ModuleInspector {
             ModuleType moduleType;
             String moduleName;
             ModuleStatus moduleStatus;
+            URL url = null;
             if (name == null) {
                 // This case occurs on WAS 6, which doesn't have a "name" field in CompoundClassLoader
-                moduleType = null;
-                // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
-                moduleName = "<unknown>";
-                moduleStatus = ModuleStatus.UNKNOWN;
-                for (SinglePathClassProviderRBean provider : ccl.getProviders()) {
-                    String path = provider.getPath().replace('\\', '/');
-                    if (path.endsWith("/WEB-INF/classes")) {
-                        moduleType = warModuleType;
-                        moduleName = path.substring(path.lastIndexOf('/', path.length()-17)+1, path.length()-16);
-                        moduleStatus = ModuleStatus.STOPPED;
-                        break;
-                    }
+                String webAppRoot = Utils.getWebAppRoot(ccl);
+                if (webAppRoot != null) {
+                    moduleType = warModuleType;
+                    moduleName = webAppRoot.substring(webAppRoot.lastIndexOf('/')+1);
+                    moduleStatus = ModuleStatus.STOPPED;
+                    url = Utils.dirToURL(webAppRoot);
+                } else {
+                    moduleType = null;
+                    // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
+                    moduleName = "<unknown>";
+                    moduleStatus = ModuleStatus.UNKNOWN;
                 }
             } else if (name.startsWith("app:")) {
                 moduleType = earModuleType;
@@ -84,12 +85,13 @@ public class WASModuleInspector implements ModuleInspector {
                 moduleType = warModuleType;
                 moduleName = name.substring(name.lastIndexOf('/')+1);
                 moduleStatus = ModuleStatus.STOPPED;
+                url = Utils.dirToURL(Utils.getWebAppRoot(ccl));
             } else {
                 moduleType = null;
                 moduleName = name;
                 moduleStatus = ModuleStatus.UNKNOWN;
             }
-            return new ModuleDescription(moduleType, moduleName, classLoader, null, moduleStatus);
+            return new ModuleDescription(moduleType, moduleName, classLoader, url, moduleStatus);
         } else {
             return null;
         }

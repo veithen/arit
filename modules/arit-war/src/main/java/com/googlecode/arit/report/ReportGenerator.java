@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,39 +90,53 @@ public class ReportGenerator implements Initializable, Disposable {
             return moduleMap.get(classLoader);
         } else {
             ModuleDescription desc = moduleInspector.inspect(classLoader);
-            Module module;
             if (desc == null) {
-                module = null;
+                return null;
             } else {
-                module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
-                ModuleType moduleType = desc.getType();
-                ClassLoader parentClassLoader = classLoader.getParent();
-                Module parentModule;
-                if (parentClassLoader != null) {
-                    // TODO: we should actually walk up the hierarchy until we identify a class loader
-                    parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
-                    if (parentModule != null) {
-                        parentModule.addChild(module);
-                    }
-                } else {
-                    parentModule = null;
-                }
-                String variant;
-                if (desc.getStatus() == ModuleStatus.STOPPED) {
-                    if (parentModule == null || !parentModule.isStopped()) {
-                        variant = "defunct";
-                    } else {
-                        variant = "grayed";
-                    }
-                } else {
-                    variant = "default";
-                }
-                module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
-                module.setIdentities(moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader));
+                return loadModule(moduleInspector, moduleMap, desc);
             }
-            moduleMap.put(classLoader, module);
-            return module;
         }
+    }
+    
+    private Module getModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ModuleDescription desc) {
+        ClassLoader classLoader = desc.getClassLoader();
+        if (moduleMap.containsKey(classLoader)) {
+            return moduleMap.get(classLoader);
+        } else {
+            return loadModule(moduleInspector, moduleMap, desc);
+        }
+    }
+    
+    // TODO: refactor the get/loadModule stuff into a ReportBuilder class and make this a private method of the class (it must only be called by getModule)
+    private Module loadModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ModuleDescription desc) {
+        ClassLoader classLoader = desc.getClassLoader();
+        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
+        ModuleType moduleType = desc.getType();
+        ClassLoader parentClassLoader = classLoader.getParent();
+        Module parentModule;
+        if (parentClassLoader != null) {
+            // TODO: we should actually walk up the hierarchy until we identify a class loader
+            parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
+            if (parentModule != null) {
+                parentModule.addChild(module);
+            }
+        } else {
+            parentModule = null;
+        }
+        String variant;
+        if (desc.getStatus() == ModuleStatus.STOPPED) {
+            if (parentModule == null || !parentModule.isStopped()) {
+                variant = "defunct";
+            } else {
+                variant = "grayed";
+            }
+        } else {
+            variant = "default";
+        }
+        module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
+        module.setIdentities(moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader));
+        moduleMap.put(classLoader, module);
+        return module;
     }
 
     public Report generateReport() {
@@ -131,10 +145,17 @@ public class ReportGenerator implements Initializable, Disposable {
         ThreadLocalLogger.setTarget(messages);
         try {
             ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
-            
-            moduleInspector.listModules();
-            
             Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
+            
+            // If the application server supports this, load the entire module list before starting
+            // to inspect the resources.
+            List<ModuleDescription> moduleDescriptions = moduleInspector.listModules();
+            if (moduleDescriptions != null) {
+                for (ModuleDescription desc : moduleDescriptions) {
+                    getModule(moduleInspector, moduleMap, desc);
+                }
+            }
+            
             for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.next()) {
