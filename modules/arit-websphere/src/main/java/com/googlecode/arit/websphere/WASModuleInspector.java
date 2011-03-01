@@ -53,7 +53,9 @@ public class WASModuleInspector implements ModuleInspector {
         ModuleDescription desc = moduleMap.get(classLoader);
         if (desc != null) {
             return desc;
-        } else if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
+        } else if (rbf.getRBeanInfo(CompoundClassLoaderRBean.class).getTargetClass().equals(classLoader.getClass())) {
+            // We only consider instances of CompoundClassLoader, not subclasses such as ExtJarClassLoader, because
+            // they are not related to application modules.
             CompoundClassLoaderRBean ccl = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader);
             String name = ccl.getName();
             ModuleType moduleType;
