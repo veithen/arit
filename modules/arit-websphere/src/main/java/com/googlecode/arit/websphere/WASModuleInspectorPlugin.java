@@ -130,10 +130,18 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
                 if (binariesURL != null) {
                     url = Utils.dirToURL(new File(binariesURL));
                 } else {
-                    // On WAS 6.1, try to identify the location of the EAR content based on the entries
-                    // of the class path.
-                    // TODO: we could also achieve this by accessing the private applicationArchive attribute
-                    url = Utils.dirToURL(Utils.getEARRoot(rbf.createRBean(CompoundClassLoaderRBean.class, classLoader)));
+                    CompoundClassLoaderRBean ccl = rbf.createRBean(CompoundClassLoaderRBean.class, classLoader);
+                    if (!ccl.getProviders().iterator().hasNext()) {
+                        // On WAS 6.1, if the classpath of the EAR is empty, don't show it at all. The reason is that
+                        // WASModuleInspector will not be able to identify the application (because on WAS 6.1,
+                        // CompoundClassLoader doesn't have a "name" property). With this approach, started and
+                        // defunct applications are displayed in a consistent way.
+                        continue;
+                    } else {
+                        // On WAS 6.1, try to identify the location of the EAR content based on the entries
+                        // of the class path.
+                        url = Utils.dirToURL(Utils.getEARRoot(ccl));
+                    }
                 }
             } else {
                 url = null;
