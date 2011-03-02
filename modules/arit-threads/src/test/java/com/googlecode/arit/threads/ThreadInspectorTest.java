@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.threads;
 
+import java.net.ServerSocket;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Exchanger;
@@ -22,7 +23,7 @@ import java.util.concurrent.Exchanger;
 import org.codehaus.plexus.PlexusTestCase;
 
 public class ThreadInspectorTest extends PlexusTestCase {
-    public void test() throws Exception {
+    public void testTimerThread() throws Exception {
         ThreadInspector inspectorManager = lookup(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Timer timer = new Timer();
@@ -49,5 +50,35 @@ public class ThreadInspectorTest extends PlexusTestCase {
         ThreadDescription description = inspectorManager.getDescription(thread);
         assertTrue(description.getDescription().contains(ThreadInspectorTest.class.getName() + "$"));
         timer.cancel();
+    }
+    
+    public void testAcceptorThread1() throws Exception {
+        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
+        assertTrue(inspectorManager.isAvailable());
+        ServerSocket serverSocket = new ServerSocket(0);
+        try {
+            Thread thread = new AcceptorThread(serverSocket);
+            thread.start();
+            ThreadDescription description = inspectorManager.getDescription(thread);
+            assertNotNull(description);
+            assertTrue(description.getDescription().contains(AcceptorThread.class.getName()));
+            assertTrue(description.getDescription().contains("port=" + serverSocket.getLocalPort()));
+        } finally {
+            serverSocket.close();
+        }
+    }
+
+    public void testAcceptorThread2() throws Exception {
+        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
+        assertTrue(inspectorManager.isAvailable());
+        Server server = new Server();
+        server.start();
+        try {
+            ThreadDescription description = inspectorManager.getDescription(server.getThread());
+            assertNotNull(description);
+            assertTrue(description.getDescription().contains("port=" + server.getPort()));
+        } finally {
+            server.stop();
+        }
     }
 }
