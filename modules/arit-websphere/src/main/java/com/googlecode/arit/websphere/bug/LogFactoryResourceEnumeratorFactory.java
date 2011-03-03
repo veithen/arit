@@ -24,17 +24,18 @@ import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="ArtifactLoaderUtility-bug")
-public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceEnumeratorFactory {
-    private final ArtifactLoaderUtilityRBean rbean;
+// TODO: there is probably some code that could be reused between this class and ArtifactLoaderUtilityResourceEnumeratorFactory
+@Component(role=ResourceEnumeratorFactory.class, hint="LogFactory-bug")
+public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory {
+    private final LogFactoryRBean rbean;
     
     @Requirement(hint="websphere-bug")
     private ResourceType resourceType;
     
-    public ArtifactLoaderUtilityResourceEnumeratorFactory() {
-        ArtifactLoaderUtilityRBean rbean;
+    public LogFactoryResourceEnumeratorFactory() {
+        LogFactoryRBean rbean;
         try {
-            rbean = new RBeanFactory(ArtifactLoaderUtilityRBean.class).createRBean(ArtifactLoaderUtilityRBean.class);
+            rbean = new RBeanFactory(LogFactoryRBean.class).createRBean(LogFactoryRBean.class);
         } catch (RBeanFactoryException ex) {
             rbean = null;
         }
@@ -42,7 +43,7 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
     }
 
     public String getDescription() {
-        return "ArtifactLoaderUtility#appNameCache entries";
+        return "Cached LogFactory instances";
     }
 
     public boolean isAvailable() {
@@ -50,6 +51,6 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry", rbean.getAppNameCache());
+        return new PerClassLoaderCacheResourceEnumerator(resourceType, "Cached LogFactory", rbean.getFactories());
     }
 }

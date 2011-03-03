@@ -18,18 +18,21 @@ package com.googlecode.arit.websphere.bug;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 
-public class ArtifactLoaderUtilityResourceEnumerator implements ResourceEnumerator {
+public class PerClassLoaderCacheResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
+    private final String description;
     private final Iterator<ClassLoader> classLoaderIterator;
     private ClassLoader classLoader;
 
-    public ArtifactLoaderUtilityResourceEnumerator(ResourceType resourceType, Iterator<ClassLoader> classLoaderIterator) {
+    public PerClassLoaderCacheResourceEnumerator(ResourceType resourceType, String description, Map<ClassLoader,?> cache) {
         this.resourceType = resourceType;
-        this.classLoaderIterator = classLoaderIterator;
+        this.description = description;
+        classLoaderIterator = cache.keySet().iterator();
     }
 
     public ResourceType getType() {
@@ -41,7 +44,7 @@ public class ArtifactLoaderUtilityResourceEnumerator implements ResourceEnumerat
     }
 
     public String getDescription() {
-        return "ArtifactLoaderUtility#appNameCache entry";
+        return description;
     }
 
     public boolean next() {
