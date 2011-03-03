@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.iz67457;
+package com.googlecode.arit.websphere.bug;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -29,7 +29,7 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFactory {
     private final StandardBeanInfoRBean rbean;
     
-    @Requirement(hint="iz67457")
+    @Requirement(hint="websphere-bug")
     private ResourceType resourceType;
     
     public IZ67457ResourceEnumeratorFactory() {

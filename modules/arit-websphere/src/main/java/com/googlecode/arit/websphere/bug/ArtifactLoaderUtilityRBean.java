@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.iz67457;
+package com.googlecode.arit.websphere.bug;
 
-import java.beans.MethodDescriptor;
 import java.util.Map;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("java.beans.StandardBeanInfo")
-public interface StandardBeanInfoRBean extends StaticRBean {
-    @Accessor(name="methodDescCache")
-    Map<Class<?>,MethodDescriptor[]> getMethodDescriptorCache();
+@Target("com.ibm.wbiserver.relationshipservice.util.ArtifactLoaderUtility")
+public interface ArtifactLoaderUtilityRBean extends StaticRBean {
+    @Accessor(name="appNameCache")
+    Map<ClassLoader,String> getAppNameCache();
 }

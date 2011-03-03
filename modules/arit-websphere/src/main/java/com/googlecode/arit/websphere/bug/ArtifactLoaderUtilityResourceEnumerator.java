@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.iz67457;
+package com.googlecode.arit.websphere.bug;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,14 +22,14 @@ import java.util.Iterator;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 
-public class IZ67457ResourceEnumerator implements ResourceEnumerator {
+public class ArtifactLoaderUtilityResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
-    private final Iterator<Class<?>> classIterator;
-    private Class<?> clazz;
+    private final Iterator<ClassLoader> classLoaderIterator;
+    private ClassLoader classLoader;
 
-    public IZ67457ResourceEnumerator(ResourceType resourceType, Iterator<Class<?>> classIterator) {
+    public ArtifactLoaderUtilityResourceEnumerator(ResourceType resourceType, Iterator<ClassLoader> classLoaderIterator) {
         this.resourceType = resourceType;
-        this.classIterator = classIterator;
+        this.classLoaderIterator = classLoaderIterator;
     }
 
     public ResourceType getType() {
@@ -37,16 +37,16 @@ public class IZ67457ResourceEnumerator implements ResourceEnumerator {
     }
 
     public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(clazz.getClassLoader());
+        return Collections.singleton(classLoader);
     }
 
     public String getDescription() {
-        return "Cached MethodDescriptors for class " + clazz.getName();
+        return "ArtifactLoaderUtility#appNameCache entry";
     }
 
     public boolean next() {
-        if (classIterator.hasNext()) {
-            clazz = classIterator.next();
+        if (classLoaderIterator.hasNext()) {
+            classLoader = classLoaderIterator.next();
             return true;
         } else {
             return false;

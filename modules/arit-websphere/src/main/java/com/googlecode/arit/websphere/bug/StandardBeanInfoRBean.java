@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.iz67457;
+package com.googlecode.arit.websphere.bug;
 
-import org.codehaus.plexus.component.annotations.Component;
+import java.beans.MethodDescriptor;
+import java.util.Map;
 
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.rbeans.Accessor;
+import com.googlecode.arit.rbeans.StaticRBean;
+import com.googlecode.arit.rbeans.Target;
 
-@Component(role=ResourceType.class, hint="iz67457")
-public class IZ67457ResourceType extends ResourceType {
-    public IZ67457ResourceType() {
-        super(ImageFormat.GIF, IZ67457ResourceType.class.getResource("icon.gif"));
-    }
+@Target("java.beans.StandardBeanInfo")
+public interface StandardBeanInfoRBean extends StaticRBean {
+    @Accessor(name="methodDescCache")
+    Map<Class<?>,MethodDescriptor[]> getMethodDescriptorCache();
 }
