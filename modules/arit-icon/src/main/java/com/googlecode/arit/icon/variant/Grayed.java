@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
  */
 package com.googlecode.arit.icon.variant;
 
-import java.awt.color.ColorSpace;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
 import java.awt.image.RenderedImage;
 
 import org.codehaus.plexus.component.annotations.Component;
@@ -26,8 +29,25 @@ import org.codehaus.plexus.component.annotations.Component;
 public class Grayed extends TransformationVariant {
     @Override
     protected RenderedImage transform(BufferedImage image) {
-        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        op.filter(image, image);
-        return image;
+        // Normally it should be possible to produce a grayed image using the following code:
+        //
+        // ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        // op.filter(image, image);
+        //
+        // However, this doesn't work on older Java versions, such as the JRE used by WAS 6.1.
+        // Somehow, they don't preserve transparencey and will eventually produce an image with a
+        // black background.
+        //
+        // The following algorithm seems to work on all JREs:
+        
+        GrayFilter filter = new GrayFilter();
+        ImageProducer prod = new FilteredImageSource(image.getSource(), filter);
+        Image grayImage = Toolkit.getDefaultToolkit().createImage(prod);
+
+        BufferedImage rendered = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+        Graphics2D g = rendered.createGraphics();
+        g.drawImage(grayImage, 0, 0, null);
+        g.dispose();
+        return rendered;
     }
 }

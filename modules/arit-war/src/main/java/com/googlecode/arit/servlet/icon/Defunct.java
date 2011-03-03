@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 package com.googlecode.arit.servlet.icon;
 
 import java.awt.Graphics;
-import java.awt.color.ColorSpace;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 
@@ -27,6 +29,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import com.googlecode.arit.icon.imageio.ImageIO;
+import com.googlecode.arit.icon.variant.GrayFilter;
 import com.googlecode.arit.icon.variant.IconVariant;
 import com.googlecode.arit.icon.variant.TransformationVariant;
 
@@ -44,13 +47,14 @@ public class Defunct extends TransformationVariant implements Initializable {
 
     @Override
     protected RenderedImage transform(BufferedImage image) {
-        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        op.filter(image, image);
+        GrayFilter filter = new GrayFilter();
+        ImageProducer prod = new FilteredImageSource(image.getSource(), filter);
+        Image grayImage = Toolkit.getDefaultToolkit().createImage(prod);
         int width = image.getWidth();
         int height = image.getHeight();
         BufferedImage outImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = outImage.getGraphics();
-        g.drawImage(image, 0, 0, null);
+        g.drawImage(grayImage, 0, 0, null);
         g.drawImage(skull, 0, height/2, width/2, height/2, null);
         g.dispose();
         return outImage;
