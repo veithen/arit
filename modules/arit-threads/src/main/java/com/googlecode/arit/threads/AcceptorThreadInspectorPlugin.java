@@ -34,7 +34,7 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ThreadInspectorPlugin.class)
+@Component(role=ThreadInspectorPlugin.class, hint="acceptor-thread")
 public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Requirement(hint="acceptor-thread")
     private ResourceType resourceType;
