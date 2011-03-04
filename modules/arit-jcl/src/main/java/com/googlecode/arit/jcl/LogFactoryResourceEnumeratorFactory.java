@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.bug;
+package com.googlecode.arit.jcl;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -24,12 +24,11 @@ import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-// TODO: there is probably some code that could be reused between this class and ArtifactLoaderUtilityResourceEnumeratorFactory
-@Component(role=ResourceEnumeratorFactory.class, hint="LogFactory-bug")
+@Component(role=ResourceEnumeratorFactory.class, hint="jcl")
 public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory {
     private final LogFactoryRBean rbean;
     
-    @Requirement(hint="websphere-bug")
+    @Requirement(hint="jcl-factory")
     private ResourceType resourceType;
     
     public LogFactoryResourceEnumeratorFactory() {
@@ -43,7 +42,7 @@ public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFa
     }
 
     public String getDescription() {
-        return "Cached LogFactory instances";
+        return "JCL LogFactory instances cached by the container";
     }
 
     public boolean isAvailable() {
@@ -51,6 +50,6 @@ public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFa
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new PerClassLoaderCacheResourceEnumerator(resourceType, "Cached LogFactory", rbean.getFactories());
+        return new LogFactoryResourceEnumerator(resourceType, rbean.getFactories());
     }
 }

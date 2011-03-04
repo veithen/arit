@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.bug;
+package com.googlecode.arit.jcl;
 
-import java.util.Map;
+import org.codehaus.plexus.component.annotations.Component;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.icon.ImageFormat;
 
-@Target("org.apache.commons.logging.LogFactory")
-public interface LogFactoryRBean extends StaticRBean {
-    @Accessor(name="factories")
-    Map<ClassLoader,?> getFactories();
+@Component(role=ResourceType.class, hint="jcl-factory")
+public class LogFactoryResourceType extends ResourceType {
+    public LogFactoryResourceType() {
+        super(ImageFormat.PNG, LogFactoryResourceType.class.getResource("icon.png"));
+    }
 }
