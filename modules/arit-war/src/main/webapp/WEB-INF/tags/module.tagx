@@ -11,7 +11,7 @@
                 <jsp:text> (</jsp:text>
                 <c:forEach items="${module.identities}" var="identity" varStatus="status">
                     <c:if test="${!status.first}">, </c:if>
-                    <c:out value="${identity}"/>
+                    <c:out value="${identity.value}"/>
                 </c:forEach>
                 <jsp:text>)</jsp:text>
             </c:if>
