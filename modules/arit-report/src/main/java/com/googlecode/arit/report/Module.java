@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public class Module implements Serializable {
     private final String name;
     private final boolean stopped;
     private String icon;
-    private List<String> identities;
+    private final List<Identity> identities = new ArrayList<Identity>();
     private final List<Resource> resources = new ArrayList<Resource>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
@@ -57,12 +57,12 @@ public class Module implements Serializable {
         this.icon = icon;
     }
 
-    public List<String> getIdentities() {
+    public List<Identity> getIdentities() {
         return identities;
     }
 
-    public void setIdentities(List<String> identities) {
-        this.identities = identities;
+    public void addIdentity(Identity identity) {
+        identities.add(identity);
     }
 
     public List<Resource> getResources() {

@@ -36,6 +36,7 @@
         <module>arit-mbeans</module>
         <module>arit-rbeans</module>
         <module>arit-report</module>
+        <module>arit-report-xml</module>
         <module>arit-rmi</module>
         <module>arit-shutdown-hooks</module>
         <module>arit-test-war</module>

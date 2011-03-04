@@ -29,6 +29,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
@@ -56,6 +57,9 @@ public class ReportGenerator implements Initializable, Disposable {
     
     @Requirement(role=IconManager.class, hint="module")
     private ModuleTypeIconManager moduleTypeIconManager;
+    
+//    @Requirement(role=IconManager.class, hint="identity")
+//    private ModuleTypeIconManager moduleIdentityTypeIconManager;
     
     @Requirement
     private ModuleIdentityProvider moduleIdentityProvider;
@@ -134,7 +138,9 @@ public class ReportGenerator implements Initializable, Disposable {
             variant = "default";
         }
         module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
-        module.setIdentities(moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader));
+        for (ModuleIdentity identity : moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader)) {
+            module.addIdentity(new Identity(identity.getType().getName(), identity.getValue()));
+        }
         moduleMap.put(classLoader, module);
         return module;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
+import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
+import com.googlecode.arit.ModuleIdentityType;
 
 @Component(role=ModuleIdentityProviderPlugin.class, hint="maven")
 public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProviderPlugin {
+    @Requirement(hint="maven")
+    private ModuleIdentityType identityType;
+    
     public boolean isAvailable() {
         return true;
     }
@@ -43,7 +51,7 @@ public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProvider
         return subDirs != null && subDirs.length == 1 ? subDirs[0] : null;
     }
     
-    public String getModuleIdentity(URL url, ClassLoader classLoader) {
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
         if (url == null) {
             return null;
         }
@@ -79,6 +87,7 @@ public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProvider
         } catch (IOException ex) {
             return null;
         }
-        return pomProperties.getProperty("groupId") + ":" + pomProperties.getProperty("artifactId") + ":" + pomProperties.getProperty("version");
+        // TODO: now that we can return a list, we could return multiple identities if we find multiple pom.properties (this occurs with WAR overlays)
+        return Collections.singletonList(new ModuleIdentity(identityType, pomProperties.getProperty("groupId") + ":" + pomProperties.getProperty("artifactId") + ":" + pomProperties.getProperty("version")));
     }
 }

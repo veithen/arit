@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.report.ReportGenerator;
 
-@Component(role=HttpServlet.class, hint="InspectorServlet")
-public class InspectorServlet extends HttpServlet {
+@Component(role=HttpServlet.class, hint="HtmlReportServlet")
+public class HtmlReportServlet extends HttpServlet {
     @Requirement
     private ReportGenerator reportGenerator;
     
@@ -44,7 +44,7 @@ public class InspectorServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            InputStream in = InspectorServlet.class.getResourceAsStream("version.properties");
+            InputStream in = HtmlReportServlet.class.getResourceAsStream("version.properties");
             try {
                 Properties props = new Properties();
                 props.load(in);

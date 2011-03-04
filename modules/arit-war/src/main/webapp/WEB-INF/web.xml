@@ -7,8 +7,8 @@
         <listener-class>org.codehaus.plexus.servlet.PlexusServletContextListener</listener-class>
     </listener>
     <servlet>
-        <display-name>Inspector servlet</display-name>
-        <servlet-name>InspectorServlet</servlet-name>
+        <display-name>HTML Report Servlet</display-name>
+        <servlet-name>HtmlReportServlet</servlet-name>
         <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
     </servlet>
     <servlet>
@@ -16,13 +16,31 @@
         <servlet-name>IconServlet</servlet-name>
         <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <display-name>XML Report Servlet</display-name>
+        <servlet-name>XmlReportServlet</servlet-name>
+        <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <display-name>Schema Servlet</display-name>
+        <servlet-name>SchemaServlet</servlet-name>
+        <servlet-class>com.googlecode.arit.servlet.PlexusProxyServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>InspectorServlet</servlet-name>
+        <servlet-name>HtmlReportServlet</servlet-name>
         <url-pattern>/report.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>IconServlet</servlet-name>
         <url-pattern>/icons/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XmlReportServlet</servlet-name>
+        <url-pattern>/report.xml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SchemaServlet</servlet-name>
+        <url-pattern>/report.xsd</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jspx</welcome-file>

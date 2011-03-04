@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.codehaus.plexus.component.annotations.Component;
 
+import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
 import com.googlecode.arit.PluginManager;
 
@@ -30,14 +31,14 @@ public class ModuleIdentityProvider extends PluginManager<ModuleIdentityProvider
         super(ModuleIdentityProviderPlugin.class);
     }
     
-    public List<String> getModuleIdentities(URL url, ClassLoader classLoader) {
-        List<String> identities = new ArrayList<String>();
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
+        List<ModuleIdentity> result = new ArrayList<ModuleIdentity>();
         for (ModuleIdentityProviderPlugin plugin : getPlugins()) {
-            String identity = plugin.getModuleIdentity(url, classLoader);
-            if (identity != null) {
-                identities.add(identity);
+            List<ModuleIdentity> identities = plugin.getModuleIdentities(url, classLoader);
+            if (identities != null) {
+                result.addAll(identities);
             }
         }
-        return identities;
+        return result;
     }
 }

@@ -16,10 +16,15 @@
 package com.googlecode.arit.websphere;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
+import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
+import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
@@ -31,6 +36,9 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
  */
 @Component(role=ModuleIdentityProviderPlugin.class, hint="vmRef")
 public class VMRefModuleIdentityProvider implements ModuleIdentityProviderPlugin {
+    @Requirement(hint="vmRef")
+    private ModuleIdentityType identityType;
+    
     private final RBeanFactory rbf;
     
     public VMRefModuleIdentityProvider() {
@@ -47,7 +55,7 @@ public class VMRefModuleIdentityProvider implements ModuleIdentityProviderPlugin
         return rbf != null;
     }
 
-    public String getModuleIdentity(URL url, ClassLoader classLoader) {
-        return "vmRef=" + rbf.createRBean(ClassLoaderRBean.class, classLoader).getVMRef();
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
+        return Collections.singletonList(new ModuleIdentity(identityType, String.valueOf(rbf.createRBean(ClassLoaderRBean.class, classLoader).getVMRef())));
     }
 }
