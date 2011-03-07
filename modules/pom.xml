@@ -26,6 +26,7 @@
         <module>arit-api</module>
         <module>arit-bundlecache</module>
         <module>arit-ear</module>
+        <module>arit-ehcache</module>
         <module>arit-icon</module>
         <module>arit-jce</module>
         <module>arit-jcl</module>
