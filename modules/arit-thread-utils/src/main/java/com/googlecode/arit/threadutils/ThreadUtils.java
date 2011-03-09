@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,23 @@ public class ThreadUtils {
         }
         Thread[] result = new Thread[threadCount];
         System.arraycopy(threads, 0, result, 0, threadCount);
+        return result;
+    }
+    
+    public static ThreadGroup[] getAllThreadGroups() {
+        ThreadGroup rootThreadGroup = getRootThreadGroup();
+        ThreadGroup[] threadGroups = new ThreadGroup[64];
+        int threadGroupCount;
+        while (true) {
+            threadGroupCount = rootThreadGroup.enumerate(threadGroups, true);
+            if (threadGroupCount == threadGroups.length) {
+                threadGroups = new ThreadGroup[threadGroups.length*2];
+            } else {
+                break;
+            }
+        }
+        ThreadGroup[] result = new ThreadGroup[threadGroupCount];
+        System.arraycopy(threadGroups, 0, result, 0, threadGroupCount);
         return result;
     }
 }

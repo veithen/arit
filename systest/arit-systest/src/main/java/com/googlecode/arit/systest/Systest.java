@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public abstract class Systest extends TestCase {
             }
             assertTrue(icons.contains("default/threadlocal.gif"));
             assertTrue(icons.contains("default/timerthread.png"));
-            assertTrue(icons.contains("default/thread.gif"));
+            assertTrue(icons.contains("default/thread.png"));
             assertTrue(icons.contains("default/jce.png"));
             assertTrue(icons.contains("default/mbean.gif"));
             assertTrue(icons.contains("default/jdbc.gif"));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,6 @@ import com.googlecode.arit.icon.ImageFormat;
 @Component(role=ResourceType.class, hint="thread")
 public class ThreadResourceType extends ResourceType {
     public ThreadResourceType() {
-        super(ImageFormat.GIF, ThreadResourceType.class.getResource("thread.gif"));
+        super(ImageFormat.PNG, ThreadResourceType.class.getResource("thread.png"));
     }
 }
