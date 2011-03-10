@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.threads;
+package com.googlecode.arit.threadutils;
 
 import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
@@ -25,4 +25,9 @@ public interface ThreadRBean extends RBean {
     // "runnable" is used by IBM
     @Accessor(name={"target", "runnable"})
     Runnable getTarget();
+    
+    // "inheritedAccessControlContext" is used by Sun (1.5 and 1.6)
+    // "accessControlContext" is used by IBM
+    @Accessor(name={"inheritedAccessControlContext", "accessControlContext"})
+    AccessControlContextRBean getAccessControlContext();
 }

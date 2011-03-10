@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,23 @@
 package com.googlecode.arit.shutdown;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.threadutils.ThreadHelper;
 
 public class ShutdownHookEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<Thread> iterator;
+    private final ThreadHelper threadHelper;
     private Thread hook;
     
-    public ShutdownHookEnumerator(ResourceType resourceType, List<Thread> hooks) {
+    public ShutdownHookEnumerator(ResourceType resourceType, List<Thread> hooks, ThreadHelper threadHelper) {
         this.resourceType = resourceType;
         iterator = hooks.iterator();
+        this.threadHelper = threadHelper;
     }
 
     public ResourceType getType() {
@@ -38,7 +40,7 @@ public class ShutdownHookEnumerator implements ResourceEnumerator {
     }
 
     public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(hook.getClass().getClassLoader());
+        return threadHelper.getReferencedClassLoaders(hook);
     }
 
     public String getDescription() {

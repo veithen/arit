@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ public class RBeanFactory {
                     if (optional) {
                         methodHandler = NullHandler.INSTANCE;
                     } else {
-                        throw new TargetMemberNotFoundException("The class " + targetClass.getClass()
+                        throw new TargetMemberNotFoundException("The class " + targetClass.getName()
                                 + " doesn't contain any attribute assignment compatible with "
                                 + proxyMethod.getGenericReturnType()
                                 + " and with one of the following names: "

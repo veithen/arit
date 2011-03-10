@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,7 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threadutils.ThreadHelper;
 
 /**
  * Thread inspector that retrieves the {@link Runnable} from the thread.
@@ -34,27 +33,19 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Requirement(hint="thread")
     private ResourceType resourceType;
-    
-    private final RBeanFactory rbf;
-    
-    public DefaultThreadInspectorPlugin() {
-        RBeanFactory rbf;
-        try {
-            rbf = new RBeanFactory(ThreadRBean.class);
-        } catch (RBeanFactoryException ex) {
-            rbf = null;
-        }
-        this.rbf = rbf;
-    }
 
+    @Requirement
+    private ThreadHelper threadHelper;
+    
     public boolean isAvailable() {
-        return rbf != null;
+        return threadHelper.isAvailable();
     }
 
     public ThreadDescription getDescription(Thread thread) {
-        Runnable target = rbf.createRBean(ThreadRBean.class, thread).getTarget();
+        Runnable target = threadHelper.getTarget(thread);
         StringBuilder description = new StringBuilder("Thread; name=");
         description.append(thread.getName());
+        // TODO: use the methods in ThreadHelper to extract the class loaders
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
         classLoaders.add(thread.getContextClassLoader());
         Class<?> threadClass = thread.getClass();

@@ -24,8 +24,7 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.threadutils.ThreadHelper;
 
 /**
  * Plugin that attempts to identify TCP acceptor threads. It is based on the idea that in most
@@ -38,21 +37,12 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Requirement(hint="acceptor-thread")
     private ResourceType resourceType;
-    
-    private final RBeanFactory rbf;
-    
-    public AcceptorThreadInspectorPlugin() {
-        RBeanFactory rbf;
-        try {
-            rbf = new RBeanFactory(ThreadRBean.class);
-        } catch (RBeanFactoryException ex) {
-            rbf = null;
-        }
-        this.rbf = rbf;
-    }
 
+    @Requirement
+    private ThreadHelper threadHelper;
+    
     public boolean isAvailable() {
-        return rbf != null;
+        return threadHelper.isAvailable();
     }
 
     public int getPriority() {
@@ -85,7 +75,7 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
     
     public ThreadDescription getDescription(Thread thread) {
         ServerSocket socket;
-        Runnable target = rbf.createRBean(ThreadRBean.class, thread).getTarget();
+        Runnable target = threadHelper.getTarget(thread);
         if (target == null) {
             socket = findSocket(thread, Thread.class);
         } else {

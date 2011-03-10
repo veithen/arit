@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.threadutils.ThreadHelper;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
@@ -30,8 +31,11 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
     @Requirement
     private ShutdownHookInspector inspector;
 
+    @Requirement
+    private ThreadHelper threadHelper;
+    
     public boolean isAvailable() {
-        return inspector.isAvailable();
+        return inspector.isAvailable() && threadHelper.isAvailable();
     }
 
     public String getDescription() {
@@ -39,6 +43,6 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ShutdownHookEnumerator(resourceType, inspector.getShutdownHooks());
+        return new ShutdownHookEnumerator(resourceType, inspector.getShutdownHooks(), threadHelper);
     }
 }
