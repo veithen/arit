@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,6 @@ public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspec
                     description.append(taskClass.getName());
                     classLoaders.add(taskClass.getClassLoader());
                 }
-            }
-            // If we have found timer tasks, then the class loaders of these tasks
-            // are the most meaningful. Only add the TCCL if we have not identified
-            // any tasks.
-            if (classLoaders.isEmpty()) {
-                classLoaders.add(thread.getContextClassLoader());
             }
             return new ThreadDescription(resourceType, description.toString(), classLoaders);
         } else {

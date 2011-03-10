@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,25 @@
 package com.googlecode.arit.threads;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.threadutils.ThreadHelper;
 
 public class ThreadEnumerator implements ResourceEnumerator {
     private final ResourceType defaultResourceType;
+    private final ThreadHelper threadHelper;
     private final ThreadInspector inspectorManager;
     private final Thread[] threads;
     private int current = -1;
     private Thread thread;
     private ThreadDescription description;
 
-    public ThreadEnumerator(ResourceType defaultResourceType, ThreadInspector inspectorManager, Thread[] threads) {
+    public ThreadEnumerator(ResourceType defaultResourceType, ThreadHelper threadHelper, ThreadInspector inspectorManager, Thread[] threads) {
         this.defaultResourceType = defaultResourceType;
+        this.threadHelper = threadHelper;
         this.inspectorManager = inspectorManager;
         this.threads = threads;
     }
@@ -40,7 +44,12 @@ public class ThreadEnumerator implements ResourceEnumerator {
     }
 
     public Collection<ClassLoader> getClassLoaders() {
-        return description == null ? Collections.singleton(thread.getContextClassLoader()) : description.getClassLoaders();
+        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+        classLoaders.addAll(threadHelper.getReferencedClassLoaders(thread));
+        if (description != null) {
+            classLoaders.addAll(description.getAdditionalClassLoaderReferences());
+        }
+        return classLoaders;
     }
 
     public String getDescription() {

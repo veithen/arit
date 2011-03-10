@@ -17,8 +17,7 @@ package com.googlecode.arit.threads;
 
 import java.lang.reflect.Field;
 import java.net.ServerSocket;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -87,21 +86,17 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
             description.append("; name=");
             // Copy & paste code from DefaultThreadInspectorPlugin:
             description.append(thread.getName());
-            Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-            classLoaders.add(thread.getContextClassLoader());
             Class<?> threadClass = thread.getClass();
             if (threadClass != Thread.class) {
                 description.append(", type=");
                 description.append(threadClass.getName());
-                classLoaders.add(threadClass.getClassLoader());
             }
             if (target != null) {
                 Class<?> targetClass = target.getClass();
                 description.append(", target=");
                 description.append(targetClass.getName());
-                classLoaders.add(targetClass.getClassLoader());
             }
-            return new ThreadDescription(resourceType, description.toString(), classLoaders);
+            return new ThreadDescription(resourceType, description.toString(), Collections.<ClassLoader>emptySet());
         } else {
             return null;
         }

@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -45,22 +44,17 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
         Runnable target = threadHelper.getTarget(thread);
         StringBuilder description = new StringBuilder("Thread; name=");
         description.append(thread.getName());
-        // TODO: use the methods in ThreadHelper to extract the class loaders
-        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-        classLoaders.add(thread.getContextClassLoader());
         Class<?> threadClass = thread.getClass();
         if (threadClass != Thread.class) {
             description.append(", type=");
             description.append(threadClass.getName());
-            classLoaders.add(threadClass.getClassLoader());
         }
         if (target != null) {
             Class<?> targetClass = target.getClass();
             description.append(", target=");
             description.append(targetClass.getName());
-            classLoaders.add(targetClass.getClassLoader());
         }
-        return new ThreadDescription(resourceType, description.toString(), classLoaders);
+        return new ThreadDescription(resourceType, description.toString(), Collections.<ClassLoader>emptySet());
     }
 
     public int getPriority() {

@@ -15,6 +15,8 @@
  */
 package com.googlecode.arit.websphere.bug;
 
+import java.util.Collections;
+
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
@@ -42,7 +44,7 @@ public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
     public ThreadDescription getDescription(Thread thread) {
         Runnable target = threadHelper.getTarget(thread);
         if (target != null && target.getClass().getName().equals("org.eclipse.jdt.internal.core.search.indexing.IndexManager")) {
-            return new ThreadDescription(resourceType, "PM04639 (Eclipse bug 296343): JDT indexer thread", threadHelper.getReferencedClassLoaders(thread));
+            return new ThreadDescription(resourceType, "PM04639 (Eclipse bug 296343): JDT indexer thread", Collections.<ClassLoader>emptySet());
         } else {
             return null;
         }

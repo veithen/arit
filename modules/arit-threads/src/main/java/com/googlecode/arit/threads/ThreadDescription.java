@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,13 @@ public class ThreadDescription {
         return description;
     }
 
-    public Set<ClassLoader> getClassLoaders() {
+    /**
+     * Get a collection of class loaders referenced by the thread in addition to those identified by
+     * {@link com.googlecode.arit.threadutils.ThreadHelper#getReferencedClassLoaders(Thread)}.
+     * 
+     * @return a set of class loaders
+     */
+    public Set<ClassLoader> getAdditionalClassLoaderReferences() {
         return classLoaders;
     }
 }

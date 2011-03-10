@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,16 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="thread")
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     @Requirement(hint="thread")
     private ResourceType defaultResourceType;
+    
+    @Requirement
+    private ThreadHelper threadHelper;
     
     @Requirement
     private ThreadInspector inspectorManager;
@@ -40,6 +44,6 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new ThreadEnumerator(defaultResourceType, inspectorManager, ThreadUtils.getAllThreads());
+        return new ThreadEnumerator(defaultResourceType, threadHelper, inspectorManager, ThreadUtils.getAllThreads());
     }
 }
