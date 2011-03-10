@@ -21,35 +21,24 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 @Component(role=ResourceEnumeratorFactory.class, hint="jcl")
 public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory {
-    private final LogFactoryRBean rbean;
+    @Requirement
+    private LogFactoryLoader logFactoryLoader;
     
     @Requirement(hint="jcl-factory")
     private ResourceType resourceType;
     
-    public LogFactoryResourceEnumeratorFactory() {
-        LogFactoryRBean rbean;
-        try {
-            rbean = new RBeanFactory(LogFactoryRBean.class).createRBean(LogFactoryRBean.class);
-        } catch (RBeanFactoryException ex) {
-            rbean = null;
-        }
-        this.rbean = rbean;
-    }
-
     public String getDescription() {
-        return "JCL LogFactory instances cached by the container";
+        return "Cached JCL LogFactory instances";
     }
 
     public boolean isAvailable() {
-        return rbean != null;
+        return logFactoryLoader.isAvailable();
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new LogFactoryResourceEnumerator(resourceType, rbean.getFactories());
+        return new LogFactoryResourceEnumerator(resourceType, logFactoryLoader.getLogFactories());
     }
 }

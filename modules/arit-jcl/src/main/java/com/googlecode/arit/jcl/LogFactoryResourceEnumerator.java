@@ -18,6 +18,7 @@ package com.googlecode.arit.jcl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.googlecode.arit.ResourceEnumerator;
@@ -25,13 +26,15 @@ import com.googlecode.arit.ResourceType;
 
 public class LogFactoryResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
-    private final Iterator<Map.Entry<ClassLoader,Object>> iterator;
+    private final Iterator<LogFactoryRef> iterator1;
+    private Iterator<Map.Entry<ClassLoader,Object>> iterator2;
+    private LogFactoryRef logFactoryRef;
     private ClassLoader classLoader;
     private Object factory;
 
-    public LogFactoryResourceEnumerator(ResourceType resourceType, Map<ClassLoader,Object> factories) {
+    public LogFactoryResourceEnumerator(ResourceType resourceType, List<LogFactoryRef> logFactoryRefs) {
         this.resourceType = resourceType;
-        iterator = factories.entrySet().iterator();
+        iterator1 = logFactoryRefs.iterator();
     }
 
     public ResourceType getType() {
@@ -43,17 +46,27 @@ public class LogFactoryResourceEnumerator implements ResourceEnumerator {
     }
 
     public String getDescription() {
-        return "LogFactory instance cached by container; class=" + factory.getClass().getName();
+        return "LogFactory instance cached by " + logFactoryRef.getDescription() + "; class=" + factory.getClass().getName();
     }
 
     public boolean next() {
-        if (iterator.hasNext()) {
-            Map.Entry<ClassLoader,Object> entry = iterator.next();
-            classLoader = entry.getKey();
-            factory = entry.getValue();
-            return true;
-        } else {
-            return false;
+        while (true) {
+            if (iterator2 == null) {
+                if (iterator1.hasNext()) {
+                    logFactoryRef = iterator1.next();
+                    iterator2 = logFactoryRef.getFactory().getFactories().entrySet().iterator();
+                } else {
+                    return false;
+                }
+            }
+            if (iterator2.hasNext()) {
+                Map.Entry<ClassLoader,Object> entry = iterator2.next();
+                classLoader = entry.getKey();
+                factory = entry.getValue();
+                return true;
+            } else {
+                iterator2 = null;
+            }
         }
     }
 }
