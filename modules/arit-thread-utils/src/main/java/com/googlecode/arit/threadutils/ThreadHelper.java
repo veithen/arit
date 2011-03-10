@@ -16,7 +16,6 @@
 package com.googlecode.arit.threadutils;
 
 import java.security.ProtectionDomain;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,7 +46,7 @@ public class ThreadHelper {
         return rbf.createRBean(ThreadRBean.class, thread).getTarget();
     }
     
-    public Collection<ClassLoader> getReferencedClassLoaders(Thread thread) {
+    public Set<ClassLoader> getReferencedClassLoaders(Thread thread) {
         ThreadRBean threadRBean = rbf.createRBean(ThreadRBean.class, thread);
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
         classLoaders.add(thread.getContextClassLoader());
@@ -59,7 +58,7 @@ public class ThreadHelper {
         if (target != null) {
             classLoaders.add(target.getClass().getClassLoader());
         }
-        ProtectionDomain[] context = threadRBean.getAccessControlContext().getContext();
+        ProtectionDomain[] context = threadRBean.getAccessControlContext().getProtectionDomains();
         if (context != null) {
             for (ProtectionDomain pd : context) {
                 classLoaders.add(pd.getClassLoader());

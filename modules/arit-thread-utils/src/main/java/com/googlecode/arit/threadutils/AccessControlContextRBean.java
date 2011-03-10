@@ -24,6 +24,7 @@ import com.googlecode.arit.rbeans.TargetClass;
 
 @TargetClass(AccessControlContext.class)
 public interface AccessControlContextRBean extends RBean {
-    @Accessor(name="context")
-    ProtectionDomain[] getContext();
+    // "domainsArray" is used on WAS 6.1
+    @Accessor(name={"context", "domainsArray"})
+    ProtectionDomain[] getProtectionDomains();
 }
