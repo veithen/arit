@@ -4,6 +4,7 @@
     <jsp:directive.attribute name="module"
                              type="com.googlecode.arit.report.Module"
                              required="true"/>
+    <a name="m_${module.id}"/>
     <div class="module">
         <div class="module-name">
             <img src="icons/module/${module.icon}"/><jsp:text> </jsp:text><c:out value="${module.name}"/>
