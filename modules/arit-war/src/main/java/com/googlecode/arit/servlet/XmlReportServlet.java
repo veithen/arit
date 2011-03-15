@@ -84,6 +84,7 @@ public class XmlReportServlet extends HttpServlet {
         result.setId(module.getId());
         result.setName(module.getName());
         result.setStopped(module.isStopped());
+        result.setIcon(module.getIcon());
         List<IdentityType> identities = new ArrayList<IdentityType>();
         for (Identity identity : module.getIdentities()) {
             identities.add(convert(identity));

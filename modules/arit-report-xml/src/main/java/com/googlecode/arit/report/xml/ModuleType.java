@@ -26,6 +26,7 @@ public class ModuleType {
     private Integer id;
     private String name;
     private boolean stopped;
+    private String icon;
     private List<IdentityType> identities;
     private List<ModuleType> children;
 
@@ -54,6 +55,15 @@ public class ModuleType {
 
     public void setStopped(boolean stopped) {
         this.stopped = stopped;
+    }
+
+    @XmlAttribute
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     @XmlElement(name="identity")
