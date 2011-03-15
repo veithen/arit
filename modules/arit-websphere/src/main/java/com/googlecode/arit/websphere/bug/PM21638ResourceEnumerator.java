@@ -19,12 +19,12 @@ import java.util.Map;
 
 import com.googlecode.arit.ResourceType;
 
-public class IZ67457ResourceEnumerator extends PerClassCacheResourceEnumerator {
-    public IZ67457ResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {
+public class PM21638ResourceEnumerator extends PerClassCacheResourceEnumerator {
+    public PM21638ResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {
         super(resourceType, cache);
     }
 
     protected String getDescription(Class<?> clazz) {
-        return "IZ67457: Cached MethodDescriptors for class " + clazz.getName();
+        return "PM21638: Cached bean property descriptors for class " + clazz.getName();
     }
 }

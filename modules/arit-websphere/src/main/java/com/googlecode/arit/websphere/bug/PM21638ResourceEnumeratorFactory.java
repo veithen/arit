@@ -24,18 +24,17 @@ import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-// TODO: the IZ67457 issue may actually come from Apache Harmony; check this and if necessary move the code out of the WebSphere module
-@Component(role=ResourceEnumeratorFactory.class, hint="iz67457")
-public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFactory {
-    private final StandardBeanInfoRBean rbean;
+@Component(role=ResourceEnumeratorFactory.class, hint="PM21638")
+public class PM21638ResourceEnumeratorFactory implements ResourceEnumeratorFactory {
+    private final BeanELResolverRBean rbean;
     
     @Requirement(hint="websphere-bug")
     private ResourceType resourceType;
     
-    public IZ67457ResourceEnumeratorFactory() {
-        StandardBeanInfoRBean rbean;
+    public PM21638ResourceEnumeratorFactory() {
+        BeanELResolverRBean rbean;
         try {
-            rbean = new RBeanFactory(StandardBeanInfoRBean.class).createRBean(StandardBeanInfoRBean.class);
+            rbean = new RBeanFactory(BeanELResolverRBean.class).createRBean(BeanELResolverRBean.class);
         } catch (RBeanFactoryException ex) {
             rbean = null;
         }
@@ -43,7 +42,7 @@ public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFacto
     }
 
     public String getDescription() {
-        return "Cached MethodDescriptor array in StandardBeanInfo (IZ67457)";
+        return "Cached bean property descriptors in javax.el.BeanELResolver (PM21638)";
     }
 
     public boolean isAvailable() {
@@ -51,6 +50,6 @@ public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFacto
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new IZ67457ResourceEnumerator(resourceType, rbean.getMethodDescriptorCache());
+        return new PM21638ResourceEnumerator(resourceType, rbean.getProperties());
     }
 }
