@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,13 @@
  */
 package com.googlecode.arit.jdbc;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class JdbcDriverEnumerator implements ResourceEnumerator {
+public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<Class<?>> iterator;
     private Class<?> driverClass;
@@ -37,15 +35,19 @@ public class JdbcDriverEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(driverClass.getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return driverClass.getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Driver class";
+    }
+
+    public String getResourceDescription() {
         return "JDBC driver: " + driverClass.getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         if (iterator.hasNext()) {
             driverClass = iterator.next();
             return true;

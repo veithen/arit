@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.mbeans;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 import javax.management.MBeanServer;
@@ -25,10 +23,10 @@ import javax.management.ObjectName;
 
 import org.codehaus.plexus.logging.Logger;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class MBeanEnumerator implements ResourceEnumerator {
+public class MBeanEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
@@ -49,15 +47,19 @@ public class MBeanEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(mbean.getClass().getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return mbean.getClass().getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "MBean implementation class";
+    }
+
+    public String getResourceDescription() {
         return "MBean: " + name.toString() + " (class: " + mbean.getClass().getName() + ")";
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         while (true) {
             if (mbeanIterator != null && mbeanIterator.hasNext()) {
                 name = mbeanIterator.next();

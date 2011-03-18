@@ -15,13 +15,10 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class ThreadGroupEnumerator implements ResourceEnumerator {
+public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final ThreadGroup[] threadGroups;
     private int current = -1;
@@ -36,15 +33,19 @@ public class ThreadGroupEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(threadGroup.getClass().getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return threadGroup.getClass().getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "ThreadGroup implementation class";
+    }
+
+    public String getResourceDescription() {
         return "Thread group: " + threadGroup.getName() + "; class=" + threadGroup.getClass().getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         if (current+1 < threadGroups.length) {
             current++;
             threadGroup = threadGroups[current];

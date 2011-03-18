@@ -15,16 +15,14 @@
  */
 package com.googlecode.arit.jcl;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class LogFactoryResourceEnumerator implements ResourceEnumerator {
+public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<LogFactoryRef> iterator1;
     private Iterator<Map.Entry<ClassLoader,Object>> iterator2;
@@ -41,15 +39,19 @@ public class LogFactoryResourceEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(classLoader);
+    public ClassLoader getReferencedClassLoader() {
+        return classLoader;
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Cache key";
+    }
+
+    public String getResourceDescription() {
         return "LogFactory instance cached by " + logFactoryRef.getDescription() + "; class=" + factory.getClass().getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         while (true) {
             if (iterator2 == null) {
                 if (iterator1.hasNext()) {

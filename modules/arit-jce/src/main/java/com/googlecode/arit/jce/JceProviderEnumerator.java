@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 package com.googlecode.arit.jce;
 
 import java.security.Provider;
-import java.util.Collection;
-import java.util.Collections;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class JceProviderEnumerator implements ResourceEnumerator {
+public class JceProviderEnumerator extends SimpleResourceEnumerator {
     private final Provider[] providers;
     private final ResourceType resourceType;
     private int index;
@@ -36,15 +34,19 @@ public class JceProviderEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(providers[index].getClass().getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return providers[index].getClass().getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Implementation class";
+    }
+
+    public String getResourceDescription() {
         return "JCE provider: " + providers[index].getClass().getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         index++;
         return index < providers.length;
     }

@@ -1,5 +1,6 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fn="http://java.sun.com/jsp/jstl/functions"
           xmlns:arit="urn:jsptagdir:/WEB-INF/tags">
     <jsp:directive.attribute name="module"
                              type="com.googlecode.arit.report.Module"
@@ -23,7 +24,24 @@
             </c:when>
             <c:otherwise>
                 <c:forEach items="${module.resources}" var="resource">
-                    <div class="resource"><img src="icons/resource/${resource.icon}"/><jsp:text> </jsp:text><c:out value="${resource.description}"/></div>
+                    <div class="resource">
+                        <img src="icons/resource/${resource.icon}"/>
+                        <jsp:text> </jsp:text>
+                        <c:out value="${resource.description}"/>
+                        <c:choose>
+                            <c:when test="${fn:length(resource.links) == 1}">
+                                <jsp:text> </jsp:text><img src="link.png"/><jsp:text> </jsp:text>
+                                <c:out value="${resource.links[0].description}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${resource.links}" var="link">
+                                    <div class="link">
+                                        <img src="link.png"/><jsp:text> </jsp:text><c:out value="${link.description}"/>
+                                    </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </c:forEach>
                 <c:forEach items="${module.children}" var="child">
                     <arit:module module="${child}"/>

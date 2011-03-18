@@ -15,44 +15,43 @@
  */
 package com.googlecode.arit.shutdown;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
+import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
 
-public class ShutdownHookEnumerator implements ResourceEnumerator {
+public class ShutdownHookEnumerator extends ThreadObjectEnumerator {
     private final ResourceType resourceType;
     private final Iterator<Thread> iterator;
-    private final ThreadHelper threadHelper;
-    private Thread hook;
     
     public ShutdownHookEnumerator(ResourceType resourceType, List<Thread> hooks, ThreadHelper threadHelper) {
+        super(threadHelper);
         this.resourceType = resourceType;
         iterator = hooks.iterator();
-        this.threadHelper = threadHelper;
     }
 
     public ResourceType getType() {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return threadHelper.getReferencedClassLoaders(hook);
+    public String getResourceDescription() {
+        return "Shutdown hook; type=" + threadObject.getClass().getName();
     }
 
-    public String getDescription() {
-        return "Shutdown hook; type=" + hook.getClass().getName();
-    }
-
-    public boolean next() {
+    protected Thread nextThreadObject() {
         if (iterator.hasNext()) {
-            hook = iterator.next();
-            return true;
+            return iterator.next();
         } else {
-            return false;
+            return null;
         }
+    }
+
+    @Override
+    protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
+        return Collections.emptySet();
     }
 }

@@ -15,26 +15,22 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
+import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
 
-public class ThreadEnumerator implements ResourceEnumerator {
+public class ThreadEnumerator extends ThreadObjectEnumerator {
     private final ResourceType defaultResourceType;
-    private final ThreadHelper threadHelper;
     private final ThreadInspector inspectorManager;
     private final Thread[] threads;
     private int current = -1;
-    private Thread thread;
     private ThreadDescription description;
 
     public ThreadEnumerator(ResourceType defaultResourceType, ThreadHelper threadHelper, ThreadInspector inspectorManager, Thread[] threads) {
+        super(threadHelper);
         this.defaultResourceType = defaultResourceType;
-        this.threadHelper = threadHelper;
         this.inspectorManager = inspectorManager;
         this.threads = threads;
     }
@@ -43,27 +39,23 @@ public class ThreadEnumerator implements ResourceEnumerator {
         return description == null ? defaultResourceType : description.getResourceType();
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-        classLoaders.addAll(threadHelper.getReferencedClassLoaders(thread));
-        if (description != null) {
-            classLoaders.addAll(description.getAdditionalClassLoaderReferences());
-        }
-        return classLoaders;
+    public String getResourceDescription() {
+        return description == null ? "Thread: " + threadObject.getName() + " [" + threadObject.getId() + "] " : description.getDescription();
     }
 
-    public String getDescription() {
-        return description == null ? "Thread: " + thread.getName() + " [" + thread.getId() + "] " : description.getDescription();
-    }
-
-    public boolean next() {
+    protected Thread nextThreadObject() {
         if (current+1 < threads.length) {
             current++;
-            thread = threads[current];
+            Thread thread = threads[current];
             description = inspectorManager.getDescription(thread);
-            return true;
+            return thread;
         } else {
-            return false;
+            return null;
         }
+    }
+
+    @Override
+    protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
+        return description.getAdditionalClassLoaderReferences();
     }
 }

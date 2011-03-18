@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,13 @@
  */
 package com.googlecode.arit.rmi;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class RmiExportEnumerator implements ResourceEnumerator {
+public class RmiExportEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<Object> iterator;
     private Object exportedObject;
@@ -37,15 +35,19 @@ public class RmiExportEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(exportedObject.getClass().getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return exportedObject.getClass().getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Exported oject implementation class";
+    }
+
+    public String getResourceDescription() {
         return "Exported object (RMI): " + exportedObject.getClass().getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         if (iterator.hasNext()) {
             exportedObject = iterator.next();
             return true;

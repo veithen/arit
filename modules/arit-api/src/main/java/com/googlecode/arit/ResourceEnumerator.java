@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,32 @@
  */
 package com.googlecode.arit;
 
-import java.util.Collection;
-
 public interface ResourceEnumerator {
+    /**
+     * Fetch the next resource from the enumerator.
+     * 
+     * @return <code>true</code> if a resource has been fetched; <code>false</code> if there are no
+     *         more resources
+     */
+    boolean nextResource();
+    
+    /**
+     * Get the type of the current resource.
+     * 
+     * @return the type of the current resource
+     */
     ResourceType getType();
-    Collection<ClassLoader> getClassLoaders();
-    String getDescription();
-    boolean next();
+    
+    /**
+     * Get a (human readable) description of the current resource.
+     * 
+     * @return the description of the current resource
+     */
+    String getResourceDescription();
+    
+    boolean nextClassLoaderReference();
+    
+    ClassLoader getReferencedClassLoader();
+    
+    String getClassLoaderReferenceDescription();
 }

@@ -15,15 +15,13 @@
  */
 package com.googlecode.arit.jvm;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class JVMSingletonEnumerator implements ResourceEnumerator {
+public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<JVMSingleton> iterator;
     private JVMSingleton singleton;
@@ -38,15 +36,19 @@ public class JVMSingletonEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(instance.getClass().getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return instance.getClass().getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Implementation class";
+    }
+
+    public String getResourceDescription() {
         return singleton.getDescription() + ": " + instance.getClass().getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         while (iterator.hasNext()) {
             singleton = iterator.next();
             instance = singleton.getInstance();

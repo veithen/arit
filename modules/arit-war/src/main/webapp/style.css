@@ -37,3 +37,10 @@ div.resource {
   margin-top: 4px;
   margin-bottom: 4px;
 }
+
+div.link {
+  font-size: 14px;
+  padding-left: 30px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}

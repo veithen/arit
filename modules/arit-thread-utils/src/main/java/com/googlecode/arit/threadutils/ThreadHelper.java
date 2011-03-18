@@ -15,10 +15,6 @@
  */
 package com.googlecode.arit.threadutils;
 
-import java.security.ProtectionDomain;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.codehaus.plexus.component.annotations.Component;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -42,28 +38,11 @@ public class ThreadHelper {
         return rbf != null;
     }
     
-    public Runnable getTarget(Thread thread) {
-        return rbf.createRBean(ThreadRBean.class, thread).getTarget();
+    public ThreadRBean getThreadRBean(Thread thread) {
+        return rbf.createRBean(ThreadRBean.class, thread);
     }
     
-    public Set<ClassLoader> getReferencedClassLoaders(Thread thread) {
-        ThreadRBean threadRBean = rbf.createRBean(ThreadRBean.class, thread);
-        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-        classLoaders.add(thread.getContextClassLoader());
-        Class<?> threadClass = thread.getClass();
-        if (threadClass != Thread.class) {
-            classLoaders.add(threadClass.getClassLoader());
-        }
-        Runnable target = threadRBean.getTarget();
-        if (target != null) {
-            classLoaders.add(target.getClass().getClassLoader());
-        }
-        ProtectionDomain[] context = threadRBean.getAccessControlContext().getProtectionDomains();
-        if (context != null) {
-            for (ProtectionDomain pd : context) {
-                classLoaders.add(pd.getClassLoader());
-            }
-        }
-        return classLoaders;
+    public Runnable getTarget(Thread thread) {
+        return rbf.createRBean(ThreadRBean.class, thread).getTarget();
     }
 }

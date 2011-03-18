@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,15 @@
 package com.googlecode.arit.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Resource implements Serializable {
     private static final long serialVersionUID = -3572748920334331705L;
     
     private final String icon;
     private final String description;
+    private final List<ClassLoaderLink> links = new ArrayList<ClassLoaderLink>();
 
     public Resource(String icon, String description) {
         this.icon = icon;
@@ -34,5 +37,9 @@ public class Resource implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<ClassLoaderLink> getLinks() {
+        return links;
     }
 }

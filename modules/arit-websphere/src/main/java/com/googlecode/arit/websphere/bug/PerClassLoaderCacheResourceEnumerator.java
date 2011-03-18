@@ -15,15 +15,13 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class PerClassLoaderCacheResourceEnumerator implements ResourceEnumerator {
+public class PerClassLoaderCacheResourceEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final String description;
     private final Iterator<ClassLoader> classLoaderIterator;
@@ -39,15 +37,19 @@ public class PerClassLoaderCacheResourceEnumerator implements ResourceEnumerator
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(classLoader);
+    public ClassLoader getReferencedClassLoader() {
+        return classLoader;
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Cache key";
+    }
+
+    public String getResourceDescription() {
         return description;
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         if (classLoaderIterator.hasNext()) {
             classLoader = classLoaderIterator.next();
             return true;

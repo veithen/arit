@@ -18,6 +18,7 @@ package com.googlecode.arit.report;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,16 +163,30 @@ public class ReportGenerator implements Initializable, Disposable {
                 }
             }
             
+            Map<ClassLoader,Resource> resourceMap = new HashMap<ClassLoader,Resource>();
             for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
-                while (resourceEnumerator.next()) {
-                    for (ClassLoader classLoader : resourceEnumerator.getClassLoaders()) {
-                        if (classLoader != null) {
-                            Module module = getModule(moduleInspector, moduleMap, classLoader);
-                            // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
-                            if (module != null) {
-                                module.getResources().add(new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getType()).getIconImage("default").getFileName(), resourceEnumerator.getDescription()));
-                                break;
+                while (resourceEnumerator.nextResource()) {
+                    resourceMap.clear();
+                    String resourceDescription = null;
+                    while (resourceEnumerator.nextClassLoaderReference()) {
+                        ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
+                        if (classLoader != null) { // TODO: do we really need this check??
+                            Resource resource = resourceMap.get(classLoader);
+                            if (resource == null) {
+                                Module module = getModule(moduleInspector, moduleMap, classLoader);
+                                // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
+                                if (module != null) {
+                                    if (resourceDescription == null) {
+                                        resourceDescription = resourceEnumerator.getResourceDescription();
+                                    }
+                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getType()).getIconImage("default").getFileName(), resourceDescription);
+                                    module.getResources().add(resource);
+                                }
+                                resourceMap.put(classLoader, resource);
+                            }
+                            if (resource != null) {
+                                resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription()));
                             }
                         }
                     }

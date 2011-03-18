@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,13 @@
  */
 package com.googlecode.arit.bundlecache;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
 
-public class CachedResourceBundleEnumerator implements ResourceEnumerator {
+public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<CachedResourceBundle> iterator;
     private CachedResourceBundle bundle;
@@ -37,15 +35,19 @@ public class CachedResourceBundleEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public Collection<ClassLoader> getClassLoaders() {
-        return Collections.singleton(bundle.getClassLoader());
+    public ClassLoader getReferencedClassLoader() {
+        return bundle.getClassLoader();
     }
 
-    public String getDescription() {
+    public String getClassLoaderReferenceDescription() {
+        return "Bundle class loader";
+    }
+
+    public String getResourceDescription() {
         return "Cached resource bundle: " + bundle.getName();
     }
 
-    public boolean next() {
+    protected boolean doNextResource() {
         if (iterator.hasNext()) {
             bundle = iterator.next();
             return true;
