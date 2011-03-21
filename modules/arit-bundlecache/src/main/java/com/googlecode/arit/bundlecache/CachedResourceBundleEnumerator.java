@@ -55,4 +55,8 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
             return false;
         }
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

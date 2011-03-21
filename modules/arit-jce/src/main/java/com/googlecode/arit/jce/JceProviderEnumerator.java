@@ -50,4 +50,8 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
         index++;
         return index < providers.length;
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

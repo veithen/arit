@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ public class DefaultClassLoaderIdProvider implements ClassLoaderIdProvider {
     private final Map<ClassLoader,Integer> idMap = new WeakHashMap<ClassLoader,Integer>();
     private int nextId = 1;
 
-    public synchronized Integer getClassLoaderId(ClassLoader classLoader) {
+    public synchronized Integer getClassLoaderId(ClassLoader classLoader, boolean create) {
         Integer id = idMap.get(classLoader);
-        if (id == null) {
+        if (id == null && create) {
             id = nextId++;
             idMap.put(classLoader, id);
         }

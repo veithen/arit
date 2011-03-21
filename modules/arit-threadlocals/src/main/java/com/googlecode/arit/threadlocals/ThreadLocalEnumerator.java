@@ -66,4 +66,8 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
     public String getClassLoaderReferenceDescription() {
         return "Value class: " + valueClass.getName();
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

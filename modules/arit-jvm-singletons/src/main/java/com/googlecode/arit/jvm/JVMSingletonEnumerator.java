@@ -58,4 +58,8 @@ public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
         }
         return false;
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

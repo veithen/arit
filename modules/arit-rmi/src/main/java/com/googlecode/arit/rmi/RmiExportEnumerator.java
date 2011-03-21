@@ -55,4 +55,8 @@ public class RmiExportEnumerator extends SimpleResourceEnumerator {
             return false;
         }
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

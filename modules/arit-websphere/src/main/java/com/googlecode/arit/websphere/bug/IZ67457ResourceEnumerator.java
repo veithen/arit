@@ -27,4 +27,8 @@ public class IZ67457ResourceEnumerator extends PerClassCacheResourceEnumerator {
     protected String getDescription(Class<?> clazz) {
         return "IZ67457: Cached MethodDescriptors for class " + clazz.getName();
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

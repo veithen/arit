@@ -54,4 +54,8 @@ public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
             return false;
         }
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

@@ -115,7 +115,7 @@ public class ReportGenerator implements Initializable, Disposable {
     // TODO: refactor the get/loadModule stuff into a ReportBuilder class and make this a private method of the class (it must only be called by getModule)
     private Module loadModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ModuleDescription desc) {
         ClassLoader classLoader = desc.getClassLoader();
-        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
+        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
         ModuleType moduleType = desc.getType();
         ClassLoader parentClassLoader = classLoader.getParent();
         Module parentModule;

@@ -55,4 +55,8 @@ public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
             return false;
         }
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

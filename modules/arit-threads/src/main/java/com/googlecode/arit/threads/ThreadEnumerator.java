@@ -58,4 +58,8 @@ public class ThreadEnumerator extends ThreadObjectEnumerator {
     protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
         return description.getAdditionalClassLoaderReferences();
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }

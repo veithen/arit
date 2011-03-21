@@ -17,6 +17,7 @@ package com.googlecode.arit.mbeans;
 
 import java.util.Iterator;
 
+import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
@@ -31,6 +32,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
     private final Logger logger;
+    private MBeanServer mbs;
     private MBeanAccessor mbeanAccessor;
     private Iterator<ObjectName> mbeanIterator;
     private ObjectName name;
@@ -67,7 +69,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
                 return true;
             } else if (mbsIterator.hasNext()) {
                 mbeanIterator = null;
-                MBeanServer mbs = mbsIterator.next();
+                mbs = mbsIterator.next();
                 mbeanAccessor = mbsInspector.inspect(mbs);
                 if (mbeanAccessor == null) {
                     logger.error("Unable to inspect MBeanServer of type " + mbs.getClass().getName());
@@ -82,6 +84,15 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
             } else {
                 return false;
             }
+        }
+    }
+
+    public boolean cleanup() {
+        try {
+            mbs.unregisterMBean(name);
+            return true;
+        } catch (JMException ex) {
+            return false;
         }
     }
 }

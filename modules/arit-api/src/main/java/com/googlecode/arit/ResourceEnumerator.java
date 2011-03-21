@@ -43,4 +43,13 @@ public interface ResourceEnumerator {
     ClassLoader getReferencedClassLoader();
     
     String getClassLoaderReferenceDescription();
+    
+    /**
+     * Clean up this resource, i.e. attempt to break the link between the resource and the
+     * referenced class loader (returned by {@link #getReferencedClassLoader()}.
+     * 
+     * @return <code>true</code> if the resource has been cleaned up, <code>false</code> if this
+     *         operation is not supported or if the cleanup is not possible for some other reasons
+     */
+    boolean cleanup();
 }

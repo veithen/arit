@@ -54,4 +54,8 @@ public class ShutdownHookEnumerator extends ThreadObjectEnumerator {
     protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
         return Collections.emptySet();
     }
+
+    public boolean cleanup() {
+        return false;
+    }
 }
