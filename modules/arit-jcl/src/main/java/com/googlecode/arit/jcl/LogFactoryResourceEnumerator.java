@@ -73,6 +73,7 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
     }
 
     public boolean cleanup() {
-        return false;
+        iterator2.remove();
+        return true;
     }
 }

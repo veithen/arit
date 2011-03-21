@@ -59,6 +59,7 @@ public class PerClassLoaderCacheResourceEnumerator extends SimpleResourceEnumera
     }
 
     public boolean cleanup() {
-        return false;
+        classLoaderIterator.remove();
+        return true;
     }
 }
