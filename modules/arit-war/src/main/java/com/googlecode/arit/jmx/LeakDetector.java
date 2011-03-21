@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
 
