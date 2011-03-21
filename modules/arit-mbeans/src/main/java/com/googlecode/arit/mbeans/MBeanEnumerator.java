@@ -43,7 +43,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
         this.logger = logger;
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

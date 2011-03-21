@@ -33,7 +33,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
         threadLocalIterator = threadLocals.values().iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

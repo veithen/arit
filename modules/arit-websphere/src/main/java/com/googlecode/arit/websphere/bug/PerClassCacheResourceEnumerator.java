@@ -31,7 +31,7 @@ public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnum
         classIterator = cache.keySet().iterator();
     }
 
-    public final ResourceType getType() {
+    public final ResourceType getResourceType() {
         return resourceType;
     }
 

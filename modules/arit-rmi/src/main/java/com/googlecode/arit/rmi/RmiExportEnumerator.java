@@ -31,7 +31,7 @@ public class RmiExportEnumerator extends SimpleResourceEnumerator {
         iterator = exportedObjects.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

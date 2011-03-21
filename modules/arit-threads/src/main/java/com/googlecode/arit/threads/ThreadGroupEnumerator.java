@@ -29,7 +29,7 @@ public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
         this.threadGroups = threadGroups;
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

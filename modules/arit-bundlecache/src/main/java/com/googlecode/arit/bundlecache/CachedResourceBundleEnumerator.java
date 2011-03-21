@@ -31,7 +31,7 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
         iterator = cachedResourceBundles.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

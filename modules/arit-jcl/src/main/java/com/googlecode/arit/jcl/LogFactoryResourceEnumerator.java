@@ -35,7 +35,7 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
         iterator1 = logFactoryRefs.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

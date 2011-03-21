@@ -32,7 +32,7 @@ public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
         iterator = singletons.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

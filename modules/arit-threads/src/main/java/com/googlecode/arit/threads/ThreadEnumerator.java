@@ -35,7 +35,7 @@ public class ThreadEnumerator extends ThreadObjectEnumerator {
         this.threads = threads;
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return description == null ? defaultResourceType : description.getResourceType();
     }
 

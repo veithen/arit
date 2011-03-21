@@ -34,7 +34,7 @@ public class ShutdownHookEnumerator extends ThreadObjectEnumerator {
         iterator = hooks.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

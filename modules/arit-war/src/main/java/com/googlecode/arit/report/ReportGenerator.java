@@ -180,7 +180,7 @@ public class ReportGenerator implements Initializable, Disposable {
                                     if (resourceDescription == null) {
                                         resourceDescription = resourceEnumerator.getResourceDescription();
                                     }
-                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getType()).getIconImage("default").getFileName(), resourceDescription);
+                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getResourceType()).getIconImage("default").getFileName(), resourceDescription);
                                     module.getResources().add(resource);
                                 }
                                 resourceMap.put(classLoader, resource);

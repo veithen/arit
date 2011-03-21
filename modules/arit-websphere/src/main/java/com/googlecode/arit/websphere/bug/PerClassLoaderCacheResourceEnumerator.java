@@ -33,7 +33,7 @@ public class PerClassLoaderCacheResourceEnumerator extends SimpleResourceEnumera
         classLoaderIterator = cache.keySet().iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

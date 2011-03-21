@@ -30,7 +30,7 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
         this.resourceType = resourceType;
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

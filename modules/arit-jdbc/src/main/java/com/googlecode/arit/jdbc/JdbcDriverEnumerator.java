@@ -31,7 +31,7 @@ public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
         iterator = driverClasses.iterator();
     }
 
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 

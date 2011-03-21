@@ -29,7 +29,7 @@ public interface ResourceEnumerator {
      * 
      * @return the type of the current resource
      */
-    ResourceType getType();
+    ResourceType getResourceType();
     
     /**
      * Get a (human readable) description of the current resource.
