@@ -27,8 +27,4 @@ public class PM21638ResourceEnumerator extends PerClassCacheResourceEnumerator {
     protected String getDescription(Class<?> clazz) {
         return "PM21638: Cached bean property descriptors for class " + clazz.getName();
     }
-
-    public boolean cleanup() {
-        return false;
-    }
 }

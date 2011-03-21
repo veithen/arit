@@ -57,4 +57,9 @@ public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnum
             return false;
         }
     }
+
+    public final boolean cleanup() {
+        classIterator.remove();
+        return true;
+    }
 }

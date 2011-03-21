@@ -17,14 +17,12 @@ package com.googlecode.arit.websphere.bug;
 
 import java.util.Map;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.rbeans.Accessor;
+import com.googlecode.arit.rbeans.StaticRBean;
+import com.googlecode.arit.rbeans.Target;
 
-public class IZ67457ResourceEnumerator extends PerClassCacheResourceEnumerator {
-    public IZ67457ResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {
-        super(resourceType, cache);
-    }
-
-    protected String getDescription(Class<?> clazz) {
-        return "IZ67457: Cached MethodDescriptors for class " + clazz.getName();
-    }
+@Target("com.ibm.ws.sca.internal.java.handler.JavaReflectionAdapter")
+public interface JavaReflectionAdapterRBean extends StaticRBean {
+    @Accessor(name="adapters")
+    Map<Class<?>,?> getAdapters();
 }
