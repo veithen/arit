@@ -56,10 +56,33 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
                         classes = new HashSet<Class<?>>();
                         threadLocals.put(threadLocal, classes);
                     }
-                    classes.add(value.getClass());
+                    collectClasses(classes, value);
                 }
             }
         }
         return new ThreadLocalEnumerator(resourceType, threadLocals);
+    }
+    
+    private void collectClasses(Set<Class<?>> classes, Object value) {
+        if (value instanceof Class<?>) {
+            classes.add((Class<?>)value);
+        } else {
+            // Even if it is a collection, the actual implementation may be loaded from the
+            // application class loader. Therefore we always add the class.
+            classes.add(value.getClass());
+            if (value instanceof Map<?,?>) {
+                // This should allow us situations such as described in AXIS-2674
+                for (Map.Entry<?,?> mapEntry : ((Map<?,?>)value).entrySet()) {
+                    Object mapKey = mapEntry.getKey();
+                    if (mapKey != null) {
+                        collectClasses(classes, mapKey);
+                    }
+                    Object mapValue = mapEntry.getValue();
+                    if (mapValue != null) {
+                        collectClasses(classes, mapValue);
+                    }
+                }
+            }
+        }
     }
 }
