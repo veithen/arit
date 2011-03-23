@@ -72,15 +72,19 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
             classes.add(value.getClass());
             if (value instanceof Map<?,?>) {
                 // This should allow us situations such as described in AXIS-2674
-                for (Map.Entry<?,?> mapEntry : ((Map<?,?>)value).entrySet()) {
-                    Object mapKey = mapEntry.getKey();
-                    if (mapKey != null) {
-                        collectClasses(classes, mapKey);
+                try {
+                    for (Map.Entry<?,?> mapEntry : ((Map<?,?>)value).entrySet()) {
+                        Object mapKey = mapEntry.getKey();
+                        if (mapKey != null) {
+                            collectClasses(classes, mapKey);
+                        }
+                        Object mapValue = mapEntry.getValue();
+                        if (mapValue != null) {
+                            collectClasses(classes, mapValue);
+                        }
                     }
-                    Object mapValue = mapEntry.getValue();
-                    if (mapValue != null) {
-                        collectClasses(classes, mapValue);
-                    }
+                } catch (UnsupportedOperationException ex) {
+                    return;
                 }
             }
         }
