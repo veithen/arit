@@ -15,18 +15,15 @@
  */
 package com.googlecode.arit.jmx;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.management.JMException;
-import javax.management.MBeanNotificationInfo;
-import javax.management.MBeanServer;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
+import javax.management.modelmbean.ModelMBeanNotificationInfo;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -37,20 +34,20 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
 
-@Component(role=MBeanProvider.class, hint="LeakDetector")
-public class LeakDetector extends NotificationBroadcasterSupport implements LeakDetectorMBean, Initializable, Disposable, MBeanProvider {
+@Component(role=LeakDetector.class)
+public class LeakDetector extends NotificationBroadcasterSupport implements Initializable, Disposable {
     private final static String LEAK_DETECTED = "arit.leak.detected";
     
     @Requirement
     private ReportGenerator reportGenerator;
     
     private Timer timer;
-    private final Set<Integer> reportedModules = new HashSet<Integer>();
+    private final Set<Integer> reportedModules = Collections.synchronizedSet(new HashSet<Integer>());
     private long notificationSequence;
     
     @Override
-    public MBeanNotificationInfo[] getNotificationInfo() {
-        return new MBeanNotificationInfo[] { new MBeanNotificationInfo(
+    public ModelMBeanNotificationInfo[] getNotificationInfo() {
+        return new ModelMBeanNotificationInfo[] { new ModelMBeanNotificationInfo(
                 new String[] { LEAK_DETECTED }, Notification.class.getName(), "Leak detector notification") };
     }
 
@@ -64,10 +61,6 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
         }, 0, 60000);
     }
     
-    public ObjectInstance registerMBean(MBeanServer server, ObjectName name) throws JMException {
-        return server.registerMBean(this, name);
-    }
-
     private void runDetection() {
         for (Module module : reportGenerator.generateReport().getRootModules()) {
             if (module.isStopped()) {
@@ -79,6 +72,10 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Leak
         }
     }
     
+    public int getDetectedLeakCount() {
+        return reportedModules.size();
+    }
+
     public void dispose() {
         if (timer != null) {
             timer.cancel();
