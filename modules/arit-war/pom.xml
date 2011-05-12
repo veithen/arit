@@ -56,6 +56,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>arit-jmx</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>arit-jetty</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>

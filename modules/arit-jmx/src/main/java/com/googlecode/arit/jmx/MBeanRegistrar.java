@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
 import javax.management.ObjectName;
 
 import org.codehaus.plexus.component.annotations.Component;
@@ -43,13 +42,18 @@ public class MBeanRegistrar implements Initializable, Disposable {
     @Requirement(role=MBeanProvider.class)
     private Map<String,MBeanProvider> mbeanProviders;
     
+    @Requirement(role=MBeanServerProvider.class)
+    private List<MBeanServerProvider> mbeanServerProviders;
+    
     public void initialize() throws InitializationException {
-        // TODO: the agent ID should not be hardcoded
-        List<MBeanServer> servers = MBeanServerFactory.findMBeanServer("WebSphere");
-        if (servers.isEmpty()) {
+        for (MBeanServerProvider mbeanServerProvider : mbeanServerProviders) {
+            mbs = mbeanServerProvider.getMBeanServer();
+            if (mbs != null) {
+                break;
+            }
+        }
+        if (mbs == null) {
             mbs = ManagementFactory.getPlatformMBeanServer();
-        } else {
-            mbs = servers.get(0);
         }
         for (Map.Entry<String,MBeanProvider> entry : mbeanProviders.entrySet()) {
             try {
