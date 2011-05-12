@@ -42,7 +42,7 @@ public class PM21638ResourceEnumeratorFactory implements ResourceEnumeratorFacto
     }
 
     public String getDescription() {
-        return "Cached bean property descriptors in javax.el.BeanELResolver (PM21638/PM38747)";
+        return "Cached bean property descriptors in javax.el.BeanELResolver (PM21638)";
     }
 
     public boolean isAvailable() {
