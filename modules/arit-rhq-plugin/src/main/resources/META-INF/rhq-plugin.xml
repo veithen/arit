@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin name="Arit"
+        displayName="Arit"
+        package="com.googlecode.arit.org.rhq"
+        description="Detects class loader leaks in J2EE applications"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:xmlns:rhq-plugin"
+        xmlns:c="urn:xmlns:rhq-configuration">
+    <depends plugin="JMX" />
+    <service name="Arit" singleton="true"
+             discovery="org.rhq.plugins.jmx.MBeanResourceDiscoveryComponent"
+             class="org.rhq.plugins.jmx.MBeanResourceComponent"
+             description="Class loader leak detection">
+        <runs-inside>
+            <parent-resource-type name="JMX Server" plugin="JMX"/>
+            <parent-resource-type name="JBossAS Server" plugin="JBossAS"/>
+            <parent-resource-type name="JBossAS Server" plugin="JBossAS5"/>
+            <parent-resource-type name="WebSphere Server" plugin="WebSphere"/>
+        </runs-inside>
+        <plugin-configuration>
+            <c:simple-property name="objectName" readOnly="true" default="com.googlecode.arit:type=LeakDetector"/>
+            <c:simple-property name="nameTemplate" readOnly="true" default="Arit"/>
+            <c:simple-property name="descriptionTemplate" readOnly="true" default="Arit class loader leak detection."/>
+        </plugin-configuration>
+        <metric property="detectedLeakCount" displayName="Detected Leaks"
+                description="The number of stopped application instances with memory leaks."
+                category="performance" displayType="summary"/>
+    </service>
+</plugin>
