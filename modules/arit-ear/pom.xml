@@ -34,6 +34,14 @@
                             <bundleFileName>arit.war</bundleFileName>
                         </webModule>
                     </modules>
+                    <archive>
+                        <manifestEntries>
+                            <!-- On WebSphere this allows to easily identify the version that has been deployed
+                                 (The value of Implementation-Version is displayed in the admin console
+                                 as "Application build level"). -->
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
