@@ -62,6 +62,7 @@
         <module>legal-files</module>
         <module>modules</module>
         <module>systest</module>
+        <module>arit-distribution</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

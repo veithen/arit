@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<assembly>
+    <id>bin</id>
+    <includeBaseDirectory>true</includeBaseDirectory> 
+    <baseDirectory>arit-${version}</baseDirectory>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/</outputDirectory>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
+    </dependencySets>
+</assembly>
