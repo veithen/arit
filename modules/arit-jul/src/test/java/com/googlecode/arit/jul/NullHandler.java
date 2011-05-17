@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.jul;
 
-// TODO: rename to ResourceType
-public interface ResourceEnumeratorFactory<T extends ResourceEnumerator> {
-    boolean isAvailable();
-    String getDescription();
-    T createEnumerator();
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
+public class NullHandler extends Handler {
+    @Override
+    public void publish(LogRecord record) {
+    }
+
+    @Override
+    public void close() throws SecurityException {
+    }
+
+    @Override
+    public void flush() {
+    }
 }

@@ -20,12 +20,12 @@ import java.util.logging.LogManager;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
-import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=HandlerResourceEnumeratorFactory.class, hint="jul")
-public class HandlerResourceEnumeratorFactory {
-    @Requirement(hint="jcl-factory")
+@Component(role=ResourceEnumeratorFactory.class, hint="jul")
+public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFactory<HandlerResourceEnumerator> {
+    @Requirement(hint="jul-handler")
     private ResourceType resourceType;
     
     public String getDescription() {
@@ -36,7 +36,7 @@ public class HandlerResourceEnumeratorFactory {
         return true;
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public HandlerResourceEnumerator createEnumerator() {
         return new HandlerResourceEnumerator(resourceType, LogManager.getLogManager());
     }
 }

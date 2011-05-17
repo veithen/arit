@@ -40,27 +40,37 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     @Override
     protected boolean doNextResource() {
         while (true) {
-            if (handlers == null || handlerIndex == handlers.length) {
+            if (handlers == null) {
                 if (loggerNames.hasMoreElements()) {
                     logger = logManager.getLogger(loggerNames.nextElement());
-                    handlers = logger.getHandlers();
-                    if (handlers != null && handlers.length != 0) {
+                    Handler[] handlers = logger.getHandlers();
+                    // Logger#getHandlers() never returns null
+                    if (handlers.length != 0) {
+                        this.handlers = handlers;
                         handlerIndex = 0;
                         return true;
                     }
                 } else {
+                    handlerIndex = -1;
                     return false;
                 }
             } else {
                 handlerIndex++;
-                return true;
+                if (handlerIndex == handlers.length) {
+                    handlers = null;
+                } else {
+                    return true;
+                }
             }
         }
     }
 
+    public Handler getHandler() {
+        return handlers[handlerIndex];
+    }
+
     public ResourceType getResourceType() {
-        // TODO Auto-generated method stub
-        return null;
+        return resourceType;
     }
 
     public String getResourceDescription() {
@@ -72,11 +82,11 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     }
 
     public ClassLoader getReferencedClassLoader() {
-        return handlers[handlerIndex].getClass().getClassLoader();
+        return getHandler().getClass().getClassLoader();
     }
 
     public boolean cleanup() {
-        logger.removeHandler(handlers[handlerIndex]);
+        logger.removeHandler(getHandler());
         return true;
     }
 }
