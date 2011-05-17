@@ -34,6 +34,7 @@
         <module>arit-jee</module>
         <module>arit-jetty</module>
         <module>arit-jmx</module>
+        <module>arit-jul</module>
         <module>arit-jvm-singletons</module>
         <module>arit-maven</module>
         <module>arit-mbeans</module>
