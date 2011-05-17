@@ -29,7 +29,7 @@ public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFacto
     private ResourceType resourceType;
     
     public String getDescription() {
-        return "JUL handlers";
+        return "java.util.logging (JUL) handlers";
     }
 
     public boolean isAvailable() {

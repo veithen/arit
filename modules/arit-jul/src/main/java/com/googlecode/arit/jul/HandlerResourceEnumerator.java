@@ -74,11 +74,17 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getResourceDescription() {
-        return "java.util.logging.Handler registered on logger " + logger.getName();
+        String loggerName = logger.getName();
+        if (loggerName == null) {
+            loggerName = "<anonymous>";
+        } else if (loggerName.length() == 0) {
+            loggerName = "<root>";
+        }
+        return "JUL handler " + getHandler().getClass().getName() + " registered on logger " + loggerName;
     }
 
     public String getClassLoaderReferenceDescription() {
-        return "Handler implementation class";
+        return "Implementation class";
     }
 
     public ClassLoader getReferencedClassLoader() {
