@@ -28,15 +28,35 @@ public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFacto
     @Requirement(hint="jul-handler")
     private ResourceType resourceType;
     
+    private final LogManager logManager;
+    
+    public HandlerResourceEnumeratorFactory() {
+        LogManager logManager = LogManager.getLogManager();
+        Class<? extends LogManager> clazz = logManager.getClass();
+        try {
+            // We only enable the plugin if the getLogger and getLoggerNames methods have not
+            // been overridden. For LogManager implementations that override these methods
+            // (such as Tomcat's ClassLoaderLogManager), we need specialized plugins. 
+            if (clazz.getMethod("getLogger", String.class).getDeclaringClass().equals(LogManager.class)
+                    && clazz.getMethod("getLoggerNames").getDeclaringClass().equals(LogManager.class)) {
+                this.logManager = logManager;
+            } else {
+                this.logManager = null;
+            }
+        } catch (NoSuchMethodException ex) {
+            throw new NoSuchMethodError(ex.getMessage());
+        }
+    }
+    
     public String getDescription() {
         return "java.util.logging (JUL) handlers";
     }
 
     public boolean isAvailable() {
-        return true;
+        return logManager != null;
     }
 
     public HandlerResourceEnumerator createEnumerator() {
-        return new HandlerResourceEnumerator(resourceType, LogManager.getLogManager());
+        return new HandlerResourceEnumerator(resourceType, logManager);
     }
 }

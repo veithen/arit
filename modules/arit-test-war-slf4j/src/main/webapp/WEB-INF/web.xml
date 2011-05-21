@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    version="2.5">
+    <display-name>Test app</display-name>
+    <servlet>
+        <display-name>Test servlet</display-name>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>com.googlecode.arit.test.TestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+</web-app>

@@ -45,6 +45,7 @@
         <module>arit-rmi</module>
         <module>arit-shutdown-hooks</module>
         <module>arit-test-war</module>
+        <module>arit-test-war-slf4j</module>
         <module>arit-threadlocals</module>
         <module>arit-threads</module>
         <module>arit-thread-utils</module>

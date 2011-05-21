@@ -15,58 +15,28 @@
  */
 package com.googlecode.arit.jul;
 
-import java.util.Enumeration;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
 public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
-    private final LogManager logManager;
-    private final Enumeration<String> loggerNames;
-    private Logger logger;
-    private Handler[] handlers;
-    private int handlerIndex;
+    private final HandlerEnumerator handlerEnumerator;
     
     public HandlerResourceEnumerator(ResourceType resourceType, LogManager logManager) {
         this.resourceType = resourceType;
-        this.logManager = logManager;
-        this.loggerNames = logManager.getLoggerNames();
+        handlerEnumerator = new HandlerEnumerator(new LogManagerLoggerEnumerator(logManager));
     }
     
     @Override
     protected boolean doNextResource() {
-        while (true) {
-            if (handlers == null) {
-                if (loggerNames.hasMoreElements()) {
-                    logger = logManager.getLogger(loggerNames.nextElement());
-                    Handler[] handlers = logger.getHandlers();
-                    // Logger#getHandlers() never returns null
-                    if (handlers.length != 0) {
-                        this.handlers = handlers;
-                        handlerIndex = 0;
-                        return true;
-                    }
-                } else {
-                    handlerIndex = -1;
-                    return false;
-                }
-            } else {
-                handlerIndex++;
-                if (handlerIndex == handlers.length) {
-                    handlers = null;
-                } else {
-                    return true;
-                }
-            }
-        }
+        return handlerEnumerator.next();
     }
 
     public Handler getHandler() {
-        return handlers[handlerIndex];
+        return handlerEnumerator.getHandler();
     }
 
     public ResourceType getResourceType() {
@@ -74,13 +44,7 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getResourceDescription() {
-        String loggerName = logger.getName();
-        if (loggerName == null) {
-            loggerName = "<anonymous>";
-        } else if (loggerName.length() == 0) {
-            loggerName = "<root>";
-        }
-        return "JUL handler " + getHandler().getClass().getName() + " registered on logger " + loggerName;
+        return "JUL handler " + getHandler().getClass().getName() + " registered on logger " + Utils.getLoggerDisplayName(handlerEnumerator.getLogger());
     }
 
     public String getClassLoaderReferenceDescription() {
@@ -92,7 +56,7 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     }
 
     public boolean cleanup() {
-        logger.removeHandler(getHandler());
+        handlerEnumerator.getLogger().removeHandler(getHandler());
         return true;
     }
 }
