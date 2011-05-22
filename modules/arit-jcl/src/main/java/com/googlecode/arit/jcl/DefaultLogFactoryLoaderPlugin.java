@@ -28,6 +28,12 @@ public class DefaultLogFactoryLoaderPlugin implements LogFactoryLoaderPlugin {
     }
 
     public ClassLoader getClassLoader() {
-        return DefaultLogFactoryLoaderPlugin.class.getClassLoader();
+        // We need to get the parent class loader because Arit is packaged
+        // with commons-logging itself. Indeed:
+        //  * This makes sure that the plugin is only enabled if
+        //    commons-logging is actually deployed in the container.
+        //  * This makes sure that we pick up the right commons-logging
+        //    if the container uses parent-last class loading (e.g. Tomcat).
+        return DefaultLogFactoryLoaderPlugin.class.getClassLoader().getParent();
     }
 }
