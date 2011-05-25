@@ -53,10 +53,14 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
 
     protected boolean doNextResource() {
         while (true) {
-            if (iterator2 == null) {
+            while (iterator2 == null) {
                 if (iterator1.hasNext()) {
                     logFactoryRef = iterator1.next();
-                    iterator2 = logFactoryRef.getFactory().getFactories().entrySet().iterator();
+                    Map<ClassLoader,Object> factories = logFactoryRef.getFactory().getFactories();
+                    // This may indeed be null if no factories have been cached yet
+                    if (factories != null) {
+                        iterator2 = factories.entrySet().iterator();
+                    }
                 } else {
                     return false;
                 }
