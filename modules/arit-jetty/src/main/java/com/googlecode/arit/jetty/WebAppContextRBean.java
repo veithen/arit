@@ -20,4 +20,5 @@ import com.googlecode.arit.rbeans.Target;
 @Target("org.mortbay.jetty.webapp.WebAppContext")
 public interface WebAppContextRBean extends ContextHandlerRBean {
     String getContextPath();
+    boolean isStopped();
 }

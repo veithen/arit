@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,8 @@ public class JettyModuleInspector implements ModuleInspector {
         if (rbf.getRBeanInfo(WebAppClassLoaderRBean.class).getTargetClass().isInstance(classLoader)) {
             WebAppClassLoaderRBean wacl = rbf.createRBean(WebAppClassLoaderRBean.class, classLoader);
             WebAppContextRBean context = (WebAppContextRBean)wacl.getContext();
-            // TODO: it should be possible to determine the module status
             // TODO: maybe it's possible to determine the URL?
-            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader, null, ModuleStatus.UNKNOWN);
+            return new ModuleDescription(warModuleType, context.getContextPath(), classLoader, null, context.isStopped() ? ModuleStatus.STOPPED : ModuleStatus.STARTED);
         } else {
             return null;
         }
