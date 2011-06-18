@@ -23,7 +23,7 @@ import org.codehaus.plexus.PlexusTestCase;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 
 public class HandlerResourceEnumeratorTest extends PlexusTestCase {
-    public void test() throws Exception {
+    public void testEnumerateHandler() throws Exception {
         Handler handler = new NullHandler();
         Logger logger = Logger.getLogger("");
         logger.addHandler(handler);
@@ -40,5 +40,25 @@ public class HandlerResourceEnumeratorTest extends PlexusTestCase {
             logger.removeHandler(handler);
         }
         assertTrue(found);
+    }
+    
+    /**
+     * Tests that {@link HandlerResourceEnumerator} works properly in situations where
+     * {@link Logger} instances may be garbage collected (which is possible with Sun JRE 1.6).
+     * 
+     * @throws Exception
+     */
+    public void testLoggerGarbageCollection() throws Exception {
+        HandlerResourceEnumeratorFactory factory = ((HandlerResourceEnumeratorFactory)lookup(ResourceEnumeratorFactory.class, "jul"));
+        for (int i=0; i<100; i++) {
+            Logger.getLogger("testlogger" + i);
+        }
+        for (int i=0; i<10; i++) {
+            HandlerResourceEnumerator enumerator = factory.createEnumerator();
+            while (enumerator.nextResource()) {
+                // Just loop
+            }
+            System.gc();
+        }
     }
 }

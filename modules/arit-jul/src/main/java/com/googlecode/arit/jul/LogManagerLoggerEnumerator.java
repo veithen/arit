@@ -30,11 +30,20 @@ public class LogManagerLoggerEnumerator implements LoggerEnumerator {
     }
 
     public boolean next() {
-        if (loggerNames.hasMoreElements()) {
-            logger = logManager.getLogger(loggerNames.nextElement());
-            return true;
-        } else {
-            return false;
+        while (true) {
+            if (loggerNames.hasMoreElements()) {
+                logger = logManager.getLogger(loggerNames.nextElement());
+                // On some JREs, Logger instances may be garbage collected. In this case,
+                // the enumeration returned by getLoggerNames may contain names of garbage
+                // collected loggers, and getLogger will return null for these names.
+                // This was observed with Sun JRE 1.6. Loggers are not garbage collectable
+                // with Sun JRE 1.5, IBM JRE 1.5 and IBM JRE 1.6 (WAS 7.0).
+                if (logger != null) {
+                    return true;
+                }
+            } else {
+                return false;
+            }
         }
     }
 
