@@ -22,12 +22,12 @@ import java.util.List;
 
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
-import com.googlecode.arit.rmi.RmiInspectorPlugin;
+import com.googlecode.arit.rmi.RmiExportEnumeratorPlugin;
 
-public class HarmonyRmiInspectorPlugin implements RmiInspectorPlugin {
+public class HarmonyRmiExportEnumeratorPlugin implements RmiExportEnumeratorPlugin {
     private final Collection<WeakReference<?>> refs;
     
-    public HarmonyRmiInspectorPlugin() {
+    public HarmonyRmiExportEnumeratorPlugin() {
         ExportManagerRBean exportManager;
         try {
             RBeanFactory rbf = new RBeanFactory(ExportManagerRBean.class);

@@ -15,48 +15,8 @@
  */
 package com.googlecode.arit.rmi;
 
-import java.util.Iterator;
-import java.util.List;
+import com.googlecode.arit.ResourceEnumerator;
 
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
-
-public class RmiExportEnumerator extends SimpleResourceEnumerator {
-    private final ResourceType resourceType;
-    private final Iterator<Object> iterator;
-    private Object exportedObject;
-    
-    public RmiExportEnumerator(ResourceType resourceType, List<Object> exportedObjects) {
-        this.resourceType = resourceType;
-        iterator = exportedObjects.iterator();
-    }
-
-    public ResourceType getResourceType() {
-        return resourceType;
-    }
-
-    public ClassLoader getReferencedClassLoader() {
-        return exportedObject.getClass().getClassLoader();
-    }
-
-    public String getClassLoaderReferenceDescription() {
-        return "Exported oject implementation class";
-    }
-
-    public String getResourceDescription() {
-        return "Exported object (RMI): " + exportedObject.getClass().getName();
-    }
-
-    protected boolean doNextResource() {
-        if (iterator.hasNext()) {
-            exportedObject = iterator.next();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean cleanup() {
-        return false;
-    }
+public interface RmiExportEnumerator extends ResourceEnumerator {
+    Object getExportedObject();
 }

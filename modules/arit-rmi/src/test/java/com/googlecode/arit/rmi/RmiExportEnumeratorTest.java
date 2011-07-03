@@ -24,7 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class RmiInspectorTest {
+public class RmiExportEnumeratorTest {
     private static ClassPathXmlApplicationContext context;
     
     @BeforeClass
@@ -39,12 +39,20 @@ public class RmiInspectorTest {
     
     @Test
     public void test() throws Exception {
-        RmiInspector inspector = context.getBean(RmiInspector.class);
-        assertTrue(inspector.isAvailable());
+        RmiExportEnumeratorFactory enumeratorFactory = context.getBean(RmiExportEnumeratorFactory.class);
+        assertTrue(enumeratorFactory.isAvailable());
         HelloWorldServer server = new HelloWorldServer();
         UnicastRemoteObject.exportObject(server, 0);
         try {
-            assertTrue(inspector.getExportedObjects().contains(server));
+            RmiExportEnumerator enumerator = enumeratorFactory.createEnumerator();
+            boolean found = false;
+            while (enumerator.nextResource()) {
+                if (enumerator.getExportedObject() == server) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(found);
         } finally {
             UnicastRemoteObject.unexportObject(server, true);
         }

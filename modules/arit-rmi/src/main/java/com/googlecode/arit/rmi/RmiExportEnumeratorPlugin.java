@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,8 @@ package com.googlecode.arit.rmi;
 
 import java.util.List;
 
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.Plugin;
 
-public class RmiInspector extends SingletonPluginManager<RmiInspectorPlugin> {
-    public RmiInspector() {
-        super(RmiInspectorPlugin.class);
-    }
-    
-    public List<Object> getExportedObjects() {
-        return getPlugin().getExportedObjects();
-    }
+public interface RmiExportEnumeratorPlugin extends Plugin {
+    List<Object> getExportedObjects();
 }

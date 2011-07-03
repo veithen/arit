@@ -15,29 +15,71 @@
  */
 package com.googlecode.arit.rmi;
 
-import javax.annotation.Resource;
+import java.util.Iterator;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.SingletonPluginManager;
 
-public class RmiExportEnumeratorFactory implements ResourceEnumeratorFactory<RmiExportEnumerator> {
-    @Resource(name="rmi-export")
-    private ResourceType resourceType;
+public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExportEnumeratorPlugin> implements ResourceEnumeratorFactory<RmiExportEnumerator> {
+    private class RmiExportEnumeratorImpl extends SimpleResourceEnumerator implements RmiExportEnumerator {
+        private final Iterator<Object> iterator;
+        private Object exportedObject;
+        
+        RmiExportEnumeratorImpl(List<Object> exportedObjects) {
+            iterator = exportedObjects.iterator();
+        }
 
-    @Autowired
-    private RmiInspector inspector;
-    
-    public boolean isAvailable() {
-        return inspector.isAvailable();
+        public ResourceType getResourceType() {
+            return resourceType;
+        }
+
+        public Object getExportedObject() {
+            return exportedObject;
+        }
+
+        public ClassLoader getReferencedClassLoader() {
+            return exportedObject.getClass().getClassLoader();
+        }
+
+        public String getClassLoaderReferenceDescription() {
+            return "Exported oject implementation class";
+        }
+
+        public String getResourceDescription() {
+            return "Exported object (RMI): " + exportedObject.getClass().getName();
+        }
+
+        protected boolean doNextResource() {
+            if (iterator.hasNext()) {
+                exportedObject = iterator.next();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean cleanup() {
+            return false;
+        }
     }
+    
+    @Resource(name="rmi-export")
+    ResourceType resourceType;
 
+    public RmiExportEnumeratorFactory() {
+        super(RmiExportEnumeratorPlugin.class);
+    }
+    
     public String getDescription() {
         return "RMI exports";
     }
 
     public RmiExportEnumerator createEnumerator() {
-        return new RmiExportEnumerator(resourceType, inspector.getExportedObjects());
+        return new RmiExportEnumeratorImpl(getPlugin().getExportedObjects());
     }
 }
