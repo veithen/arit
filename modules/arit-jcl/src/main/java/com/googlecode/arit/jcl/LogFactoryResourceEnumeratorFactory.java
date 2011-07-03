@@ -19,11 +19,10 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory {
+public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory<LogFactoryResourceEnumerator> {
     @Autowired
     private LogFactoryLoader logFactoryLoader;
     
@@ -38,7 +37,7 @@ public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFa
         return logFactoryLoader.isAvailable();
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public LogFactoryResourceEnumerator createEnumerator() {
         return new LogFactoryResourceEnumerator(resourceType, logFactoryLoader.getLogFactories());
     }
 }

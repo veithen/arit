@@ -44,7 +44,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     private ModuleInspectorFactory moduleInspectorFactory;
     
     @Autowired
-    private Set<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
     
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
@@ -64,11 +64,11 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ResourceTypeIconManager resourceTypeIconManager;
     
-    private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
-    private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
+    private List<ResourceEnumeratorFactory<?>> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
+    private List<ResourceEnumeratorFactory<?>> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
     
     public void afterPropertiesSet() throws Exception {
-        for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
+        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {
                 availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
             } else {
@@ -160,7 +160,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
             }
             
             Map<ClassLoader,Resource> resourceMap = new HashMap<ClassLoader,Resource>();
-            for (ResourceEnumeratorFactory resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
+            for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.nextResource()) {
                     resourceMap.clear();
@@ -214,7 +214,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         return new Report(messages, rootModules);
     }
 
-    public List<ResourceEnumeratorFactory> getAvailableResourceEnumeratorFactories() {
+    public List<ResourceEnumeratorFactory<?>> getAvailableResourceEnumeratorFactories() {
         return Collections.unmodifiableList(availableResourceEnumeratorFactories);
     }
 }

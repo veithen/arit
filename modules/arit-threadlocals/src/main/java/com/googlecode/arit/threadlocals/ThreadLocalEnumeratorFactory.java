@@ -24,12 +24,11 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
-public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
+public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<ThreadLocalEnumerator> {
     @Resource(name="threadlocal")
     private ResourceType resourceType;
     
@@ -44,7 +43,7 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
         return "Thread locals";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public ThreadLocalEnumerator createEnumerator() {
         Map<ThreadLocal<?>,Set<Class<?>>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<Class<?>>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {
             for (Map.Entry<ThreadLocal<?>,Object> entry : inspector.getThreadLocalMap(thread).entrySet()) {

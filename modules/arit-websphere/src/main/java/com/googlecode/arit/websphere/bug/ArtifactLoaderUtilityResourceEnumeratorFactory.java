@@ -17,13 +17,12 @@ package com.googlecode.arit.websphere.bug;
 
 import javax.annotation.Resource;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceEnumeratorFactory {
+public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceEnumeratorFactory<PerClassLoaderCacheResourceEnumerator> {
     private final ArtifactLoaderUtilityRBean rbean;
     
     @Resource(name="websphere-bug")
@@ -47,7 +46,7 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
         return rbean != null;
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public PerClassLoaderCacheResourceEnumerator createEnumerator() {
         return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry", rbean.getAppNameCache());
     }
 }

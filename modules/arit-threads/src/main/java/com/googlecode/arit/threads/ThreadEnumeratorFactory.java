@@ -19,13 +19,12 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
-public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
+public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<ThreadEnumerator> {
     @Resource(name="thread")
     private ResourceType defaultResourceType;
     
@@ -43,7 +42,7 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory {
         return "Threads and timers";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public ThreadEnumerator createEnumerator() {
         return new ThreadEnumerator(defaultResourceType, threadHelper, inspectorManager, ThreadUtils.getAllThreads());
     }
 }

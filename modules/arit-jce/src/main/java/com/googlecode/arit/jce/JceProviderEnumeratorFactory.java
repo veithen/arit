@@ -19,11 +19,10 @@ import java.security.Security;
 
 import javax.annotation.Resource;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory {
+public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory<JceProviderEnumerator> {
     @Resource(name="jce")
     private ResourceType resourceType;
     
@@ -35,7 +34,7 @@ public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory {
         return "JCE providers";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public JceProviderEnumerator createEnumerator() {
         return new JceProviderEnumerator(Security.getProviders(), resourceType);
     }
 }

@@ -20,11 +20,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory {
+public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory<JVMSingletonEnumerator> {
     @Resource(name="jvm-singleton")
     private ResourceType resourceType;
 
@@ -47,7 +46,7 @@ public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory 
         return "JVM singletons";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public JVMSingletonEnumerator createEnumerator() {
         return new JVMSingletonEnumerator(resourceType, singletons);
     }
 }

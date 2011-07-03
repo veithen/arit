@@ -25,13 +25,13 @@ import com.googlecode.arit.report.ClassLoaderIdProvider;
 
 public class Cleaner {
     @Autowired
-    private Set<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
     
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
     public void clean(Integer classLoaderId) {
-        for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
+        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.nextResource()) {

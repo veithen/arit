@@ -20,11 +20,10 @@ import javax.management.MBeanServerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
+public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory<MBeanEnumerator> {
     @Resource(name="mbean")
     private ResourceType resourceType;
 
@@ -43,7 +42,7 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
         return "MBeans";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public MBeanEnumerator createEnumerator() {
         return new MBeanEnumerator(resourceType, mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator()/*, logger*/);
     }
 }

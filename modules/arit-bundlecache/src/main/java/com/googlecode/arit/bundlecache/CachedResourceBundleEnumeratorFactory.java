@@ -19,11 +19,10 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class CachedResourceBundleEnumeratorFactory implements ResourceEnumeratorFactory {
+public class CachedResourceBundleEnumeratorFactory implements ResourceEnumeratorFactory<CachedResourceBundleEnumerator> {
     @Resource(name="cached-resource-bundle")
     private ResourceType resourceType;
 
@@ -38,7 +37,7 @@ public class CachedResourceBundleEnumeratorFactory implements ResourceEnumerator
         return "Cached resource bundles";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public CachedResourceBundleEnumerator createEnumerator() {
         return new CachedResourceBundleEnumerator(resourceType, inspector.getCachedResourceBundles());
     }
 }

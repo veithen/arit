@@ -17,7 +17,6 @@ package com.googlecode.arit.threads;
 
 import javax.annotation.Resource;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
@@ -33,7 +32,7 @@ import com.googlecode.arit.threadutils.ThreadUtils;
  * 
  * @author Andreas Veithen
  */
-public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory {
+public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory<ThreadGroupEnumerator> {
     @Resource(name="threadgroup")
     private ResourceType resourceType;
     
@@ -45,7 +44,7 @@ public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory {
         return "Thread groups";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public ThreadGroupEnumerator createEnumerator() {
         return new ThreadGroupEnumerator(resourceType, ThreadUtils.getAllThreadGroups());
     }
 }

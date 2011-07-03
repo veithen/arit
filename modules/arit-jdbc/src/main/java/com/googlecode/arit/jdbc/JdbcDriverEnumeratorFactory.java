@@ -19,11 +19,10 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
+public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory<JdbcDriverEnumerator> {
     @Resource(name="jdbc")
     private ResourceType resourceType;
 
@@ -38,7 +37,7 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory {
         return "JDBC drivers";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public JdbcDriverEnumerator createEnumerator() {
         return new JdbcDriverEnumerator(resourceType, inspector.getDriverClasses());
     }
 }

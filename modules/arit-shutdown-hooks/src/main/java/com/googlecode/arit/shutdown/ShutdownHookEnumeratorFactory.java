@@ -19,12 +19,11 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
-public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
+public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory<ShutdownHookEnumerator> {
     @Resource(name="shutdown")
     private ResourceType resourceType;
 
@@ -42,7 +41,7 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory 
         return "Shutdown hooks";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public ShutdownHookEnumerator createEnumerator() {
         return new ShutdownHookEnumerator(resourceType, inspector.getShutdownHooks(), threadHelper);
     }
 }

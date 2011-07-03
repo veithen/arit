@@ -19,11 +19,10 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-public class RmiExportEnumeratorFactory implements ResourceEnumeratorFactory {
+public class RmiExportEnumeratorFactory implements ResourceEnumeratorFactory<RmiExportEnumerator> {
     @Resource(name="rmi-export")
     private ResourceType resourceType;
 
@@ -38,7 +37,7 @@ public class RmiExportEnumeratorFactory implements ResourceEnumeratorFactory {
         return "RMI exports";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public RmiExportEnumerator createEnumerator() {
         return new RmiExportEnumerator(resourceType, inspector.getExportedObjects());
     }
 }
