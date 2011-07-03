@@ -50,14 +50,23 @@ public abstract class IconManager<T extends IconProvider> implements BeanFactory
     public void afterPropertiesSet() throws Exception {
         Map<String,T> iconProviderMap = beanFactory.getBeansOfType(iconProviderClass);
         for (Map.Entry<String,T> entry : iconProviderMap.entrySet()) {
-            Icon icon = new Icon(entry.getKey(), entry.getValue(), variants);
+            String identifier = getIdentifier(entry.getKey(), entry.getValue());
+            Icon icon = new Icon(identifier, entry.getValue(), variants);
             iconByProvider.put(entry.getValue(), icon);
-            iconByKey.put(entry.getKey(), icon);
+            iconByKey.put(identifier, icon);
         }
     }
     
+    protected String getIdentifier(String beanName, T bean) {
+        return beanName;
+    }
+    
     public Icon getIcon(T iconProvider) {
-        return iconByProvider.get(iconProvider);
+        Icon icon = iconByProvider.get(iconProvider);
+        if (icon == null) {
+            throw new IllegalArgumentException("Icon not found");
+        }
+        return icon;
     }
     
     public IconImage getByFileName(String fileName) {

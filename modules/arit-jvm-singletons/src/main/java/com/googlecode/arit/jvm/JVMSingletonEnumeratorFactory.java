@@ -18,13 +18,15 @@ package com.googlecode.arit.jvm;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory<JVMSingletonEnumerator> {
-    @Resource(name="jvm-singleton")
+    @Autowired
+    @Qualifier("jvm-singleton")
     private ResourceType resourceType;
 
     private final List<JVMSingleton> singletons = new ArrayList<JVMSingleton>();

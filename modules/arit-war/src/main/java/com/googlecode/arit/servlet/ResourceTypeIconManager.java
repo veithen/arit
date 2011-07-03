@@ -22,4 +22,9 @@ public class ResourceTypeIconManager extends IconManager<ResourceType> {
     public ResourceTypeIconManager() {
         super(ResourceType.class);
     }
+
+    @Override
+    protected String getIdentifier(String beanName, ResourceType bean) {
+        return bean.getIdentifier();
+    }
 }

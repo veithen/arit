@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="mbean"/>
+        <property name="iconFormat" value="GIF"/>
+        <property name="resource" value="com/googlecode/arit/mbeans/icon.gif"/>
+        <property name="identifier" value="mbean"/>
+    </bean>
     <bean class="com.googlecode.arit.mbeans.MBeanEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.mbeans.MBeanResourceType" name="mbean"/>
     <bean class="com.googlecode.arit.mbeans.MBeanServerInspector"/>
     <bean class="com.googlecode.arit.mbeans.mx4j.MX4JMBeanServerInspectorPlugin"/>
     <bean class="com.googlecode.arit.mbeans.sun.java5.SunJava5MBeanServerInspectorPlugin"/>

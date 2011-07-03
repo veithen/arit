@@ -17,13 +17,15 @@ package com.googlecode.arit.jce;
 
 import java.security.Security;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory<JceProviderEnumerator> {
-    @Resource(name="jce")
+    @Autowired
+    @Qualifier("jce-provider")
     private ResourceType resourceType;
     
     public boolean isAvailable() {

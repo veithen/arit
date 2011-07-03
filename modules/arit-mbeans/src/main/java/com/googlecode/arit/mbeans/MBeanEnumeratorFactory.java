@@ -15,16 +15,17 @@
  */
 package com.googlecode.arit.mbeans;
 
-import javax.annotation.Resource;
 import javax.management.MBeanServerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory<MBeanEnumerator> {
-    @Resource(name="mbean")
+    @Autowired
+    @Qualifier("mbean")
     private ResourceType resourceType;
 
     @Autowired

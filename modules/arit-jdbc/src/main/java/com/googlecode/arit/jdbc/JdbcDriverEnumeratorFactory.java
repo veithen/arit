@@ -15,15 +15,15 @@
  */
 package com.googlecode.arit.jdbc;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory<JdbcDriverEnumerator> {
-    @Resource(name="jdbc")
+    @Autowired
+    @Qualifier("jdbc-driver")
     private ResourceType resourceType;
 
     @Autowired

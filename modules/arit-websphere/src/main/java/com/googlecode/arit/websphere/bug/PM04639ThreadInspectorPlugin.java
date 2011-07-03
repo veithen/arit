@@ -17,9 +17,8 @@ package com.googlecode.arit.websphere.bug;
 
 import java.util.Collections;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threads.ThreadDescription;
@@ -30,7 +29,8 @@ public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Autowired
     private ThreadHelper threadHelper;
     
-    @Resource(name="websphere-bug")
+    @Autowired
+    @Qualifier("websphere-bug")
     private ResourceType resourceType;
     
     public int getPriority() {

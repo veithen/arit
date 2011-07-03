@@ -2,6 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="jvm-singleton"/>
+        <property name="iconFormat" value="GIF"/>
+        <property name="resource" value="com/googlecode/arit/jvm/singleton.gif"/>
+        <property name="identifier" value="jvm-singleton"/>
+    </bean>
     <bean class="com.googlecode.arit.jvm.JVMSingletonEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jvm.JVMSingletonResourceType" name="jvm-singleton"/>
 </beans>

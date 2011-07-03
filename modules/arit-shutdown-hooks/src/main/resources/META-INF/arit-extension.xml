@@ -2,9 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="shutdown-hook"/>
+        <property name="iconFormat" value="GIF"/>
+        <property name="resource" value="com/googlecode/arit/shutdown/icon.png"/>
+        <property name="identifier" value="shutdown-hook"/>
+    </bean>
     <bean class="com.googlecode.arit.shutdown.ShutdownHookEnumeratorFactory"/>
     <bean class="com.googlecode.arit.shutdown.ShutdownHookInspector"/>
-    <bean class="com.googlecode.arit.shutdown.ShutdownHookResourceType" name="shutdown"/>
     <bean class="com.googlecode.arit.shutdown.harmony.HarmonyShutdownHookInspectorPlugin"/>
     <bean class="com.googlecode.arit.shutdown.ibm.IBMShutdownHookInspectorPlugin"/>
     <bean class="com.googlecode.arit.shutdown.sun.SunShutdownHookInspectorPlugin"/>

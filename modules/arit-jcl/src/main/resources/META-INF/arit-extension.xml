@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="jcl-factory"/>
+        <property name="iconFormat" value="PNG"/>
+        <property name="resource" value="com/googlecode/arit/jcl/icon.png"/>
+        <property name="identifier" value="jcl-factory"/>
+    </bean>
     <bean class="com.googlecode.arit.jcl.DefaultLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.jcl.LogFactoryLoader"/>
     <bean class="com.googlecode.arit.jcl.LogFactoryResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jcl.LogFactoryResourceType" name="jcl-factory"/>
 </beans>

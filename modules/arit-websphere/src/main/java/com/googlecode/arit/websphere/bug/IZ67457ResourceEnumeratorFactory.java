@@ -15,7 +15,8 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -26,7 +27,8 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFactory<IZ67457ResourceEnumerator> {
     private final StandardBeanInfoRBean rbean;
     
-    @Resource(name="websphere-bug")
+    @Autowired
+    @Qualifier("websphere-bug")
     private ResourceType resourceType;
     
     public IZ67457ResourceEnumeratorFactory() {

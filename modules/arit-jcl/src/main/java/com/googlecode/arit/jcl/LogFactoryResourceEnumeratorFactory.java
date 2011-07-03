@@ -15,9 +15,8 @@
  */
 package com.googlecode.arit.jcl;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -26,7 +25,8 @@ public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFa
     @Autowired
     private LogFactoryLoader logFactoryLoader;
     
-    @Resource(name="jcl-factory")
+    @Autowired
+    @Qualifier("jcl-factory")
     private ResourceType resourceType;
     
     public String getDescription() {

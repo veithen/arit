@@ -20,16 +20,16 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<ThreadLocalEnumerator> {
-    @Resource(name="threadlocal")
+    @Autowired
+    @Qualifier("threadlocal")
     private ResourceType resourceType;
     
     @Autowired

@@ -17,13 +17,15 @@ package com.googlecode.arit.jul;
 
 import java.util.logging.LogManager;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFactory<HandlerResourceEnumerator> {
-    @Resource(name="jul-handler")
+    @Autowired
+    @Qualifier("jul-handler")
     private ResourceType resourceType;
     
     private final LogManager logManager;

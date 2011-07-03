@@ -18,7 +18,8 @@ package com.googlecode.arit.rmi;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -68,7 +69,8 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
         }
     }
     
-    @Resource(name="rmi-export")
+    @Autowired
+    @Qualifier("rmi-export")
     ResourceType resourceType;
 
     public RmiExportEnumeratorFactory() {

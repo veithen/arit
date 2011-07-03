@@ -2,6 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="jce-provider"/>
+        <property name="iconFormat" value="PNG"/>
+        <property name="resource" value="com/googlecode/arit/jce/icon.png"/>
+        <property name="identifier" value="jce-provider"/>
+    </bean>
     <bean class="com.googlecode.arit.jce.JceProviderEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jce.JceProviderResourceType" name="jce"/>
 </beans>

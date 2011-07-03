@@ -19,9 +19,8 @@ import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.util.Collections;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -34,7 +33,8 @@ import com.googlecode.arit.threadutils.ThreadHelper;
  * @author Andreas Veithen
  */
 public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Resource(name="acceptor-thread")
+    @Autowired
+    @Qualifier("acceptor-thread")
     private ResourceType resourceType;
 
     @Autowired

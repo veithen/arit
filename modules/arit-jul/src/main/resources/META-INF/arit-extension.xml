@@ -2,8 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="jul-handler"/>
+        <property name="iconFormat" value="PNG"/>
+        <property name="resource" value="com/googlecode/arit/jul/icon.png"/>
+        <property name="identifier" value="jul-handler"/>
+    </bean>
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="juli-context"/>
+        <property name="iconFormat" value="PNG"/>
+        <property name="resource" value="com/googlecode/arit/jul/icon.png"/>
+        <property name="identifier" value="juli-context"/>
+    </bean>
     <bean class="com.googlecode.arit.jul.HandlerResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jul.HandlerResourceType" name="jul-handler"/>
     <bean class="com.googlecode.arit.jul.juli.LoggingContextResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jul.juli.LoggingContextResourceType" name="juli-context"/>
 </beans>

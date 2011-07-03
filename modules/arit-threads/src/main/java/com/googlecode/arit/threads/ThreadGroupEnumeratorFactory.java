@@ -15,7 +15,8 @@
  */
 package com.googlecode.arit.threads;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -33,7 +34,8 @@ import com.googlecode.arit.threadutils.ThreadUtils;
  * @author Andreas Veithen
  */
 public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory<ThreadGroupEnumerator> {
-    @Resource(name="threadgroup")
+    @Autowired
+    @Qualifier("threadgroup")
     private ResourceType resourceType;
     
     public boolean isAvailable() {

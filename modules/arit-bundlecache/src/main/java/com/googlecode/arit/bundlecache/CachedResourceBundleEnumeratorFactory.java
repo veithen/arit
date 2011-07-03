@@ -15,15 +15,15 @@
  */
 package com.googlecode.arit.bundlecache;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
 public class CachedResourceBundleEnumeratorFactory implements ResourceEnumeratorFactory<CachedResourceBundleEnumerator> {
-    @Resource(name="cached-resource-bundle")
+    @Autowired
+    @Qualifier("cached-resource-bundle")
     private ResourceType resourceType;
 
     @Autowired

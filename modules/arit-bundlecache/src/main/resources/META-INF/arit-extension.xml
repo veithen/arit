@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.ResourceTypeFactory">
+        <qualifier value="cached-resource-bundle"/>
+        <property name="iconFormat" value="PNG"/>
+        <property name="resource" value="com/googlecode/arit/bundlecache/icon.png"/>
+        <property name="identifier" value="cached-resource-bundle"/>
+    </bean>
     <bean class="com.googlecode.arit.bundlecache.CachedResourceBundleEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.bundlecache.CachedResourceBundleResourceType" name="cached-resource-bundle"/>
     <bean class="com.googlecode.arit.bundlecache.ResourceBundleCacheInspector"/>
     <bean class="com.googlecode.arit.bundlecache.harmony.HarmonyResourceBundleCacheInspectorPlugin"/>
     <bean class="com.googlecode.arit.bundlecache.sun.java5.SunJava5ResourceBundleCacheInspectorPlugin"/>

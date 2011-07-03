@@ -74,9 +74,9 @@ public abstract class Systest extends TestCase {
             assertTrue(icons.contains("default/threadlocal.gif"));
             assertTrue(icons.contains("default/timerthread.png"));
             assertTrue(icons.contains("default/thread.png"));
-            assertTrue(icons.contains("default/jce.png"));
+            assertTrue(icons.contains("default/jce-provider.png"));
             assertTrue(icons.contains("default/mbean.gif"));
-            assertTrue(icons.contains("default/jdbc.gif"));
+            assertTrue(icons.contains("default/jdbc-driver.gif"));
         } finally {
             container.stop();
         }

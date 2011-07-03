@@ -17,9 +17,8 @@ package com.googlecode.arit.threads;
 
 import java.util.Collections;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -30,7 +29,8 @@ import com.googlecode.arit.threadutils.ThreadHelper;
  * @author Andreas Veithen
  */
 public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Resource(name="thread")
+    @Autowired
+    @Qualifier("thread")
     private ResourceType resourceType;
 
     @Autowired

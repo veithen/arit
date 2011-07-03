@@ -19,12 +19,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
 
 public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Resource(name="timerthread")
+    @Autowired
+    @Qualifier("timerthread")
     private ResourceType resourceType;
     
     protected abstract TimerTask[] getTimerTasks(Thread thread);

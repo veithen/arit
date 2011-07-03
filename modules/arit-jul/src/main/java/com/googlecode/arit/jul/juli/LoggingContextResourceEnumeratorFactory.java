@@ -17,7 +17,8 @@ package com.googlecode.arit.jul.juli;
 
 import java.util.logging.LogManager;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -25,7 +26,8 @@ import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class LoggingContextResourceEnumeratorFactory implements ResourceEnumeratorFactory<LoggingContextResourceEnumerator> {
-    @Resource(name="juli-context")
+    @Autowired
+    @Qualifier("juli-context")
     private ResourceType resourceType;
     
     private final RBeanFactory rbf;

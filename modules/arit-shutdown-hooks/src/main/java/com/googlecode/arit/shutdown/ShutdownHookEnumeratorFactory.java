@@ -15,16 +15,16 @@
  */
 package com.googlecode.arit.shutdown;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory<ShutdownHookEnumerator> {
-    @Resource(name="shutdown")
+    @Autowired
+    @Qualifier("shutdown-hook")
     private ResourceType resourceType;
 
     @Autowired
