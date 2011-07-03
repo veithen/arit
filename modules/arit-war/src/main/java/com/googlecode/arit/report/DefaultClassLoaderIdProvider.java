@@ -18,9 +18,6 @@ package com.googlecode.arit.report;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.codehaus.plexus.component.annotations.Component;
-
-@Component(role=ClassLoaderIdProvider.class)
 public class DefaultClassLoaderIdProvider implements ClassLoaderIdProvider {
     private final Map<ClassLoader,Integer> idMap = new WeakHashMap<ClassLoader,Integer>();
     private int nextId = 1;

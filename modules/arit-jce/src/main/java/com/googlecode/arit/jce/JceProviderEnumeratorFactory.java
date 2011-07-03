@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,14 @@ package com.googlecode.arit.jce;
 
 import java.security.Security;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="jce")
 public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="jce")
+    @Resource(name="jce")
     private ResourceType resourceType;
     
     public boolean isAvailable() {

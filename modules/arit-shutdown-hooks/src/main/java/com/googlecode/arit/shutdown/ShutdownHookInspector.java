@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,8 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.SingletonPluginManager;
 
-@Component(role=ShutdownHookInspector.class)
 public class ShutdownHookInspector extends SingletonPluginManager<ShutdownHookInspectorPlugin> {
     public ShutdownHookInspector() {
         super(ShutdownHookInspectorPlugin.class);

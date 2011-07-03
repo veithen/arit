@@ -15,9 +15,6 @@
  */
 package com.googlecode.arit.jcl;
 
-import org.codehaus.plexus.component.annotations.Component;
-
-@Component(role=LogFactoryLoaderPlugin.class, hint="default")
 public class DefaultLogFactoryLoaderPlugin implements LogFactoryLoaderPlugin {
     public boolean isAvailable() {
         return true;

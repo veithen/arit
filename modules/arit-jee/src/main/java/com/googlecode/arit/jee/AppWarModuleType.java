@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.jee;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.icon.ImageFormat;
 
@@ -27,7 +25,6 @@ import com.googlecode.arit.icon.ImageFormat;
  * EAR with a single class loader. This module type can be used to distinguish
  * this type of deployments from standard J2EE deployments.
  */
-@Component(role=ModuleType.class, hint="appwar")
 public class AppWarModuleType extends ModuleType {
     public AppWarModuleType() {
         super(ImageFormat.GIF, AppWarModuleType.class.getResource("appwar.gif"));

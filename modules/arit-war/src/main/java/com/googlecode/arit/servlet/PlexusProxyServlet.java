@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.servlet.PlexusServletUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class PlexusProxyServlet extends HttpServlet {
     private HttpServlet target;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        PlexusContainer container = PlexusServletUtils.getPlexusContainer(config.getServletContext());
-        try {
-            target = container.lookup(HttpServlet.class, config.getServletName());
-        } catch (ComponentLookupException ex) {
-            throw new ServletException(ex);
-        }
+        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
+        target = context.getBean(config.getServletName(), HttpServlet.class);
         target.init(config);
     }
     

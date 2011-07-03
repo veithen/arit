@@ -18,13 +18,10 @@ package com.googlecode.arit.jcl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.AbstractPluginManager;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=LogFactoryLoader.class)
 public class LogFactoryLoader extends AbstractPluginManager<LogFactoryLoaderPlugin> {
     private final List<LogFactoryRef> logFactories = new ArrayList<LogFactoryRef>();
     

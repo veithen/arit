@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,17 @@ package com.googlecode.arit.icon.variant;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 
 import com.googlecode.arit.icon.IconProvider;
 import com.googlecode.arit.icon.ImageData;
 
-@Component(role=IconVariant.class, hint="default")
 public class DefaultIconVariant implements IconVariant {
     public ImageData createIconImage(IconProvider iconProvider) {
         try {
             InputStream in = iconProvider.getIconResource().openStream();
             try {
-                return new ImageData(iconProvider.getIconFormat(), IOUtil.toByteArray(in));
+                return new ImageData(iconProvider.getIconFormat(), IOUtils.toByteArray(in));
             } finally {
                 in.close();
             }

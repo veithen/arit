@@ -14,14 +14,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-component-annotations</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.rhq</groupId>
             <artifactId>rhq-core-domain</artifactId>
             <version>${rhq.version}</version>

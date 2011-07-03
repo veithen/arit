@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,10 @@
  */
 package com.googlecode.arit.servlet;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
 import com.googlecode.arit.PluginManager;
 
-@Component(role=ModuleInspectorFactory.class)
 public class ModuleInspectorFactory extends PluginManager<ModuleInspectorPlugin> {
     public ModuleInspectorFactory() {
         super(ModuleInspectorPlugin.class);

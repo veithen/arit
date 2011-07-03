@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.threads;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ResourceType.class, hint="thread")
 public class ThreadResourceType extends ResourceType {
     public ThreadResourceType() {
         super(ImageFormat.PNG, ThreadResourceType.class.getResource("thread.png"));

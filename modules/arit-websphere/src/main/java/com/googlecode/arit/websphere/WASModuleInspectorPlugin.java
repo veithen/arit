@@ -24,14 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
@@ -43,18 +42,17 @@ import com.googlecode.arit.mbeans.MBeanServerInspector;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ModuleInspectorPlugin.class, hint="websphere")
-public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initializable {
-    @Requirement
+public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, InitializingBean {
+    @Autowired
     private MBeanServerInspector mbsInspector;
     
-    @Requirement(hint="ear")
+    @Resource(name="ear")
     private ModuleType earModuleType;
     
-    @Requirement(hint="appwar")
+    @Resource(name="appwar")
     private ModuleType appWarModuleType;
     
-    @Requirement(hint="war")
+    @Resource(name="war")
     private ModuleType warModuleType;
     
     private RBeanFactory rbf;
@@ -62,7 +60,7 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     private MBeanAccessor mbeanAccessor;
     private Map<ModuleType,ObjectName> jmxNameMap = new HashMap<ModuleType,ObjectName>();
     
-    public void initialize() throws InitializationException {
+    public void afterPropertiesSet() throws Exception {
         try {
             rbf = new RBeanFactory(AdminServiceFactoryRBean.class, DeployedObjectCollaboratorRBean.class, CompoundClassLoaderRBean.class);
         } catch (RBeanFactoryException ex) {
@@ -71,14 +69,10 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
         mbs = rbf.createRBean(AdminServiceFactoryRBean.class).getMBeanFactory().getMBeanServer();
         mbeanAccessor = mbsInspector.inspect(mbs);
         if (mbeanAccessor == null) {
-            throw new InitializationException("Unable to inspect WebSphere's MBean server; this is unexpected because we are in a WebSphere specific plugin");
+            throw new Error("Unable to inspect WebSphere's MBean server; this is unexpected because we are in a WebSphere specific plugin");
         }
-        try {
-            jmxNameMap.put(earModuleType, new ObjectName("WebSphere:type=Application,*"));
-            jmxNameMap.put(warModuleType, new ObjectName("WebSphere:type=WebModule,*"));
-        } catch (MalformedObjectNameException ex) {
-            throw new InitializationException("Failed to create object name", ex);
-        }
+        jmxNameMap.put(earModuleType, new ObjectName("WebSphere:type=Application,*"));
+        jmxNameMap.put(warModuleType, new ObjectName("WebSphere:type=WebModule,*"));
     }
 
     public boolean isAvailable() {

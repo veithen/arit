@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,31 @@
  */
 package com.googlecode.arit.shutdown;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ShutdownHookInspectorTest extends PlexusTestCase {
+public class ShutdownHookInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void test() throws Exception {
-        ShutdownHookInspector inspector = lookup(ShutdownHookInspector.class);
+        ShutdownHookInspector inspector = context.getBean(ShutdownHookInspector.class);
         assertTrue(inspector.isAvailable());
         Thread hook = new Thread();
         Runtime runtime = Runtime.getRuntime();

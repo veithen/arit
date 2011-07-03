@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.jvm;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ResourceType.class, hint="jvm-singleton")
 public class JVMSingletonResourceType extends ResourceType {
     public JVMSingletonResourceType() {
         super(ImageFormat.GIF, JVMSingletonResourceType.class.getResource("singleton.gif"));

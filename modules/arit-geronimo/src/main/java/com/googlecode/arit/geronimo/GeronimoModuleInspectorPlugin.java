@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.geronimo;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
@@ -24,11 +23,10 @@ import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ModuleInspectorPlugin.class, hint="geronimo")
 public class GeronimoModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
-    @Requirement(hint="war")
+    @Resource(name="war")
     private ModuleType warModuleType;
     
     public GeronimoModuleInspectorPlugin() {

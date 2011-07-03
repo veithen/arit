@@ -28,11 +28,8 @@ import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.report.xml.ReportElement;
 
-@Component(role=HttpServlet.class, hint="SchemaServlet")
 public class SchemaServlet extends HttpServlet {
     private JAXBContext jaxbContext;
     

@@ -17,20 +17,20 @@ package com.googlecode.arit.websphere.bug;
 
 import java.util.Collections;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threads.ThreadDescription;
 import com.googlecode.arit.threads.ThreadInspectorPlugin;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
-@Component(role=ThreadInspectorPlugin.class, hint="PM04639")
 public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Requirement
+    @Autowired
     private ThreadHelper threadHelper;
     
-    @Requirement(hint="websphere-bug")
+    @Resource(name="websphere-bug")
     private ResourceType resourceType;
     
     public int getPriority() {

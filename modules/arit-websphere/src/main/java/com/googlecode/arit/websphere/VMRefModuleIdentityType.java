@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.websphere;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ModuleIdentityType.class, hint="vmRef")
 public class VMRefModuleIdentityType extends ModuleIdentityType {
     public VMRefModuleIdentityType() {
         super("vmRef", ImageFormat.PNG, VMRefModuleIdentityType.class.getResource("tag-red.png"));

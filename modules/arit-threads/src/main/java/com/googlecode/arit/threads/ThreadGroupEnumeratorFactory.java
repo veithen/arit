@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.threads;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -34,9 +33,8 @@ import com.googlecode.arit.threadutils.ThreadUtils;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ResourceEnumeratorFactory.class, hint="threadgroup")
 public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="threadgroup")
+    @Resource(name="threadgroup")
     private ResourceType resourceType;
     
     public boolean isAvailable() {

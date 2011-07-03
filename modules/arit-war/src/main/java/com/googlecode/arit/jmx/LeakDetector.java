@@ -25,20 +25,17 @@ import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.modelmbean.ModelMBeanNotificationInfo;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
 
-@Component(role=LeakDetector.class)
-public class LeakDetector extends NotificationBroadcasterSupport implements Initializable, Disposable {
+public class LeakDetector extends NotificationBroadcasterSupport implements InitializingBean, DisposableBean {
     private final static String LEAK_DETECTED = "arit.leak.detected";
     
-    @Requirement
+    @Autowired
     private ReportGenerator reportGenerator;
     
     private Timer timer;
@@ -51,7 +48,7 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Init
                 new String[] { LEAK_DETECTED }, Notification.class.getName(), "Leak detector notification") };
     }
 
-    public void initialize() throws InitializationException {
+    public void afterPropertiesSet() throws Exception {
         timer = new Timer("LeakDetectorTimer");
         timer.schedule(new TimerTask() {
             @Override
@@ -76,7 +73,7 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Init
         return reportedModules.size();
     }
 
-    public void dispose() {
+    public void destroy() throws Exception {
         if (timer != null) {
             timer.cancel();
         }

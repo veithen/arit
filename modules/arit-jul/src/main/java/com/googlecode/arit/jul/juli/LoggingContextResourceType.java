@@ -15,13 +15,10 @@
  */
 package com.googlecode.arit.jul.juli;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 import com.googlecode.arit.jul.HandlerResourceType;
 
-@Component(role=ResourceType.class, hint="juli-context")
 public class LoggingContextResourceType extends ResourceType {
     public LoggingContextResourceType() {
         // TODO: temporarily load the same icon as HandlerResourceType

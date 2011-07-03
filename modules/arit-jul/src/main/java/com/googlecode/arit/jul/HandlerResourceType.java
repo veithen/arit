@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.jul;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ResourceType.class, hint="jul-handler")
 public class HandlerResourceType extends ResourceType {
     public HandlerResourceType() {
         super(ImageFormat.PNG, HandlerResourceType.class.getResource("icon.png"));

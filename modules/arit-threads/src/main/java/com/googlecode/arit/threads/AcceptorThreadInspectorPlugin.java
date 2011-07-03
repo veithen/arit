@@ -19,8 +19,9 @@ import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.util.Collections;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -32,12 +33,11 @@ import com.googlecode.arit.threadutils.ThreadHelper;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ThreadInspectorPlugin.class, hint="acceptor-thread")
 public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Requirement(hint="acceptor-thread")
+    @Resource(name="acceptor-thread")
     private ResourceType resourceType;
 
-    @Requirement
+    @Autowired
     private ThreadHelper threadHelper;
     
     public boolean isAvailable() {

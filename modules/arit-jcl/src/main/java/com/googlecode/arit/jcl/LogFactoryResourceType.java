@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.jcl;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ResourceType.class, hint="jcl-factory")
 public class LogFactoryResourceType extends ResourceType {
     public LogFactoryResourceType() {
         super(ImageFormat.PNG, LogFactoryResourceType.class.getResource("icon.png"));

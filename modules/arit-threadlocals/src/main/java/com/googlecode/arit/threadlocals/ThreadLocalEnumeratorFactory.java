@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,20 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="threadlocal")
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="threadlocal")
+    @Resource(name="threadlocal")
     private ResourceType resourceType;
     
-    @Requirement
+    @Autowired
     private ThreadLocalInspector inspector;
     
     public boolean isAvailable() {

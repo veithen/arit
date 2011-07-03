@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,9 @@
  */
 package com.googlecode.arit.mbeans.sun.java5;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.mbeans.MBeanAccessor;
-import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.mbeans.sun.SunMBeanServerInspectorPlugin;
 
-@Component(role=MBeanServerInspectorPlugin.class, hint="sun-java5")
 public class SunJava5MBeanServerInspectorPlugin extends SunMBeanServerInspectorPlugin<DefaultMBeanServerInterceptorRBean> {
     public SunJava5MBeanServerInspectorPlugin() {
         super(DefaultMBeanServerInterceptorRBean.class);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,31 @@
  */
 package com.googlecode.arit.rmi;
 
+import static org.junit.Assert.assertTrue;
+
 import java.rmi.server.UnicastRemoteObject;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class RmiInspectorTest extends PlexusTestCase {
+public class RmiInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void test() throws Exception {
-        RmiInspector inspector = lookup(RmiInspector.class);
+        RmiInspector inspector = context.getBean(RmiInspector.class);
         assertTrue(inspector.isAvailable());
         HelloWorldServer server = new HelloWorldServer();
         UnicastRemoteObject.exportObject(server, 0);

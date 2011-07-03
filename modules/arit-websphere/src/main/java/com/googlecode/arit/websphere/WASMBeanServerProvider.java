@@ -17,13 +17,10 @@ package com.googlecode.arit.websphere;
 
 import javax.management.MBeanServer;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.jmx.MBeanServerProvider;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=MBeanServerProvider.class, hint="WebSphere")
 public class WASMBeanServerProvider implements MBeanServerProvider {
     public MBeanServer getMBeanServer() {
         // Normally, MBeanServerFactory.findMBeanServer("WebSphere") should be enough

@@ -22,8 +22,6 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.codehaus.plexus.logging.Logger;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -31,18 +29,18 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
-    private final Logger logger;
+//    private final Logger logger;
     private MBeanServer mbs;
     private MBeanAccessor mbeanAccessor;
     private Iterator<ObjectName> mbeanIterator;
     private ObjectName name;
     private Object mbean;
 
-    public MBeanEnumerator(ResourceType resourceType, MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator, Logger logger) {
+    public MBeanEnumerator(ResourceType resourceType, MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator/*, Logger logger*/) {
         this.resourceType = resourceType;
         this.mbsInspector = mbsInspector;
         this.mbsIterator = mbsIterator;
-        this.logger = logger;
+//        this.logger = logger;
     }
 
     public ResourceType getResourceType() {
@@ -72,7 +70,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
                 mbs = mbsIterator.next();
                 mbeanAccessor = mbsInspector.inspect(mbs);
                 if (mbeanAccessor == null) {
-                    logger.error("Unable to inspect MBeanServer of type " + mbs.getClass().getName());
+//                    logger.error("Unable to inspect MBeanServer of type " + mbs.getClass().getName());
                 } else {
                     try {
                         mbeanIterator = mbs.queryNames(new ObjectName("*:*"), null).iterator();

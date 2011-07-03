@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,25 @@
  */
 package com.googlecode.arit.mbeans;
 
+import javax.annotation.Resource;
 import javax.management.MBeanServerFactory;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="mbean")
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="mbean")
+    @Resource(name="mbean")
     private ResourceType resourceType;
 
-    @Requirement
+    @Autowired
     private MBeanServerInspector mbsInspector; 
     
-    @Requirement
-    private Logger logger;
+    // TODO
+//    @Requirement
+//    private Logger logger;
     
     public boolean isAvailable() {
         return mbsInspector.isAvailable();
@@ -45,6 +44,6 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory {
     }
 
     public ResourceEnumerator createEnumerator() {
-        return new MBeanEnumerator(resourceType, mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator(), logger);
+        return new MBeanEnumerator(resourceType, mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator()/*, logger*/);
     }
 }

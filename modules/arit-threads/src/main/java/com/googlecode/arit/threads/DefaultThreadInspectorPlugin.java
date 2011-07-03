@@ -17,8 +17,9 @@ package com.googlecode.arit.threads;
 
 import java.util.Collections;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -28,12 +29,11 @@ import com.googlecode.arit.threadutils.ThreadHelper;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ThreadInspectorPlugin.class)
 public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Requirement(hint="thread")
+    @Resource(name="thread")
     private ResourceType resourceType;
 
-    @Requirement
+    @Autowired
     private ThreadHelper threadHelper;
     
     public boolean isAvailable() {

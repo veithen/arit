@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.rmi.RmiInspectorPlugin;
 
-@Component(role=RmiInspectorPlugin.class, hint="harmony")
 public class HarmonyRmiInspectorPlugin implements RmiInspectorPlugin {
     private final Collection<WeakReference<?>> refs;
     

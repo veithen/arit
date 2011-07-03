@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,32 @@
  */
 package com.googlecode.arit.threadlocals;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Map;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ThreadLocalInspectorTest extends PlexusTestCase {
+public class ThreadLocalInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void test() throws Exception {
-        ThreadLocalInspector inspector = lookup(ThreadLocalInspector.class);
+        ThreadLocalInspector inspector = context.getBean(ThreadLocalInspector.class);
         assertTrue(inspector.isAvailable());
         ThreadLocal<String> threadLocal = new ThreadLocal<String>();
         threadLocal.set("test");

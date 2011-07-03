@@ -19,8 +19,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
@@ -34,9 +33,8 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
  * 
  * @author Andreas Veithen
  */
-@Component(role=ModuleIdentityProviderPlugin.class, hint="vmRef")
 public class VMRefModuleIdentityProvider implements ModuleIdentityProviderPlugin {
-    @Requirement(hint="vmRef")
+    @Resource(name="vmRef")
     private ModuleIdentityType identityType;
     
     private final RBeanFactory rbf;

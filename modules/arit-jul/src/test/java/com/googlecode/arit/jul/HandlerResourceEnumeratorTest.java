@@ -15,21 +15,37 @@
  */
 package com.googlecode.arit.jul;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.googlecode.arit.ResourceEnumeratorFactory;
-
-public class HandlerResourceEnumeratorTest extends PlexusTestCase {
+public class HandlerResourceEnumeratorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void testEnumerateHandler() throws Exception {
         Handler handler = new NullHandler();
         Logger logger = Logger.getLogger("");
         logger.addHandler(handler);
         boolean found = false;
         try {
-            HandlerResourceEnumerator enumerator = ((HandlerResourceEnumeratorFactory)lookup(ResourceEnumeratorFactory.class, "jul")).createEnumerator();
+            HandlerResourceEnumerator enumerator = context.getBean(HandlerResourceEnumeratorFactory.class).createEnumerator();
             while (enumerator.nextResource()) {
                 if (enumerator.getHandler() == handler) {
                     found = true;
@@ -48,8 +64,9 @@ public class HandlerResourceEnumeratorTest extends PlexusTestCase {
      * 
      * @throws Exception
      */
+    @Test
     public void testLoggerGarbageCollection() throws Exception {
-        HandlerResourceEnumeratorFactory factory = ((HandlerResourceEnumeratorFactory)lookup(ResourceEnumeratorFactory.class, "jul"));
+        HandlerResourceEnumeratorFactory factory = context.getBean(HandlerResourceEnumeratorFactory.class);
         for (int i=0; i<100; i++) {
             Logger.getLogger("testlogger" + i);
         }

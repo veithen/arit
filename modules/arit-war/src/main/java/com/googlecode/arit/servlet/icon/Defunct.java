@@ -22,27 +22,18 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RenderedImage;
-import java.io.IOException;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.googlecode.arit.icon.imageio.ImageIO;
 import com.googlecode.arit.icon.variant.GrayFilter;
-import com.googlecode.arit.icon.variant.IconVariant;
 import com.googlecode.arit.icon.variant.TransformationVariant;
 
-@Component(role=IconVariant.class, hint="defunct")
-public class Defunct extends TransformationVariant implements Initializable {
+public class Defunct extends TransformationVariant implements InitializingBean {
     private BufferedImage skull;
     
-    public void initialize() throws InitializationException {
-        try {
-            skull = ImageIO.read(Defunct.class.getResource("defunct.gif"));
-        } catch (IOException ex) {
-            throw new InitializationException("Failed to load defunct.gif", ex);
-        }
+    public void afterPropertiesSet() throws Exception {
+        skull = ImageIO.read(Defunct.class.getResource("defunct.gif"));
     }
 
     @Override

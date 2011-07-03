@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,11 @@ package com.googlecode.arit.mbeans.mx4j;
 
 import javax.management.MBeanServer;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=MBeanServerInspectorPlugin.class, hint="mx4j")
 public class MX4JMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
 

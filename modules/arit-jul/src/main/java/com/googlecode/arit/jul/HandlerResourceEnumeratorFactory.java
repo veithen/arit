@@ -17,15 +17,13 @@ package com.googlecode.arit.jul;
 
 import java.util.logging.LogManager;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="jul")
 public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFactory<HandlerResourceEnumerator> {
-    @Requirement(hint="jul-handler")
+    @Resource(name="jul-handler")
     private ResourceType resourceType;
     
     private final LogManager logManager;

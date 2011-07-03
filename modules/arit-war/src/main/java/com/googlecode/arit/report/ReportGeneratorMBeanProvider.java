@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,12 @@ import javax.management.modelmbean.ModelMBeanNotificationInfo;
 import javax.management.modelmbean.ModelMBeanOperationInfo;
 import javax.management.modelmbean.RequiredModelMBean;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.jmx.MBeanProvider;
 
-@Component(role=MBeanProvider.class, hint="ReportGenerator")
 public class ReportGeneratorMBeanProvider implements MBeanProvider {
-    @Requirement
+    @Autowired
     private ReportGenerator reportGenerator;
 
     public ObjectInstance registerMBean(MBeanServer server, ObjectName name) throws JMException {

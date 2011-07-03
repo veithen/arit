@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -24,11 +23,10 @@ import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="ArtifactLoaderUtility-bug")
 public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceEnumeratorFactory {
     private final ArtifactLoaderUtilityRBean rbean;
     
-    @Requirement(hint="websphere-bug")
+    @Resource(name="websphere-bug")
     private ResourceType resourceType;
     
     public ArtifactLoaderUtilityResourceEnumeratorFactory() {

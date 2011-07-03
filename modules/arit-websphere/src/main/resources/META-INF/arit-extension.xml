@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
+    <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
+    <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityType" name="vmRef"/>
+    <bean class="com.googlecode.arit.websphere.WASMBeanServerInspectorPlugin"/>
+    <bean class="com.googlecode.arit.websphere.WASMBeanServerProvider"/>
+    <bean class="com.googlecode.arit.websphere.WASModuleInspectorPlugin"/>
+    <bean class="com.googlecode.arit.websphere.bug.ArtifactLoaderUtilityResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.IZ67457ResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.JavaReflectionAdapterResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
+    <bean class="com.googlecode.arit.websphere.bug.PM18729ResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.WebSphereBugResourceType" name="websphere-bug"/>
+</beans>

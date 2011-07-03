@@ -15,19 +15,19 @@
  */
 package com.googlecode.arit.jcl;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="jcl")
 public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement
+    @Autowired
     private LogFactoryLoader logFactoryLoader;
     
-    @Requirement(hint="jcl-factory")
+    @Resource(name="jcl-factory")
     private ResourceType resourceType;
     
     public String getDescription() {

@@ -19,33 +19,30 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Component that automatically registers the MBeans provided by components with
  * role {@link MBeanProvider}.
  */
-@Component(role=MBeanRegistrar.class)
-public class MBeanRegistrar implements Initializable, Disposable {
+public class MBeanRegistrar implements InitializingBean, DisposableBean {
     private MBeanServer mbs;
     private final List<ObjectName> registeredObjectNames = new ArrayList<ObjectName>();
     
-    @Requirement(role=MBeanProvider.class)
+    @Autowired
     private Map<String,MBeanProvider> mbeanProviders;
     
-    @Requirement(role=MBeanServerProvider.class)
-    private List<MBeanServerProvider> mbeanServerProviders;
+    @Autowired
+    private Set<MBeanServerProvider> mbeanServerProviders;
     
-    public void initialize() throws InitializationException {
+    public void afterPropertiesSet() throws Exception {
         for (MBeanServerProvider mbeanServerProvider : mbeanServerProviders) {
             mbs = mbeanServerProvider.getMBeanServer();
             if (mbs != null) {
@@ -56,21 +53,13 @@ public class MBeanRegistrar implements Initializable, Disposable {
             mbs = ManagementFactory.getPlatformMBeanServer();
         }
         for (Map.Entry<String,MBeanProvider> entry : mbeanProviders.entrySet()) {
-            try {
-                registeredObjectNames.add(entry.getValue().registerMBean(mbs, new ObjectName("com.googlecode.arit:type=" + entry.getKey())).getObjectName());
-            } catch (JMException ex) {
-                throw new InitializationException("Unable to register MBean", ex);
-            }
+            registeredObjectNames.add(entry.getValue().registerMBean(mbs, new ObjectName("com.googlecode.arit:type=" + entry.getKey())).getObjectName());
         }
     }
 
-    public void dispose() {
+    public void destroy() throws Exception {
         for (ObjectName name : registeredObjectNames) {
-            try {
-                mbs.unregisterMBean(name);
-            } catch (JMException ex) {
-                throw new RuntimeException(ex);
-            }
+            mbs.unregisterMBean(name);
         }
     }
 }

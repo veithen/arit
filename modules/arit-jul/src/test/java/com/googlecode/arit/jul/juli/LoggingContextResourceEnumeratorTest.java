@@ -15,15 +15,18 @@
  */
 package com.googlecode.arit.jul.juli;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import org.apache.juli.ClassLoaderLogManager;
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.Test;
 
 import com.googlecode.arit.jul.NullHandler;
 
-public class LoggingContextResourceEnumeratorTest extends PlexusTestCase {
+public class LoggingContextResourceEnumeratorTest {
+    @Test
     public void test() throws Exception {
         ClassLoaderLogManager logManager = new ClassLoaderLogManager();
         Handler handler = new NullHandler();

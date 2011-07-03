@@ -15,16 +15,35 @@
  */
 package com.googlecode.arit.threads;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
 import java.net.ServerSocket;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Exchanger;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ThreadInspectorTest extends PlexusTestCase {
+public class ThreadInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void testTimerThread() throws Exception {
-        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
+        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Timer timer = new Timer();
         // java.util.Timer doesn't offer any method to get the timer thread; thus
@@ -52,8 +71,9 @@ public class ThreadInspectorTest extends PlexusTestCase {
         timer.cancel();
     }
     
+    @Test
     public void testAcceptorThread1() throws Exception {
-        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
+        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         ServerSocket serverSocket = new ServerSocket(0);
         try {
@@ -68,8 +88,9 @@ public class ThreadInspectorTest extends PlexusTestCase {
         }
     }
 
+    @Test
     public void testAcceptorThread2() throws Exception {
-        ThreadInspector inspectorManager = lookup(ThreadInspector.class);
+        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Server server = new Server();
         server.start();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,24 @@ package com.googlecode.arit.websphere;
 
 import javax.management.MBeanServer;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
+import com.googlecode.arit.mbeans.sun.java5.SunJava5MBeanServerInspectorPlugin;
+import com.googlecode.arit.mbeans.sun.java6.SunJava6MBeanServerInspectorPlugin;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=MBeanServerInspectorPlugin.class, hint="websphere")
 public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;
     
     // TODO: we can't have a requirment on MBeanServerInspector because this would cause a cyclic dependency; maybe it's possible to do this with Initializable
-    @Requirement(hint="sun-java5")
-    private MBeanServerInspectorPlugin sunJava5MbsInspector;
+    @Autowired
+    private SunJava5MBeanServerInspectorPlugin sunJava5MbsInspector;
     
-    @Requirement(hint="sun-java6")
-    private MBeanServerInspectorPlugin sunJava6MbsInspector;
+    @Autowired
+    private SunJava6MBeanServerInspectorPlugin sunJava6MbsInspector;
     
     public WASMBeanServerInspectorPlugin() {
         RBeanFactory rbf;

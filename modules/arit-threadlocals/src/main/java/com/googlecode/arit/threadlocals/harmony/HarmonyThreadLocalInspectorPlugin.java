@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@ import java.lang.ref.WeakReference;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threadlocals.ThreadLocalInspectorPlugin;
 
-@Component(role=ThreadLocalInspectorPlugin.class, hint="harmony")
 public class HarmonyThreadLocalInspectorPlugin implements ThreadLocalInspectorPlugin {
     private final RBeanFactory rbf;
     

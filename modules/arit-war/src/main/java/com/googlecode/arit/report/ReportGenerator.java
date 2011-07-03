@@ -22,12 +22,11 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleIdentity;
@@ -36,42 +35,39 @@ import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.icon.IconManager;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
-import com.googlecode.arit.servlet.log.ThreadLocalLogger;
 
-@Component(role=ReportGenerator.class)
-public class ReportGenerator implements Initializable, Disposable {
-    @Requirement
+public class ReportGenerator implements InitializingBean, DisposableBean {
+    @Autowired
     private ModuleInspectorFactory moduleInspectorFactory;
     
-    @Requirement(role=ResourceEnumeratorFactory.class)
-    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    @Autowired
+    private Set<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
-    @Requirement
+    @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
-    @Requirement(hint="unknown")
+    @javax.annotation.Resource(name="unknown")
     private ModuleType unknownModuleType;
     
-    @Requirement(role=IconManager.class, hint="module")
+    @Autowired
     private ModuleTypeIconManager moduleTypeIconManager;
     
 //    @Requirement(role=IconManager.class, hint="identity")
 //    private ModuleTypeIconManager moduleIdentityTypeIconManager;
     
-    @Requirement
+    @Autowired
     private ModuleIdentityProvider moduleIdentityProvider;
     
-    @Requirement(role=IconManager.class, hint="resource")
+    @Autowired
     private ResourceTypeIconManager resourceTypeIconManager;
     
     private List<ResourceEnumeratorFactory> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     private List<ResourceEnumeratorFactory> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory>();
     
-    public void initialize() throws InitializationException {
+    public void afterPropertiesSet() throws Exception {
         for (ResourceEnumeratorFactory resourceEnumeratorFactory : resourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {
                 availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
@@ -81,7 +77,7 @@ public class ReportGenerator implements Initializable, Disposable {
         }
     }
     
-    public void dispose() {
+    public void destroy() throws Exception {
         availableResourceEnumeratorFactories.clear();
         unavailableResourceEnumeratorFactories.clear();
     }
@@ -149,7 +145,7 @@ public class ReportGenerator implements Initializable, Disposable {
     public Report generateReport() {
         List<Message> messages = new ArrayList<Message>();
         List<Module> rootModules = new ArrayList<Module>();
-        ThreadLocalLogger.setTarget(messages);
+//        ThreadLocalLogger.setTarget(messages);
         try {
             ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
             Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
@@ -198,7 +194,7 @@ public class ReportGenerator implements Initializable, Disposable {
                 }
             }
         } finally {
-            ThreadLocalLogger.setTarget(null);
+//            ThreadLocalLogger.setTarget(null);
         }
         Collections.sort(rootModules, new Comparator<Module>() {
             public int compare(Module o1, Module o2) {

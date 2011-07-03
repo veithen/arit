@@ -15,11 +15,8 @@
  */
 package com.googlecode.arit.websphere;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.jcl.LogFactoryLoaderPlugin;
 
-@Component(role=LogFactoryLoaderPlugin.class, hint="was-axis2")
 public class JAXWSRuntimeLogFactoryLoaderPlugin implements LogFactoryLoaderPlugin {
     private final ClassLoader classLoader;
     

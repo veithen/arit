@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -25,11 +24,10 @@ import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 // TODO: the IZ67457 issue may actually come from Apache Harmony; check this and if necessary move the code out of the WebSphere module
-@Component(role=ResourceEnumeratorFactory.class, hint="iz67457")
 public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFactory {
     private final StandardBeanInfoRBean rbean;
     
-    @Requirement(hint="websphere-bug")
+    @Resource(name="websphere-bug")
     private ResourceType resourceType;
     
     public IZ67457ResourceEnumeratorFactory() {

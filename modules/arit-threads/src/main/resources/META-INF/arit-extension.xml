@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean class="com.googlecode.arit.threads.AcceptorThreadInspectorPlugin"/>
+    <bean class="com.googlecode.arit.threads.AcceptorThreadResourceType" name="acceptor-thread"/>
+    <bean class="com.googlecode.arit.threads.DefaultThreadInspectorPlugin"/>
+    <bean class="com.googlecode.arit.threads.ThreadEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.threads.ThreadGroupEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.threads.ThreadGroupResourceType" name="threadgroup"/>
+    <bean class="com.googlecode.arit.threads.ThreadInspector"/>
+    <bean class="com.googlecode.arit.threads.ThreadResourceType" name="thread"/>
+    <bean class="com.googlecode.arit.threads.TimerThreadResourceType" name="timerthread"/>
+    <bean class="com.googlecode.arit.threads.harmony.HarmonyTimerThreadInspectorPlugin"/>
+    <bean class="com.googlecode.arit.threads.sun.SunTimerThreadInspectorPlugin"/>
+</beans>

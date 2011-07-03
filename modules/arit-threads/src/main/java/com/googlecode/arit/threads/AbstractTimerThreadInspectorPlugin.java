@@ -19,12 +19,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceType;
 
 public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspectorPlugin {
-    @Requirement(hint="timerthread")
+    @Resource(name="timerthread")
     private ResourceType resourceType;
     
     protected abstract TimerTask[] getTimerTasks(Thread thread);

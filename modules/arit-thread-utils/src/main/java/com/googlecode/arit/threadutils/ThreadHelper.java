@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.threadutils;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ThreadHelper.class)
 public class ThreadHelper {
     private final RBeanFactory rbf;
     

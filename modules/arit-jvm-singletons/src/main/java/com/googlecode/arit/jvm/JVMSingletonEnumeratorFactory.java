@@ -18,16 +18,14 @@ package com.googlecode.arit.jvm;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="jvm-singleton")
 public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="jvm-singleton")
+    @Resource(name="jvm-singleton")
     private ResourceType resourceType;
 
     private final List<JVMSingleton> singletons = new ArrayList<JVMSingleton>();

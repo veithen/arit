@@ -28,12 +28,10 @@ import javax.management.modelmbean.ModelMBeanNotificationInfo;
 import javax.management.modelmbean.ModelMBeanOperationInfo;
 import javax.management.modelmbean.RequiredModelMBean;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component(role=MBeanProvider.class, hint="Cleaner")
 public class CleanerMBeanProvider implements MBeanProvider {
-    @Requirement
+    @Autowired
     private Cleaner cleaner;
 
     public ObjectInstance registerMBean(MBeanServer server, ObjectName name) throws JMException {

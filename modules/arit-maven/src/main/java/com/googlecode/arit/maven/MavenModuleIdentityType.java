@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.maven;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ModuleIdentityType.class, hint="maven")
 public class MavenModuleIdentityType extends ModuleIdentityType {
     public MavenModuleIdentityType() {
         super("maven", ImageFormat.GIF, MavenModuleIdentityType.class.getResource("m2.gif"));

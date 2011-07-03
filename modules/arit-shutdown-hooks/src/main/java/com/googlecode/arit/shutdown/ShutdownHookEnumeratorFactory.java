@@ -15,23 +15,23 @@
  */
 package com.googlecode.arit.shutdown;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="shutdown")
 public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="shutdown")
+    @Resource(name="shutdown")
     private ResourceType resourceType;
 
-    @Requirement
+    @Autowired
     private ShutdownHookInspector inspector;
 
-    @Requirement
+    @Autowired
     private ThreadHelper threadHelper;
     
     public boolean isAvailable() {

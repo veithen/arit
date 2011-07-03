@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,34 +18,33 @@ package com.googlecode.arit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.ListableBeanFactory;
 
-public abstract class AbstractPluginManager<T extends Plugin> implements Initializable {
+public abstract class AbstractPluginManager<T extends Plugin> implements BeanFactoryAware, InitializingBean {
     private final Class<T> pluginClass;
     
-    @Requirement
-    private PlexusContainer container;
+    private ListableBeanFactory beanFactory;
     
     public AbstractPluginManager(Class<T> pluginClass) {
         this.pluginClass = pluginClass;
     }
     
-    public void initialize() throws InitializationException {
-        try {
-            List<T> availablePlugins = new ArrayList<T>();
-            for (T plugin : container.lookupList(pluginClass)) {
-                if (plugin.isAvailable()) {
-                    availablePlugins.add(plugin);
-                }
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = (ListableBeanFactory)beanFactory;
+    }
+
+    public void afterPropertiesSet() throws Exception {
+        List<T> availablePlugins = new ArrayList<T>();
+        for (T plugin : beanFactory.getBeansOfType(pluginClass).values()) {
+            if (plugin.isAvailable()) {
+                availablePlugins.add(plugin);
             }
-            initialize(availablePlugins);
-        } catch (ComponentLookupException ex) {
-            throw new InitializationException("Failed to lookup components with role " + pluginClass, ex);
         }
+        initialize(availablePlugins);
     }
 
     protected abstract void initialize(List<T> availablePlugins);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,33 @@
  */
 package com.googlecode.arit.bundlecache;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ResourceBundleCacheInspectorTest extends PlexusTestCase {
+public class ResourceBundleCacheInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
+    @Test
     public void test() throws Exception {
-        ResourceBundleCacheInspector inspector = lookup(ResourceBundleCacheInspector.class);
+        ResourceBundleCacheInspector inspector = context.getBean(ResourceBundleCacheInspector.class);
         assertTrue(inspector.isAvailable());
         ResourceBundle bundle = ResourceBundle.getBundle("com.googlecode.arit.bundlecache.bundle");
         List<CachedResourceBundle> cachedBundles = inspector.getCachedResourceBundles();
@@ -37,8 +55,9 @@ public class ResourceBundleCacheInspectorTest extends PlexusTestCase {
         assertTrue(found);
     }
 
+    @Test
     public void testNotFound() throws Exception {
-        ResourceBundleCacheInspector inspector = lookup(ResourceBundleCacheInspector.class);
+        ResourceBundleCacheInspector inspector = context.getBean(ResourceBundleCacheInspector.class);
         assertTrue(inspector.isAvailable());
         try {
             ResourceBundle.getBundle("non.existing.bundle");

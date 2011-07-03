@@ -24,15 +24,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.report.ReportGenerator;
 
-@Component(role=HttpServlet.class, hint="HtmlReportServlet")
 public class HtmlReportServlet extends HttpServlet {
-    @Requirement
+    @Autowired
     private ReportGenerator reportGenerator;
     
     private String version;

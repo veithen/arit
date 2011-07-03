@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.jee;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ModuleType.class, hint="war")
 public class WarModuleType extends ModuleType {
     public WarModuleType() {
         super(ImageFormat.GIF, WarModuleType.class.getResource("war.gif"));

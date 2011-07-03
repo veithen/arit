@@ -15,21 +15,19 @@
  */
 package com.googlecode.arit.jmx;
 
-import java.util.List;
+import java.util.Set;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.report.ClassLoaderIdProvider;
 
-@Component(role=Cleaner.class)
 public class Cleaner {
-    @Requirement(role=ResourceEnumeratorFactory.class)
-    private List<ResourceEnumeratorFactory> resourceEnumeratorFactories;
+    @Autowired
+    private Set<ResourceEnumeratorFactory> resourceEnumeratorFactories;
     
-    @Requirement
+    @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
     public void clean(Integer classLoaderId) {

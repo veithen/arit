@@ -19,13 +19,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
 import com.googlecode.arit.PluginManager;
 
-@Component(role=ModuleIdentityProvider.class)
 public class ModuleIdentityProvider extends PluginManager<ModuleIdentityProviderPlugin> {
     public ModuleIdentityProvider() {
         super(ModuleIdentityProviderPlugin.class);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.icon.IconImage;
 import com.googlecode.arit.icon.IconManager;
 import com.googlecode.arit.icon.ImageData;
 
-@Component(role=HttpServlet.class, hint="IconServlet")
 public class IconServlet extends HttpServlet {
-    @Requirement(role=IconManager.class)
+    @Autowired(required=false) // TODO: required=false??
     private Map<String,IconManager<?>> iconManagers;
     
     @Override

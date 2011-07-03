@@ -27,8 +27,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.report.Identity;
 import com.googlecode.arit.report.Module;
@@ -38,9 +37,8 @@ import com.googlecode.arit.report.xml.IdentityType;
 import com.googlecode.arit.report.xml.ModuleType;
 import com.googlecode.arit.report.xml.ReportElement;
 
-@Component(role=HttpServlet.class, hint="XmlReportServlet")
 public class XmlReportServlet extends HttpServlet {
-    @Requirement
+    @Autowired
     private ReportGenerator reportGenerator;
 
     private JAXBContext jaxbContext;

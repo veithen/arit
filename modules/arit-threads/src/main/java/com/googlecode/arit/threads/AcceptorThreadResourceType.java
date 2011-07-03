@@ -15,12 +15,9 @@
  */
 package com.googlecode.arit.threads;
 
-import org.codehaus.plexus.component.annotations.Component;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
-@Component(role=ResourceType.class, hint="acceptor-thread")
 public class AcceptorThreadResourceType extends ResourceType {
     public AcceptorThreadResourceType() {
         super(ImageFormat.GIF, AcceptorThreadResourceType.class.getResource("tcp.gif"));

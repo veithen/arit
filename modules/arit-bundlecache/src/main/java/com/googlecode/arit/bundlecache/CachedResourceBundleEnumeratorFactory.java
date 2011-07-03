@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 package com.googlecode.arit.bundlecache;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="cached-resource-bundle")
 public class CachedResourceBundleEnumeratorFactory implements ResourceEnumeratorFactory {
-    @Requirement(hint="cached-resource-bundle")
+    @Resource(name="cached-resource-bundle")
     private ResourceType resourceType;
 
-    @Requirement
+    @Autowired
     private ResourceBundleCacheInspector inspector;
     
     public boolean isAvailable() {

@@ -23,9 +23,6 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RenderedImage;
 
-import org.codehaus.plexus.component.annotations.Component;
-
-@Component(role=IconVariant.class, hint="grayed")
 public class Grayed extends TransformationVariant {
     @Override
     protected RenderedImage transform(BufferedImage image) {

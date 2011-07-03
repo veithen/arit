@@ -4,7 +4,7 @@
     version="2.5">
     <display-name>Arit Web Application</display-name>
     <listener>
-        <listener-class>org.codehaus.plexus.servlet.PlexusServletContextListener</listener-class>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
     <servlet>
         <display-name>HTML Report Servlet</display-name>

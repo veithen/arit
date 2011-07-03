@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package com.googlecode.arit.mbeans;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.management.ManagementFactory;
 
 import javax.management.DynamicMBean;
@@ -26,17 +30,34 @@ import javax.management.modelmbean.RequiredModelMBean;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.jmx.LoggerDynamicMBean;
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class MBeanServerInspectorTest extends PlexusTestCase {
+public class MBeanServerInspectorTest {
+    private static ClassPathXmlApplicationContext context;
+    
+    @BeforeClass
+    public static void initContext() {
+        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+    }
+    
+    @AfterClass
+    public static void destroyContext() {
+        context.destroy();
+    }
+    
     private MBeanAccessor getAccessor(MBeanServer mbs) throws Exception {
-        MBeanServerInspector inspector = lookup(MBeanServerInspector.class);
+        MBeanServerInspector inspector = context.getBean(MBeanServerInspector.class);
         assertTrue(inspector.isAvailable());
         MBeanAccessor accessor = inspector.inspect(mbs);
         assertNotNull(accessor);
         return accessor;
     }
     
+    @Test
     public void testStandardMBean() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Dummy impl = new Dummy();
@@ -49,7 +70,8 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
     }
     
     // TODO: not working yet
-    public void _testStandardMBean2() throws Exception {
+    @Test @Ignore
+    public void testStandardMBean2() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         Dummy impl = new Dummy();
         StandardMBean mbean = new StandardMBean(impl, DummyMBean.class);
@@ -61,8 +83,9 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
         }
     }
     
+    @Test
     public void testRequiredModelMBean() throws Exception {
-        MBeanServerInspector inspector = lookup(MBeanServerInspector.class);
+        MBeanServerInspector inspector = context.getBean(MBeanServerInspector.class);
         assertTrue(inspector.isAvailable());
         Dummy impl = new Dummy();
         RequiredModelMBean mbean = new RequiredModelMBean();
@@ -77,6 +100,7 @@ public class MBeanServerInspectorTest extends PlexusTestCase {
         }
     }
     
+    @Test
     public void testDynamicMBean() throws Exception {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         DynamicMBean mbean = new LoggerDynamicMBean(Logger.getLogger("test"));

@@ -17,17 +17,15 @@ package com.googlecode.arit.jul.juli;
 
 import java.util.logging.LogManager;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ResourceEnumeratorFactory.class, hint="juli")
 public class LoggingContextResourceEnumeratorFactory implements ResourceEnumeratorFactory<LoggingContextResourceEnumerator> {
-    @Requirement(hint="juli-context")
+    @Resource(name="juli-context")
     private ResourceType resourceType;
     
     private final RBeanFactory rbf;

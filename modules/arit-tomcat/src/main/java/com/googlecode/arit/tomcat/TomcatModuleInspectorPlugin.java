@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package com.googlecode.arit.tomcat;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import javax.annotation.Resource;
 
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
@@ -24,11 +23,10 @@ import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-@Component(role=ModuleInspectorPlugin.class, hint="tomcat")
 public class TomcatModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
-    @Requirement(hint="war")
+    @Resource(name="war")
     private ModuleType warModuleType;
     
     public TomcatModuleInspectorPlugin() {
