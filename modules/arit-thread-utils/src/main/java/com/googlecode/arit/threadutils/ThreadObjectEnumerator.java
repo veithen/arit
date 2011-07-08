@@ -15,8 +15,9 @@
  */
 package com.googlecode.arit.threadutils;
 
+import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -33,8 +34,8 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
     protected Thread threadObject;
     protected ThreadRBean threadRBean;
     private int clRef;
-    private Iterator<ClassLoader> classLoaderIterator;
-    private ClassLoader classLoader;
+    private Iterator<?> iterator;
+    private Object object;
     
     public ThreadObjectEnumerator(ThreadHelper threadHelper) {
         this.threadHelper = threadHelper;
@@ -42,45 +43,38 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
     
     public final boolean nextClassLoaderReference() {
         while (true) {
-            if (classLoaderIterator != null) {
-                if (classLoaderIterator.hasNext()) {
-                    classLoader = classLoaderIterator.next();
+            if (iterator != null) {
+                if (iterator.hasNext()) {
+                    object = iterator.next();
                     return true;
                 } else {
-                    classLoaderIterator = null;
+                    iterator = null;
                 }
             }
             clRef++;
             switch (clRef) {
                 case REF_CCL:
-                    classLoader = threadObject.getContextClassLoader();
+                    object = threadObject.getContextClassLoader();
                     return true;
                 case REF_THREAD_CLASS:
                     Class<?> threadClass = threadObject.getClass();
                     if (threadClass != Thread.class) {
-                        classLoader = threadClass.getClassLoader();
+                        object = threadClass.getClassLoader();
                         return true;
                     }
                     break;
                 case REF_TARGET:
                     Runnable target = threadRBean.getTarget();
                     if (target != null) {
-                        classLoader = target.getClass().getClassLoader();
+                        object = target.getClass().getClassLoader();
                         return true;
                     }
                     break;
                 case REF_ACC:
-                    ProtectionDomain[] context = threadRBean.getAccessControlContext().getProtectionDomains();
-                    Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-                    if (context != null) {
-                        for (ProtectionDomain pd : context) {
-                            classLoaders.add(pd.getClassLoader());
-                        }
-                    }
-                    classLoaderIterator = classLoaders.iterator();
+                    iterator = Arrays.asList(threadRBean.getAccessControlContext().getProtectionDomains()).iterator();
                     break;
                 case REF_OTHER:
-                    classLoaderIterator = getAdditionalClassLoaderReferences().iterator();
+                    iterator = getAdditionalClassLoaderReferences().iterator();
                     break;
                 default:
                     return false;
@@ -89,7 +83,10 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
     }
 
     public final ClassLoader getReferencedClassLoader() {
-        return classLoader;
+        switch (clRef) {
+            case REF_ACC: return ((ProtectionDomain)object).getClassLoader();
+            default: return (ClassLoader)object;
+        }
     }
     
     public final String getClassLoaderReferenceDescription() {
@@ -97,7 +94,9 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
             case REF_CCL: return "Context class loader";
             case REF_THREAD_CLASS: return "Thread class: " + threadObject.getClass().getName();
             case REF_TARGET: return "Target: " + threadRBean.getTarget().getClass();
-            case REF_ACC: return "Access control context";
+            case REF_ACC:
+                CodeSource codeSource = ((ProtectionDomain)object).getCodeSource();
+                return "Access control context; code base: " + (codeSource == null ? "<unknown>" : codeSource.getLocation().toString());
             case REF_OTHER: return "Other"; // TODO: we need to get a meaningful description somehow
             default: return null;
         }
@@ -107,7 +106,7 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
     
     public final boolean nextResource() {
         clRef = 0;
-        classLoaderIterator = null;
+        iterator = null;
         threadObject = nextThreadObject();
         if (threadObject == null) {
             return false;
