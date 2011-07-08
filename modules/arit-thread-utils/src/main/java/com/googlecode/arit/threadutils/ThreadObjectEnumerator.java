@@ -71,7 +71,10 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
                     }
                     break;
                 case REF_ACC:
-                    iterator = Arrays.asList(threadRBean.getAccessControlContext().getProtectionDomains()).iterator();
+                    ProtectionDomain[] context = threadRBean.getAccessControlContext().getProtectionDomains();
+                    if (context != null) {
+                        iterator = Arrays.asList(context).iterator();
+                    }
                     break;
                 case REF_OTHER:
                     iterator = getAdditionalClassLoaderReferences().iterator();
