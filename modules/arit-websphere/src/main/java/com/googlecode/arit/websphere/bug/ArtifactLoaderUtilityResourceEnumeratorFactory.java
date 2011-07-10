@@ -41,7 +41,7 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
     }
 
     public String getDescription() {
-        return "ArtifactLoaderUtility#appNameCache entries";
+        return "ArtifactLoaderUtility#appNameCache entries (JR40014)";
     }
 
     public boolean isAvailable() {
@@ -49,6 +49,6 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
     }
 
     public PerClassLoaderCacheResourceEnumerator createEnumerator() {
-        return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry", rbean.getAppNameCache());
+        return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry (JR40014)", rbean.getAppNameCache());
     }
 }
