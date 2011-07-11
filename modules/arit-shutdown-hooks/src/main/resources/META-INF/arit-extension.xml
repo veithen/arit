@@ -5,7 +5,7 @@
     <bean class="com.googlecode.arit.ResourceTypeFactory">
         <qualifier value="shutdown-hook"/>
         <property name="iconFormat" value="GIF"/>
-        <property name="resource" value="com/googlecode/arit/shutdown/icon.png"/>
+        <property name="resource" value="com/googlecode/arit/shutdown/icon.gif"/>
         <property name="identifier" value="shutdown-hook"/>
     </bean>
     <bean class="com.googlecode.arit.shutdown.ShutdownHookEnumeratorFactory"/>

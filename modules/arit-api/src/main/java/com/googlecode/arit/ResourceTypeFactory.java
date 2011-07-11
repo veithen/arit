@@ -15,6 +15,9 @@
  */
 package com.googlecode.arit;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -47,7 +50,12 @@ public class ResourceTypeFactory implements FactoryBean<ResourceType>, Initializ
     }
 
     public void afterPropertiesSet() throws Exception {
-        resourceType = new ResourceType(iconFormat, ResourceTypeFactory.class.getClassLoader().getResource(resource), identifier);
+        URL url = ResourceTypeFactory.class.getClassLoader().getResource(resource);
+        if (url != null) {
+            resourceType = new ResourceType(iconFormat, url, identifier);
+        } else {
+            throw new IOException("Resource " + resource + " not found");
+        }
     }
 
     public ResourceType getObject() throws Exception {
