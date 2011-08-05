@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.googlecode.arit</groupId>
         <artifactId>modules</artifactId>
-        <version>0.7-beta1</version>
+        <version>0.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>arit-jmx</artifactId>
