@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit;
+package com.googlecode.arit.spring;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +21,7 @@ import java.net.URL;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.ImageFormat;
 
 public class ResourceTypeFactory implements FactoryBean<ResourceType>, InitializingBean {
