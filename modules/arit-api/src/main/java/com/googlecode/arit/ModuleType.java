@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,15 @@ import java.net.URL;
 import com.googlecode.arit.icon.AbstractIconProvider;
 import com.googlecode.arit.icon.ImageFormat;
 
-public abstract class ModuleType extends AbstractIconProvider {
-    public ModuleType(ImageFormat iconFormat, URL iconResource) {
+public final class ModuleType extends AbstractIconProvider {
+    private final String identifier;
+    
+    public ModuleType(ImageFormat iconFormat, URL iconResource, String identifier) {
         super(iconFormat, iconResource);
+        this.identifier = identifier;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 }

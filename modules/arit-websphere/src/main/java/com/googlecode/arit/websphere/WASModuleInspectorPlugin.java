@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
@@ -46,13 +46,16 @@ public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, Initiali
     @Autowired
     private MBeanServerInspector mbsInspector;
     
-    @Resource(name="ear")
+    @Autowired
+    @Qualifier("ear")
     private ModuleType earModuleType;
     
-    @Resource(name="appwar")
+    @Autowired
+    @Qualifier("appwar")
     private ModuleType appWarModuleType;
     
-    @Resource(name="war")
+    @Autowired
+    @Qualifier("war")
     private ModuleType warModuleType;
     
     private RBeanFactory rbf;

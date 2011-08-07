@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:core="http://code.google.com/p/arit/core"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <bean class="com.googlecode.arit.jee.AppWarModuleType" name="appwar"/>
-    <bean class="com.googlecode.arit.jee.EarModuleType" name="ear"/>
-    <bean class="com.googlecode.arit.jee.WarModuleType" name="war"/>
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
+
+    <!-- Module type used for enterprise applications without distinct class loaders
+         for WARs. Normally, each Web application has its own class loader. However,
+         some application servers (such as WebSphere e.g.) have an option to deploy an
+         EAR with a single class loader. This module type can be used to distinguish
+         this type of deployments from standard J2EE deployments. -->
+    <core:module-type identifier="appwar" iconFormat="GIF" resource="com/googlecode/arit/jee/appwar.gif"/>
+    
+    <core:module-type identifier="ear" iconFormat="GIF" resource="com/googlecode/arit/jee/ear.gif"/>
+    
+    <core:module-type identifier="war" iconFormat="GIF" resource="com/googlecode/arit/jee/war.gif"/>
 </beans>

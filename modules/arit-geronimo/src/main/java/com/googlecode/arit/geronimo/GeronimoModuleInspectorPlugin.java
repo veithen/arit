@@ -15,7 +15,8 @@
  */
 package com.googlecode.arit.geronimo;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
@@ -26,7 +27,8 @@ import com.googlecode.arit.rbeans.RBeanFactoryException;
 public class GeronimoModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;
     
-    @Resource(name="war")
+    @Autowired
+    @Qualifier("war")
     private ModuleType warModuleType;
     
     public GeronimoModuleInspectorPlugin() {

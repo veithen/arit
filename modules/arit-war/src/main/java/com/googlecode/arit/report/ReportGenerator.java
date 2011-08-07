@@ -27,6 +27,7 @@ import java.util.Set;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleIdentity;
@@ -49,7 +50,8 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
-    @javax.annotation.Resource(name="unknown")
+    @Autowired
+    @Qualifier("unknown")
     private ModuleType unknownModuleType;
     
     @Autowired

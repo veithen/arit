@@ -24,10 +24,10 @@ import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-public class ResourceTypeBeanDefinitionParser extends AbstractSimpleBeanDefinitionParser {
+public class ModuleTypeBeanDefinitionParser extends AbstractSimpleBeanDefinitionParser {
     @Override
     protected Class<?> getBeanClass(Element element) {
-        return ResourceTypeFactory.class;
+        return ModuleTypeFactory.class;
     }
 
     @Override
@@ -38,6 +38,6 @@ public class ResourceTypeBeanDefinitionParser extends AbstractSimpleBeanDefiniti
 
     @Override
     protected String resolveId(Element element, AbstractBeanDefinition definition, ParserContext parserContext) throws BeanDefinitionStoreException {
-        return "resource-type:" + definition.getPropertyValues().getPropertyValue("identifier").getValue();
+        return "module-type:" + definition.getPropertyValues().getPropertyValue("identifier").getValue();
     }
 }

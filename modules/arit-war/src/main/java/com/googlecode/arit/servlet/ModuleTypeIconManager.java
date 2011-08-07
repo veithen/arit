@@ -22,4 +22,9 @@ public class ModuleTypeIconManager extends IconManager<ModuleType> {
     public ModuleTypeIconManager() {
         super(ModuleType.class);
     }
+
+    @Override
+    protected String getIdentifier(String beanName, ModuleType bean) {
+        return bean.getIdentifier();
+    }
 }

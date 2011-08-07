@@ -5,6 +5,14 @@
             targetNamespace="http://code.google.com/p/arit/core" 
             elementFormDefault="qualified">
     <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"/>
+    <xsd:element name="module-type">
+        <xsd:complexType>
+            <xsd:sequence/>
+            <xsd:attribute name="identifier" use="required" type="xsd:string"/>
+            <xsd:attribute name="iconFormat" use="required" type="xsd:string"/>
+            <xsd:attribute name="resource" use="required" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
     <xsd:element name="resource-type">
         <xsd:complexType>
             <xsd:sequence/>
