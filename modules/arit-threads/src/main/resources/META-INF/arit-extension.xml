@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:core="http://code.google.com/p/arit/core"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <bean class="com.googlecode.arit.ResourceTypeFactory">
-        <qualifier value="acceptor-thread"/>
-        <property name="iconFormat" value="GIF"/>
-        <property name="resource" value="com/googlecode/arit/threads/tcp.gif"/>
-        <property name="identifier" value="acceptor-thread"/>
-    </bean>
-    <bean class="com.googlecode.arit.ResourceTypeFactory">
-        <qualifier value="threadgroup"/>
-        <property name="iconFormat" value="PNG"/>
-        <property name="resource" value="com/googlecode/arit/threads/threadgroup.png"/>
-        <property name="identifier" value="threadgroup"/>
-    </bean>
-    <bean class="com.googlecode.arit.ResourceTypeFactory">
-        <qualifier value="thread"/>
-        <property name="iconFormat" value="PNG"/>
-        <property name="resource" value="com/googlecode/arit/threads/thread.png"/>
-        <property name="identifier" value="thread"/>
-    </bean>
-    <bean class="com.googlecode.arit.ResourceTypeFactory">
-        <qualifier value="timerthread"/>
-        <property name="iconFormat" value="PNG"/>
-        <property name="resource" value="com/googlecode/arit/threads/timer.png"/>
-        <property name="identifier" value="timerthread"/>
-    </bean>
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
+    <core:resource-type identifier="acceptor-thread" iconFormat="GIF" resource="com/googlecode/arit/threads/tcp.gif"/>
+    <core:resource-type identifier="threadgroup" iconFormat="PNG" resource="com/googlecode/arit/threads/threadgroup.png"/>
+    <core:resource-type identifier="thread" iconFormat="PNG" resource="com/googlecode/arit/threads/thread.png"/>
+    <core:resource-type identifier="timerthread" iconFormat="PNG" resource="com/googlecode/arit/threads/timer.png"/>
     <bean class="com.googlecode.arit.threads.AcceptorThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.threads.DefaultThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.threads.ThreadEnumeratorFactory"/>
