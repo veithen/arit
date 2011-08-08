@@ -24,6 +24,7 @@
     </dependencyManagement>
     <modules>
         <module>arit-api</module>
+        <module>arit-axis2</module>
         <module>arit-bundlecache</module>
         <module>arit-ear</module>
         <module>arit-ehcache</module>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:core="http://code.google.com/p/arit/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
+    <core:module-type identifier="mar" iconFormat="PNG" resource="com/googlecode/arit/axis2/mar.png"/>
+    <core:module-type identifier="aar" iconFormat="GIF" resource="com/googlecode/arit/axis2/aar.gif"/>
+    <bean class="com.googlecode.arit.axis2.Axis2ModuleInspectorPlugin"/>
+</beans>
