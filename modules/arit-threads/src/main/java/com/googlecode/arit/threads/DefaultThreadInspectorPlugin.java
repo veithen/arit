@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.threadutils.ThreadHelper;
 
 /**
  * Thread inspector that retrieves the {@link Runnable} from the thread.
@@ -31,28 +30,12 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Qualifier("thread")
     private ResourceType resourceType;
 
-    @Autowired
-    private ThreadHelper threadHelper;
-    
     public boolean isAvailable() {
-        return threadHelper.isAvailable();
+        return true;
     }
 
     public ThreadDescription getDescription(Thread thread) {
-        Runnable target = threadHelper.getTarget(thread);
-        StringBuilder description = new StringBuilder("Thread; name=");
-        description.append(thread.getName());
-        Class<?> threadClass = thread.getClass();
-        if (threadClass != Thread.class) {
-            description.append(", type=");
-            description.append(threadClass.getName());
-        }
-        if (target != null) {
-            Class<?> targetClass = target.getClass();
-            description.append(", target=");
-            description.append(targetClass.getName());
-        }
-        return new SimpleThreadDescription(resourceType, description.toString());
+        return new SimpleThreadDescription(resourceType, "Thread");
     }
 
     public int getPriority() {

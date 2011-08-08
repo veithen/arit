@@ -43,7 +43,7 @@ public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
     public ThreadDescription getDescription(Thread thread) {
         Runnable target = threadHelper.getTarget(thread);
         if (target != null && target.getClass().getName().equals("org.eclipse.jdt.internal.core.search.indexing.IndexManager")) {
-            return new SimpleThreadDescription(resourceType, "PM04639 (Eclipse bug 296343): JDT indexer thread");
+            return new SimpleThreadDescription(resourceType, "JDT indexer thread (PM04639; Eclipse bug 296343)");
         } else {
             return null;
         }

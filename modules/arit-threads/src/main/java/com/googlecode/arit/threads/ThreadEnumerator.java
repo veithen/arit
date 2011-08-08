@@ -20,25 +20,23 @@ import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
 
 public class ThreadEnumerator extends ThreadObjectEnumerator {
-    private final ResourceType defaultResourceType;
     private final ThreadInspector inspectorManager;
     private final Thread[] threads;
     private int current = -1;
     private ThreadDescription description;
 
-    public ThreadEnumerator(ResourceType defaultResourceType, ThreadHelper threadHelper, ThreadInspector inspectorManager, Thread[] threads) {
+    public ThreadEnumerator(ThreadHelper threadHelper, ThreadInspector inspectorManager, Thread[] threads) {
         super(threadHelper);
-        this.defaultResourceType = defaultResourceType;
         this.inspectorManager = inspectorManager;
         this.threads = threads;
     }
 
     public ResourceType getResourceType() {
-        return description == null ? defaultResourceType : description.getResourceType();
+        return description.getResourceType();
     }
 
     public String getResourceDescription() {
-        return description == null ? "Thread: " + threadObject.getName() + " [" + threadObject.getId() + "] " : description.getDescription();
+        return description.getDescription() + ": " + threadObject.getName() + " [" + threadObject.getId() + "]";
     }
 
     protected Thread nextThreadObject() {

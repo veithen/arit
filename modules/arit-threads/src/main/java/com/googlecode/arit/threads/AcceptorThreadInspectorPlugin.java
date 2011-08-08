@@ -80,22 +80,7 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
             socket = findSocket(target, Object.class);
         }
         if (socket != null) {
-            StringBuilder description = new StringBuilder("TCP acceptor thread; port=");
-            description.append(socket.getLocalPort());
-            description.append("; name=");
-            // Copy & paste code from DefaultThreadInspectorPlugin:
-            description.append(thread.getName());
-            Class<?> threadClass = thread.getClass();
-            if (threadClass != Thread.class) {
-                description.append(", type=");
-                description.append(threadClass.getName());
-            }
-            if (target != null) {
-                Class<?> targetClass = target.getClass();
-                description.append(", target=");
-                description.append(targetClass.getName());
-            }
-            return new SimpleThreadDescription(resourceType, description.toString());
+            return new SimpleThreadDescription(resourceType, "TCP acceptor thread (port " + socket.getLocalPort() + ")");
         } else {
             return null;
         }

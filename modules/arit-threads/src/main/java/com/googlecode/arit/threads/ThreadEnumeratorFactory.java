@@ -16,18 +16,12 @@
 package com.googlecode.arit.threads;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<ThreadEnumerator> {
-    @Autowired
-    @Qualifier("thread")
-    private ResourceType defaultResourceType;
-    
     @Autowired
     private ThreadHelper threadHelper;
     
@@ -43,6 +37,6 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<Thread
     }
 
     public ThreadEnumerator createEnumerator() {
-        return new ThreadEnumerator(defaultResourceType, threadHelper, inspectorManager, ThreadUtils.getAllThreads());
+        return new ThreadEnumerator(threadHelper, inspectorManager, ThreadUtils.getAllThreads());
     }
 }

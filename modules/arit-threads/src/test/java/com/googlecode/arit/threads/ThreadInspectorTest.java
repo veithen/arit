@@ -82,8 +82,7 @@ public class ThreadInspectorTest {
             thread.start();
             ThreadDescription description = inspectorManager.getDescription(thread);
             assertNotNull(description);
-            assertTrue(description.getDescription().contains(AcceptorThread.class.getName()));
-            assertTrue(description.getDescription().contains("port=" + serverSocket.getLocalPort()));
+            assertTrue(description.getDescription().contains("port " + serverSocket.getLocalPort()));
         } finally {
             serverSocket.close();
         }
@@ -98,7 +97,7 @@ public class ThreadInspectorTest {
         try {
             ThreadDescription description = inspectorManager.getDescription(server.getThread());
             assertNotNull(description);
-            assertTrue(description.getDescription().contains("port=" + server.getPort()));
+            assertTrue(description.getDescription().contains("port " + server.getPort()));
         } finally {
             server.stop();
         }
