@@ -115,16 +115,18 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         ClassLoader classLoader = desc.getClassLoader();
         Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
         ModuleType moduleType = desc.getType();
+        Module parentModule = null;
         ClassLoader parentClassLoader = classLoader.getParent();
-        Module parentModule;
-        if (parentClassLoader != null) {
-            // TODO: we should actually walk up the hierarchy until we identify a class loader
+        // There may be intermediary class loaders that we don't identify as modules. Therefore
+        // the parent module doesn't necessarily corresponds to the parent class loader and we need
+        // to walk up the class loader hierarchy until we identify a module.
+        while (parentClassLoader != null) {
             parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
             if (parentModule != null) {
                 parentModule.addChild(module);
+                break;
             }
-        } else {
-            parentModule = null;
+            parentClassLoader = parentClassLoader.getParent();
         }
         String variant;
         if (desc.getStatus() == ModuleStatus.STOPPED) {
