@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.Set;
-
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
@@ -55,8 +53,18 @@ public class ThreadEnumerator extends ThreadObjectEnumerator {
     }
 
     @Override
-    protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
-        return description.getAdditionalClassLoaderReferences();
+    protected boolean nextOtherClassLoaderReference() {
+        return description.nextClassLoaderReference();
+    }
+
+    @Override
+    protected ClassLoader getOtherReferencedClassLoader() {
+        return description.getReferencedClassLoader();
+    }
+
+    @Override
+    protected String getOtherClassLoaderReferenceDescription() {
+        return description.getClassLoaderReferenceDescription();
     }
 
     public boolean cleanup() {

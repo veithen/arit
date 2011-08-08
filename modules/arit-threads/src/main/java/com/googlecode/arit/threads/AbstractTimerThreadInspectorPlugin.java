@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +30,31 @@ public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspec
     protected abstract TimerTask[] getTimerTasks(Thread thread);
     
     public ThreadDescription getDescription(Thread thread) {
-        TimerTask[] timerTasks = getTimerTasks(thread);
+        final TimerTask[] timerTasks = getTimerTasks(thread);
         if (timerTasks != null) {
-            StringBuilder description = new StringBuilder("Timer thread");
-            Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-            boolean first = true;
-            for (TimerTask task : timerTasks) {
-                if (task != null) {
-                    Class<?> taskClass = task.getClass();
-                    if (first) {
-                        description.append("; tasks: ");
-                        first = false;
-                    } else {
-                        description.append(", ");
+            return new ThreadDescription(resourceType, "Timer thread") {
+                private int i = -1;
+                
+                @Override
+                public boolean nextClassLoaderReference() {
+                    while (i < timerTasks.length-1) {
+                        if (timerTasks[++i] != null) {
+                            return true;
+                        }
                     }
-                    description.append(taskClass.getName());
-                    classLoaders.add(taskClass.getClassLoader());
+                    return false;
                 }
-            }
-            return new ThreadDescription(resourceType, description.toString(), classLoaders);
+                
+                @Override
+                public ClassLoader getReferencedClassLoader() {
+                    return timerTasks[i].getClass().getClassLoader();
+                }
+    
+                @Override
+                public String getClassLoaderReferenceDescription() {
+                    return "Task: " + timerTasks[i].getClass().getName();
+                }
+            };
         } else {
             return null;
         }

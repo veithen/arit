@@ -67,7 +67,8 @@ public class ThreadInspectorTest {
         }, 1000, 1000);
         Thread thread = exchanger.exchange(null);
         ThreadDescription description = inspectorManager.getDescription(thread);
-        assertTrue(description.getDescription().contains(ThreadInspectorTest.class.getName() + "$"));
+        assertTrue(description.nextClassLoaderReference());
+        assertTrue(description.getClassLoaderReferenceDescription().contains(ThreadInspectorTest.class.getName() + "$"));
         timer.cancel();
     }
     

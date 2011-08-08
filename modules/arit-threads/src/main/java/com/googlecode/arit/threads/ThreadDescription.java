@@ -15,36 +15,33 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.Set;
-
 import com.googlecode.arit.ResourceType;
 
-public class ThreadDescription {
+/**
+ * Provides a description of a given thread instance. Implementations of this interface are used to
+ * identify the resource type and to describe the thread. They can also provide additional class
+ * loader references not identified by {@link ThreadEnumerator}.
+ */
+public abstract class ThreadDescription {
     private final ResourceType resourceType;
     private final String description;
-    private final Set<ClassLoader> classLoaders;
     
-    public ThreadDescription(ResourceType resourceType, String description, Set<ClassLoader> classLoaders) {
+    public ThreadDescription(ResourceType resourceType, String description) {
         this.resourceType = resourceType;
         this.description = description;
-        this.classLoaders = classLoaders;
     }
 
-    public ResourceType getResourceType() {
+    public final ResourceType getResourceType() {
         return resourceType;
     }
 
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
-    /**
-     * Get a collection of class loaders referenced by the thread in addition to those identified by
-     * {@link com.googlecode.arit.threadutils.ThreadHelper#getReferencedClassLoaders(Thread)}.
-     * 
-     * @return a set of class loaders
-     */
-    public Set<ClassLoader> getAdditionalClassLoaderReferences() {
-        return classLoaders;
-    }
+    public abstract boolean nextClassLoaderReference();
+    
+    public abstract ClassLoader getReferencedClassLoader();
+    
+    public abstract String getClassLoaderReferenceDescription();
 }

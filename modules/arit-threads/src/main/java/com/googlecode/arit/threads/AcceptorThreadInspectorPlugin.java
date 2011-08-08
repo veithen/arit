@@ -17,7 +17,6 @@ package com.googlecode.arit.threads;
 
 import java.lang.reflect.Field;
 import java.net.ServerSocket;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,7 +95,7 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
                 description.append(", target=");
                 description.append(targetClass.getName());
             }
-            return new ThreadDescription(resourceType, description.toString(), Collections.<ClassLoader>emptySet());
+            return new SimpleThreadDescription(resourceType, description.toString());
         } else {
             return null;
         }

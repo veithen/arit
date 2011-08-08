@@ -19,7 +19,6 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.googlecode.arit.ResourceEnumerator;
 
@@ -77,7 +76,9 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
                     }
                     break;
                 case REF_OTHER:
-                    iterator = getAdditionalClassLoaderReferences().iterator();
+                    if (nextOtherClassLoaderReference()) {
+                        return true;
+                    }
                     break;
                 default:
                     return false;
@@ -88,6 +89,7 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
     public final ClassLoader getReferencedClassLoader() {
         switch (clRef) {
             case REF_ACC: return ((ProtectionDomain)object).getClassLoader();
+            case REF_OTHER: return getOtherReferencedClassLoader();
             default: return (ClassLoader)object;
         }
     }
@@ -100,12 +102,14 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
             case REF_ACC:
                 CodeSource codeSource = ((ProtectionDomain)object).getCodeSource();
                 return "Access control context; code base: " + (codeSource == null ? "<unknown>" : codeSource.getLocation().toString());
-            case REF_OTHER: return "Other"; // TODO: we need to get a meaningful description somehow
+            case REF_OTHER: return getOtherClassLoaderReferenceDescription();
             default: return null;
         }
     }
 
-    protected abstract Set<ClassLoader> getAdditionalClassLoaderReferences();
+    protected abstract boolean nextOtherClassLoaderReference();
+    protected abstract ClassLoader getOtherReferencedClassLoader();
+    protected abstract String getOtherClassLoaderReferenceDescription();
     
     public final boolean nextResource() {
         clRef = 0;

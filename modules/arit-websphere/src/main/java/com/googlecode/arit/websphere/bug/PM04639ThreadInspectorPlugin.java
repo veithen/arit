@@ -15,12 +15,11 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.threads.SimpleThreadDescription;
 import com.googlecode.arit.threads.ThreadDescription;
 import com.googlecode.arit.threads.ThreadInspectorPlugin;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -44,7 +43,7 @@ public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
     public ThreadDescription getDescription(Thread thread) {
         Runnable target = threadHelper.getTarget(thread);
         if (target != null && target.getClass().getName().equals("org.eclipse.jdt.internal.core.search.indexing.IndexManager")) {
-            return new ThreadDescription(resourceType, "PM04639 (Eclipse bug 296343): JDT indexer thread", Collections.<ClassLoader>emptySet());
+            return new SimpleThreadDescription(resourceType, "PM04639 (Eclipse bug 296343): JDT indexer thread");
         } else {
             return null;
         }

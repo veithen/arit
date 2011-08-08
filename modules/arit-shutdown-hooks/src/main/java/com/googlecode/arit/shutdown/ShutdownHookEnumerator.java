@@ -15,10 +15,8 @@
  */
 package com.googlecode.arit.shutdown;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -51,8 +49,18 @@ public class ShutdownHookEnumerator extends ThreadObjectEnumerator {
     }
 
     @Override
-    protected Set<ClassLoader> getAdditionalClassLoaderReferences() {
-        return Collections.emptySet();
+    protected boolean nextOtherClassLoaderReference() {
+        return false;
+    }
+
+    @Override
+    protected ClassLoader getOtherReferencedClassLoader() {
+        return null;
+    }
+
+    @Override
+    protected String getOtherClassLoaderReferenceDescription() {
+        return null;
     }
 
     public boolean cleanup() {

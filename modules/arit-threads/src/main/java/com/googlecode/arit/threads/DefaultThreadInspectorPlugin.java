@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.threads;
 
-import java.util.Collections;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -54,7 +52,7 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
             description.append(", target=");
             description.append(targetClass.getName());
         }
-        return new ThreadDescription(resourceType, description.toString(), Collections.<ClassLoader>emptySet());
+        return new SimpleThreadDescription(resourceType, description.toString());
     }
 
     public int getPriority() {
