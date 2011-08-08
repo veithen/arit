@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,9 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
@@ -88,78 +85,20 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         return moduleInspectorFactory.isAvailable();
     }
     
-    private Module getModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ClassLoader classLoader) {
-        if (moduleMap.containsKey(classLoader)) {
-            return moduleMap.get(classLoader);
-        } else {
-            ModuleDescription desc = moduleInspector.inspect(classLoader);
-            if (desc == null) {
-                return null;
-            } else {
-                return loadModule(moduleInspector, moduleMap, desc);
-            }
-        }
-    }
-    
-    private Module getModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ModuleDescription desc) {
-        ClassLoader classLoader = desc.getClassLoader();
-        if (moduleMap.containsKey(classLoader)) {
-            return moduleMap.get(classLoader);
-        } else {
-            return loadModule(moduleInspector, moduleMap, desc);
-        }
-    }
-    
-    // TODO: refactor the get/loadModule stuff into a ReportBuilder class and make this a private method of the class (it must only be called by getModule)
-    private Module loadModule(ModuleInspector moduleInspector, Map<ClassLoader,Module> moduleMap, ModuleDescription desc) {
-        ClassLoader classLoader = desc.getClassLoader();
-        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
-        ModuleType moduleType = desc.getType();
-        Module parentModule = null;
-        ClassLoader parentClassLoader = classLoader.getParent();
-        // There may be intermediary class loaders that we don't identify as modules. Therefore
-        // the parent module doesn't necessarily corresponds to the parent class loader and we need
-        // to walk up the class loader hierarchy until we identify a module.
-        while (parentClassLoader != null) {
-            parentModule = getModule(moduleInspector, moduleMap, parentClassLoader);
-            if (parentModule != null) {
-                parentModule.addChild(module);
-                break;
-            }
-            parentClassLoader = parentClassLoader.getParent();
-        }
-        String variant;
-        if (desc.getStatus() == ModuleStatus.STOPPED) {
-            if (parentModule == null || !parentModule.isStopped()) {
-                variant = "defunct";
-            } else {
-                variant = "grayed";
-            }
-        } else {
-            variant = "default";
-        }
-        module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
-        for (ModuleIdentity identity : moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader)) {
-            module.addIdentity(new Identity(identity.getType().getName(), identity.getValue()));
-        }
-        moduleMap.put(classLoader, module);
-        return module;
-    }
-
     public Report generateReport() {
         List<Message> messages = new ArrayList<Message>();
         List<Module> rootModules = new ArrayList<Module>();
 //        ThreadLocalLogger.setTarget(messages);
         try {
             ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
-            Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
+            ModuleHelper moduleHelper = new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager, moduleIdentityProvider);
             
             // If the application server supports this, load the entire module list before starting
             // to inspect the resources.
             List<ModuleDescription> moduleDescriptions = moduleInspector.listModules();
             if (moduleDescriptions != null) {
                 for (ModuleDescription desc : moduleDescriptions) {
-                    getModule(moduleInspector, moduleMap, desc);
+                    moduleHelper.getModule(desc);
                 }
             }
             
@@ -174,7 +113,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                         if (classLoader != null) { // TODO: do we really need this check??
                             Resource resource = resourceMap.get(classLoader);
                             if (resource == null) {
-                                Module module = getModule(moduleInspector, moduleMap, classLoader);
+                                Module module = moduleHelper.getModule(classLoader);
                                 // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
                                 if (module != null) {
                                     if (resourceDescription == null) {
@@ -192,7 +131,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                     }
                 }
             }
-            for (Module module : moduleMap.values()) {
+            for (Module module : moduleHelper.getModules()) {
                 if (module != null && module.getParent() == null) {
                     rootModules.add(module);
                 }
