@@ -15,9 +15,10 @@
  */
 package com.googlecode.arit.report;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleIdentity;
@@ -52,7 +53,19 @@ public class ModuleHelper {
         } else {
             ModuleDescription desc = moduleInspector.inspect(classLoader);
             if (desc == null) {
-                return null;
+                Module module;
+                // There may be intermediary class loaders that we don't identify as modules. Therefore
+                // multiple class loaders may correspond to a single module and we need to walk up the
+                // class loader hierarchy until we identify a module.
+                ClassLoader parentClassLoader = classLoader.getParent();
+                if (parentClassLoader != null) {
+                    module = getModule(parentClassLoader);
+                } else {
+                    module = null;
+                }
+                // Cache the result
+                moduleMap.put(classLoader, module);
+                return module;
             } else {
                 return loadModule(desc);
             }
@@ -68,26 +81,29 @@ public class ModuleHelper {
         }
     }
     
-    public Collection<Module> getModules() {
-        return moduleMap.values();
+    public Set<Module> getModules() {
+        Set<Module> result = new HashSet<Module>();
+        for (Module module : moduleMap.values()) {
+            if (module != null) {
+                result.add(module);
+            }
+        }
+        return result;
     }
     
     private Module loadModule(ModuleDescription desc) {
         ClassLoader classLoader = desc.getClassLoader();
         Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
         ModuleType moduleType = desc.getType();
-        Module parentModule = null;
+        Module parentModule;
         ClassLoader parentClassLoader = classLoader.getParent();
-        // There may be intermediary class loaders that we don't identify as modules. Therefore
-        // the parent module doesn't necessarily corresponds to the parent class loader and we need
-        // to walk up the class loader hierarchy until we identify a module.
-        while (parentClassLoader != null) {
+        if (parentClassLoader != null) {
             parentModule = getModule(parentClassLoader);
             if (parentModule != null) {
                 parentModule.addChild(module);
-                break;
             }
-            parentClassLoader = parentClassLoader.getParent();
+        } else {
+            parentModule = null;
         }
         String variant;
         if (desc.getStatus() == ModuleStatus.STOPPED) {

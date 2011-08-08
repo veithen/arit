@@ -101,8 +101,11 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                     moduleHelper.getModule(desc);
                 }
             }
-            
-            Map<ClassLoader,Resource> resourceMap = new HashMap<ClassLoader,Resource>();
+
+            // A resource has class loader references to multiple class loaders and therefore to multiple
+            // modules. In this case the report contains several Resource instances for a single resource.
+            // This map is used to keep track of these instances.
+            Map<Module,Resource> resourceMap = new HashMap<Module,Resource>();
             for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
                 ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
                 while (resourceEnumerator.nextResource()) {
@@ -111,20 +114,17 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                     while (resourceEnumerator.nextClassLoaderReference()) {
                         ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
                         if (classLoader != null) { // TODO: do we really need this check??
-                            Resource resource = resourceMap.get(classLoader);
-                            if (resource == null) {
-                                Module module = moduleHelper.getModule(classLoader);
-                                // TODO: we should actually walk up the hierarchy until we identify a class loader (because an application may create its own class loaders)
-                                if (module != null) {
+                            Module module = moduleHelper.getModule(classLoader);
+                            if (module != null) {
+                                Resource resource = resourceMap.get(module);
+                                if (resource == null) {
                                     if (resourceDescription == null) {
                                         resourceDescription = resourceEnumerator.getResourceDescription();
                                     }
                                     resource = new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getResourceType()).getIconImage("default").getFileName(), resourceDescription);
                                     module.getResources().add(resource);
+                                    resourceMap.put(module, resource);
                                 }
-                                resourceMap.put(classLoader, resource);
-                            }
-                            if (resource != null) {
                                 resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription()));
                             }
                         }
