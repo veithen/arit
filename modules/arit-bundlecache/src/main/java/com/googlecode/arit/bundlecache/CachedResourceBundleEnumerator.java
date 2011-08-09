@@ -44,7 +44,7 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
     }
 
     public Object getResourceObject() {
-        return bundle;
+        return bundle.getBundle();
     }
 
     public String getResourceDescription() {

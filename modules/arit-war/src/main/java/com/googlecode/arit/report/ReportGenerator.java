@@ -49,6 +49,9 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     private ClassLoaderIdProvider classLoaderIdProvider;
     
     @Autowired
+    private ResourceIdProvider resourceIdProvider;
+    
+    @Autowired
     @Qualifier("unknown")
     private ModuleType unknownModuleType;
     
@@ -112,6 +115,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                 while (resourceEnumerator.nextResource()) {
                     resourceMap.clear();
                     String resourceDescription = null;
+                    Integer resourceId = null;
                     while (resourceEnumerator.nextClassLoaderReference()) {
                         ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
                         if (classLoader != null) { // TODO: do we really need this check??
@@ -119,11 +123,14 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                             if (module != null) {
                                 Resource resource = resourceMap.get(module);
                                 if (resource == null) {
+                                    ResourceType resourceType = resourceEnumerator.getResourceType();
                                     if (resourceDescription == null) {
                                         resourceDescription = resourceEnumerator.getResourceDescription();
                                     }
-                                    ResourceType resourceType = resourceEnumerator.getResourceType();
-                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
+                                    if (resourceId == null) {
+                                        resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
+                                    }
+                                    resource = new Resource(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
                                     module.getResources().add(resource);
                                     resourceMap.put(module, resource);
                                 }

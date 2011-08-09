@@ -23,10 +23,20 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name="resource")
 public class ResourceType {
+    private Integer id;
     private String type;
     private String description;
     private List<ClassLoaderLinkType> links;
     
+    @XmlAttribute(required=true)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @XmlAttribute(required=true)
     public String getType() {
         return type;

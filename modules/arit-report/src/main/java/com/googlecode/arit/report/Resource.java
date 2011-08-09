@@ -22,15 +22,21 @@ import java.util.List;
 public class Resource implements Serializable {
     private static final long serialVersionUID = -3572748920334331705L;
     
+    private final Integer id;
     private final String icon;
     private final String type;
     private final String description;
     private final List<ClassLoaderLink> links = new ArrayList<ClassLoaderLink>();
 
-    public Resource(String icon, String type, String description) {
+    public Resource(Integer id, String icon, String type, String description) {
+        this.id = id;
         this.icon = icon;
         this.type = type;
         this.description = description;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getIcon() {

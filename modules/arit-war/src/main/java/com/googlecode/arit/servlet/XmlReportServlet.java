@@ -111,6 +111,7 @@ public class XmlReportServlet extends HttpServlet {
     
     private ResourceType convert(Resource resource) {
         ResourceType result = new ResourceType();
+        result.setId(resource.getId());
         result.setType(resource.getType());
         result.setDescription(resource.getDescription());
         List<ClassLoaderLinkType> links = new ArrayList<ClassLoaderLinkType>();
