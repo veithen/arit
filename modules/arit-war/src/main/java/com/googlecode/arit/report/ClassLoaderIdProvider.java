@@ -15,6 +15,19 @@
  */
 package com.googlecode.arit.report;
 
-public interface ClassLoaderIdProvider {
-    Integer getClassLoaderId(ClassLoader classLoader, boolean create);
+import java.util.Map;
+import java.util.WeakHashMap;
+
+public class ClassLoaderIdProvider {
+    private final Map<ClassLoader,Integer> idMap = new WeakHashMap<ClassLoader,Integer>();
+    private int nextId = 1;
+
+    public synchronized Integer getClassLoaderId(ClassLoader classLoader, boolean create) {
+        Integer id = idMap.get(classLoader);
+        if (id == null && create) {
+            id = nextId++;
+            idMap.put(classLoader, id);
+        }
+        return id;
+    }
 }

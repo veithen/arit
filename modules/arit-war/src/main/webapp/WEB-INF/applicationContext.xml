@@ -9,7 +9,7 @@
     <bean class="com.googlecode.arit.jmx.CleanerMBeanProvider" name="Cleaner"/>
     <bean class="com.googlecode.arit.jmx.LeakDetector"/>
     <bean class="com.googlecode.arit.jmx.LeakDetectorMBeanProvider" name="LeakDetector"/>
-    <bean class="com.googlecode.arit.report.DefaultClassLoaderIdProvider"/>
+    <bean class="com.googlecode.arit.report.ClassLoaderIdProvider"/>
     <bean class="com.googlecode.arit.report.ModuleIdentityProvider"/>
     <bean class="com.googlecode.arit.report.ReportGenerator"/>
     <bean class="com.googlecode.arit.report.ReportGeneratorMBeanProvider" name="ReportGenerator"/>
