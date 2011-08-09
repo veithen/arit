@@ -38,7 +38,7 @@ public class SchemaServlet extends HttpServlet {
         try {
             jaxbContext = JAXBContext.newInstance(ReportElement.class);
         } catch (JAXBException ex) {
-            throw new ServletException();
+            throw new ServletException(ex);
         }
     }
 

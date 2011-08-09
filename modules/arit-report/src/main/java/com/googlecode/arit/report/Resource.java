@@ -23,16 +23,22 @@ public class Resource implements Serializable {
     private static final long serialVersionUID = -3572748920334331705L;
     
     private final String icon;
+    private final String type;
     private final String description;
     private final List<ClassLoaderLink> links = new ArrayList<ClassLoaderLink>();
 
-    public Resource(String icon, String description) {
+    public Resource(String icon, String type, String description) {
         this.icon = icon;
+        this.type = type;
         this.description = description;
     }
 
     public String getIcon() {
         return icon;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getDescription() {

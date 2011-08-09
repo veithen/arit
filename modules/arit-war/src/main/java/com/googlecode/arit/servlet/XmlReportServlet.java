@@ -29,13 +29,17 @@ import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.googlecode.arit.report.ClassLoaderLink;
 import com.googlecode.arit.report.Identity;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
+import com.googlecode.arit.report.Resource;
+import com.googlecode.arit.report.xml.ClassLoaderLinkType;
 import com.googlecode.arit.report.xml.IdentityType;
 import com.googlecode.arit.report.xml.ModuleType;
 import com.googlecode.arit.report.xml.ReportElement;
+import com.googlecode.arit.report.xml.ResourceType;
 
 public class XmlReportServlet extends HttpServlet {
     @Autowired
@@ -48,7 +52,7 @@ public class XmlReportServlet extends HttpServlet {
         try {
             jaxbContext = JAXBContext.newInstance(ReportElement.class);
         } catch (JAXBException ex) {
-            throw new ServletException();
+            throw new ServletException(ex);
         }
     }
 
@@ -81,6 +85,7 @@ public class XmlReportServlet extends HttpServlet {
         ModuleType result = new ModuleType();
         result.setId(module.getId());
         result.setName(module.getName());
+        result.setType(module.getType());
         result.setStopped(module.isStopped());
         result.setIcon("icons/module/" + module.getIcon());
         List<IdentityType> identities = new ArrayList<IdentityType>();
@@ -88,6 +93,11 @@ public class XmlReportServlet extends HttpServlet {
             identities.add(convert(identity));
         }
         result.setIdentities(identities);
+        List<ResourceType> resources = new ArrayList<ResourceType>();
+        for (Resource resource : module.getResources()) {
+            resources.add(convert(resource));
+        }
+        result.setResources(resources);
         result.setChildren(convert(module.getChildren()));
         return result;
     }
@@ -96,6 +106,24 @@ public class XmlReportServlet extends HttpServlet {
         IdentityType result = new IdentityType();
         result.setType(identity.getType());
         result.setValue(identity.getValue());
+        return result;
+    }
+    
+    private ResourceType convert(Resource resource) {
+        ResourceType result = new ResourceType();
+        result.setType(resource.getType());
+        result.setDescription(resource.getDescription());
+        List<ClassLoaderLinkType> links = new ArrayList<ClassLoaderLinkType>();
+        for (ClassLoaderLink link : resource.getLinks()) {
+            links.add(convert(link));
+        }
+        result.setLinks(links);
+        return result;
+    }
+    
+    private ClassLoaderLinkType convert(ClassLoaderLink link) {
+        ClassLoaderLinkType result = new ClassLoaderLinkType();
+        result.setDescription(link.getDescription());
         return result;
     }
 }

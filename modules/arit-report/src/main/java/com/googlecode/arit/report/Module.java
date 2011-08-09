@@ -24,6 +24,7 @@ public class Module implements Serializable {
     
     private final Integer id;
     private final String name;
+    private final String type;
     private final boolean stopped;
     private String icon;
     private final List<Identity> identities = new ArrayList<Identity>();
@@ -31,9 +32,10 @@ public class Module implements Serializable {
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
-    public Module(Integer id, String name, boolean stopped) {
+    public Module(Integer id, String name, String type, boolean stopped) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.stopped = stopped;
     }
 
@@ -43,6 +45,10 @@ public class Module implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public boolean isStopped() {

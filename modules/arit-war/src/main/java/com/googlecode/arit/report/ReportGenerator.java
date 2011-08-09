@@ -33,6 +33,7 @@ import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
@@ -121,7 +122,8 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                                     if (resourceDescription == null) {
                                         resourceDescription = resourceEnumerator.getResourceDescription();
                                     }
-                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceEnumerator.getResourceType()).getIconImage("default").getFileName(), resourceDescription);
+                                    ResourceType resourceType = resourceEnumerator.getResourceType();
+                                    resource = new Resource(resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
                                     module.getResources().add(resource);
                                     resourceMap.put(module, resource);
                                 }

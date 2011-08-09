@@ -21,13 +21,15 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name="module", propOrder={"identities", "children"})
+@XmlType(name="module", propOrder={"identities", "resources", "children"})
 public class ModuleType {
     private Integer id;
     private String name;
+    private String type;
     private boolean stopped;
     private String icon;
     private List<IdentityType> identities;
+    private List<ResourceType> resources;
     private List<ModuleType> children;
 
     @XmlAttribute(required=true)
@@ -46,6 +48,15 @@ public class ModuleType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @XmlAttribute(required=true)
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @XmlAttribute
@@ -73,6 +84,15 @@ public class ModuleType {
 
     public void setIdentities(List<IdentityType> identities) {
         this.identities = identities;
+    }
+
+    @XmlElement(name="resource")
+    public List<ResourceType> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<ResourceType> resources) {
+        this.resources = resources;
     }
 
     @XmlElement(name="module")

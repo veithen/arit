@@ -93,7 +93,7 @@ public class ModuleHelper {
     
     private Module loadModule(ModuleDescription desc) {
         ClassLoader classLoader = desc.getClassLoader();
-        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getStatus() == ModuleStatus.STOPPED);
+        Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getType().getIdentifier(), desc.getStatus() == ModuleStatus.STOPPED);
         ModuleType moduleType = desc.getType();
         Module parentModule;
         ClassLoader parentClassLoader = classLoader.getParent();
