@@ -44,6 +44,10 @@ public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
         return "Implementation class";
     }
 
+    public Object getResourceObject() {
+        return instance;
+    }
+
     public String getResourceDescription() {
         return singleton.getDescription() + ": " + instance.getClass().getName();
     }

@@ -41,6 +41,10 @@ public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
         return "ThreadGroup implementation class";
     }
 
+    public Object getResourceObject() {
+        return threadGroup;
+    }
+
     public String getResourceDescription() {
         return "Thread group: " + threadGroup.getName() + "; class=" + threadGroup.getClass().getName();
     }

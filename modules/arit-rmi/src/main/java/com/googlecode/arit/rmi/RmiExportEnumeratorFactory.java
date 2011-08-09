@@ -21,13 +21,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 import com.googlecode.arit.SingletonPluginManager;
 
-public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExportEnumeratorPlugin> implements ResourceEnumeratorFactory<RmiExportEnumerator> {
-    private class RmiExportEnumeratorImpl extends SimpleResourceEnumerator implements RmiExportEnumerator {
+public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExportEnumeratorPlugin> implements ResourceEnumeratorFactory<ResourceEnumerator> {
+    private class RmiExportEnumeratorImpl extends SimpleResourceEnumerator {
         private final Iterator<Object> iterator;
         private Object exportedObject;
         
@@ -39,7 +40,7 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
             return resourceType;
         }
 
-        public Object getExportedObject() {
+        public Object getResourceObject() {
             return exportedObject;
         }
 
@@ -81,7 +82,7 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
         return "RMI exports";
     }
 
-    public RmiExportEnumerator createEnumerator() {
+    public ResourceEnumerator createEnumerator() {
         return new RmiExportEnumeratorImpl(getPlugin().getExportedObjects());
     }
 }

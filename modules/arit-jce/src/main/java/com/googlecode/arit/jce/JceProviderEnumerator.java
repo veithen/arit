@@ -42,6 +42,10 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
         return "Implementation class";
     }
 
+    public Object getResourceObject() {
+        return providers[index];
+    }
+
     public String getResourceDescription() {
         return "JCE provider: " + providers[index].getClass().getName();
     }

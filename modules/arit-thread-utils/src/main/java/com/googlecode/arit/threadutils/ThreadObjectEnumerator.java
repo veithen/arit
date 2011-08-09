@@ -123,5 +123,9 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
         }
     }
 
+    public final Object getResourceObject() {
+        return threadObject;
+    }
+
     protected abstract Thread nextThreadObject();
 }

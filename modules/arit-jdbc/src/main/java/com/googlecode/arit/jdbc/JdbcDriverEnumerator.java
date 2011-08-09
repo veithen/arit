@@ -43,6 +43,11 @@ public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
         return "Driver class";
     }
 
+    public Object getResourceObject() {
+        // TODO: this is probably not correct
+        return driverClass;
+    }
+
     public String getResourceDescription() {
         return "JDBC driver: " + driverClass.getName();
     }

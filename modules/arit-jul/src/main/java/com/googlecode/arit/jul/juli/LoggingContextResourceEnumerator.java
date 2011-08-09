@@ -29,6 +29,7 @@ public class LoggingContextResourceEnumerator implements ResourceEnumerator {
     private final RBeanFactory rbf;
     private final Iterator<Map.Entry<ClassLoader,Object>> contextIterator;
     private ClassLoader classLoader;
+    private Object object;
     private ClassLoaderLogInfoRBean logInfo;
     private int state;
     private HandlerEnumerator handlerEnumerator;
@@ -43,7 +44,8 @@ public class LoggingContextResourceEnumerator implements ResourceEnumerator {
         if (contextIterator.hasNext()) {
             Map.Entry<ClassLoader,?> entry = contextIterator.next();
             classLoader = entry.getKey();
-            logInfo = rbf.createRBean(ClassLoaderLogInfoRBean.class, entry.getValue());
+            object = entry.getValue();
+            logInfo = rbf.createRBean(ClassLoaderLogInfoRBean.class, object);
             state = 0;
             return true;
         } else {
@@ -53,6 +55,10 @@ public class LoggingContextResourceEnumerator implements ResourceEnumerator {
 
     public ResourceType getResourceType() {
         return resourceType;
+    }
+
+    public Object getResourceObject() {
+        return object;
     }
 
     public String getResourceDescription() {

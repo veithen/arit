@@ -43,6 +43,10 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
         return resourceType;
     }
 
+    public Object getResourceObject() {
+        return getHandler();
+    }
+
     public String getResourceDescription() {
         return "JUL handler " + getHandler().getClass().getName() + " registered on logger " + Utils.getLoggerDisplayName(handlerEnumerator.getLogger());
     }

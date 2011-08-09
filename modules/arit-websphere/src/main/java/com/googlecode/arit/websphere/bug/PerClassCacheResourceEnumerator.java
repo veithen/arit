@@ -43,6 +43,10 @@ public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnum
         return "Cache key";
     }
 
+    public final Object getResourceObject() {
+        return clazz;
+    }
+
     public final String getResourceDescription() {
         return getDescription(clazz);
     }

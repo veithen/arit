@@ -45,6 +45,10 @@ public class PerClassLoaderCacheResourceEnumerator extends SimpleResourceEnumera
         return "Cache key";
     }
 
+    public Object getResourceObject() {
+        return classLoader;
+    }
+
     public String getResourceDescription() {
         return description;
     }

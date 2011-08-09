@@ -55,6 +55,10 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
         return "MBean implementation class";
     }
 
+    public Object getResourceObject() {
+        return mbean;
+    }
+
     public String getResourceDescription() {
         return "MBean: " + name.toString() + " (class: " + mbean.getClass().getName() + ")";
     }

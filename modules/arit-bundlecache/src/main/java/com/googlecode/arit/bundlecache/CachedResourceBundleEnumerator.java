@@ -43,6 +43,10 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
         return "Bundle class loader";
     }
 
+    public Object getResourceObject() {
+        return bundle;
+    }
+
     public String getResourceDescription() {
         return "Cached resource bundle: " + bundle.getName();
     }

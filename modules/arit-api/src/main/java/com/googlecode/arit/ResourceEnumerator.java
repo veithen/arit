@@ -32,6 +32,14 @@ public interface ResourceEnumerator {
     ResourceType getResourceType();
     
     /**
+     * Get the object that represents this resource. The returned object may be of any type. The
+     * only constraint is that the same instance must be returned when a resources is visited twice.
+     * 
+     * @return the object representing this resource; must not be <code>null</code>
+     */
+    Object getResourceObject();
+    
+    /**
      * Get a (human readable) description of the current resource.
      * 
      * @return the description of the current resource

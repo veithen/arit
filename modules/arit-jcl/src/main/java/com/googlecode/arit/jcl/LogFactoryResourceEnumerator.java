@@ -47,6 +47,10 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
         return "Cache key";
     }
 
+    public Object getResourceObject() {
+        return factory;
+    }
+
     public String getResourceDescription() {
         return "LogFactory instance cached by " + logFactoryRef.getDescription() + "; class=" + factory.getClass().getName();
     }

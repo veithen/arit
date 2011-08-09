@@ -24,13 +24,14 @@ import com.googlecode.arit.ResourceType;
 
 public class ThreadLocalEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
-    private final Iterator<Set<Class<?>>> threadLocalIterator;
+    private final Iterator<Map.Entry<ThreadLocal<?>,Set<Class<?>>>> threadLocalIterator;
+    private ThreadLocal<?> threadLocal;
     private Iterator<Class<?>> valueClassIterator;
     private Class<?> valueClass;
 
     public ThreadLocalEnumerator(ResourceType resourceType, Map<ThreadLocal<?>,Set<Class<?>>> threadLocals) {
         this.resourceType = resourceType;
-        threadLocalIterator = threadLocals.values().iterator();
+        threadLocalIterator = threadLocals.entrySet().iterator();
     }
 
     public ResourceType getResourceType() {
@@ -43,11 +44,17 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
 
     public boolean nextResource() {
         if (threadLocalIterator.hasNext()) {
-            valueClassIterator = threadLocalIterator.next().iterator();
+            Map.Entry<ThreadLocal<?>,Set<Class<?>>> entry = threadLocalIterator.next();
+            threadLocal = entry.getKey();
+            valueClassIterator = entry.getValue().iterator();
             return true;
         } else {
             return false;
         }
+    }
+
+    public Object getResourceObject() {
+        return threadLocal;
     }
 
     public boolean nextClassLoaderReference() {
