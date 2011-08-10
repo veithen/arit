@@ -22,30 +22,38 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.management.Notification;
-import javax.management.NotificationBroadcasterSupport;
-import javax.management.modelmbean.ModelMBeanNotificationInfo;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedNotification;
+import org.springframework.jmx.export.annotation.ManagedNotifications;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.jmx.export.notification.NotificationPublisher;
+import org.springframework.jmx.export.notification.NotificationPublisherAware;
 
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
 
-public class LeakDetector extends NotificationBroadcasterSupport implements InitializingBean, DisposableBean {
-    private final static String LEAK_DETECTED = "arit.leak.detected";
+@ManagedResource(objectName="com.googlecode.arit:type=LeakDetector", description="Detects applications with memory leaks")
+@ManagedNotifications(
+    @ManagedNotification(name="javax.management.Notification", description="Leak detector notification", notificationTypes={LeakDetector.LEAK_DETECTED})
+)
+public class LeakDetector implements InitializingBean, DisposableBean, NotificationPublisherAware {
+    public final static String LEAK_DETECTED = "arit.leak.detected";
     
     @Autowired
     private ReportGenerator reportGenerator;
+
+    private NotificationPublisher notificationPublisher;
     
     private Timer timer;
     private final Set<Integer> reportedModules = Collections.synchronizedSet(new HashSet<Integer>());
     private long notificationSequence;
     
-    @Override
-    public ModelMBeanNotificationInfo[] getNotificationInfo() {
-        return new ModelMBeanNotificationInfo[] { new ModelMBeanNotificationInfo(
-                new String[] { LEAK_DETECTED }, Notification.class.getName(), "Leak detector notification") };
+    public void setNotificationPublisher(NotificationPublisher notificationPublisher) {
+        this.notificationPublisher = notificationPublisher;
     }
 
     public void afterPropertiesSet() throws Exception {
@@ -62,13 +70,14 @@ public class LeakDetector extends NotificationBroadcasterSupport implements Init
         for (Module module : reportGenerator.generateReport().getRootModules()) {
             if (module.isStopped()) {
                 if (reportedModules.add(module.getId())) {
-                    sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
+                    notificationPublisher.sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
                             "Resource leak detected in application " + module.getName()));
                 }
             }
         }
     }
     
+    @ManagedAttribute(description="The number of stopped application instances with memory leaks")
     public int getDetectedLeakCount() {
         return reportedModules.size();
     }

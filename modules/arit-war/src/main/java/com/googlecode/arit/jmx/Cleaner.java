@@ -18,11 +18,16 @@ package com.googlecode.arit.jmx;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
+import org.springframework.jmx.export.annotation.ManagedOperationParameters;
+import org.springframework.jmx.export.annotation.ManagedResource;
 
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.report.ClassLoaderIdProvider;
 
+@ManagedResource(objectName="com.googlecode.arit:type=Cleaner", description="Cleans resources that cause memory leaks")
 public class Cleaner {
     @Autowired
     private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
@@ -30,6 +35,10 @@ public class Cleaner {
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
+    @ManagedOperation(description="Clean resources linked to a given class loader")
+    @ManagedOperationParameters(
+        @ManagedOperationParameter(name="classLoaderId", description="The ID of the class loader")
+    )
     public void clean(Integer classLoaderId) {
         for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {

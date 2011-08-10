@@ -27,6 +27,8 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
@@ -38,6 +40,7 @@ import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
 
+@ManagedResource(objectName="com.googlecode.arit:type=ReportGenerator", description="Generates Arit reports")
 public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ModuleInspectorFactory moduleInspectorFactory;
@@ -89,6 +92,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         return moduleInspectorFactory.isAvailable();
     }
     
+    @ManagedOperation(description="Generate an Arit report")
     public Report generateReport() {
         List<Message> messages = new ArrayList<Message>();
         List<Module> rootModules = new ArrayList<Module>();

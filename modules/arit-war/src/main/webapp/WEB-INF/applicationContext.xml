@@ -6,14 +6,11 @@
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
     <import resource="classpath:arit-appcontext.xml"/>
     <bean class="com.googlecode.arit.jmx.Cleaner"/>
-    <bean class="com.googlecode.arit.jmx.CleanerMBeanProvider" name="Cleaner"/>
     <bean class="com.googlecode.arit.jmx.LeakDetector"/>
-    <bean class="com.googlecode.arit.jmx.LeakDetectorMBeanProvider" name="LeakDetector"/>
     <bean class="com.googlecode.arit.report.ClassLoaderIdProvider"/>
     <bean class="com.googlecode.arit.report.ResourceIdProvider"/>
     <bean class="com.googlecode.arit.report.ModuleIdentityProvider"/>
     <bean class="com.googlecode.arit.report.ReportGenerator"/>
-    <bean class="com.googlecode.arit.report.ReportGeneratorMBeanProvider" name="ReportGenerator"/>
     <bean class="com.googlecode.arit.servlet.HtmlReportServlet" name="HtmlReportServlet"/>
     <bean class="com.googlecode.arit.servlet.ModuleIdentityTypeIconManager" name="identity"/>
     <bean class="com.googlecode.arit.servlet.ModuleInspectorFactory"/>
