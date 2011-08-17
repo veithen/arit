@@ -25,5 +25,13 @@
         <metric property="detectedLeakCount" displayName="Detected Leaks"
                 description="The number of stopped application instances with memory leaks."
                 category="performance" displayType="summary"/>
+        <service name="Application Stats"
+                 discovery="com.googlecode.arit.rhq.ApplicationStatsDiscoveryComponent"
+                 class="com.googlecode.arit.rhq.ApplicationStatsComponent"
+                 description="Class loader leak statistics per application">
+            <metric property="detectedLeakCount" displayName="Detected Leaks"
+                    description="The number of stopped instances with memory leaks."
+                    category="performance" displayType="summary"/>
+        </service>
     </service>
 </plugin>
