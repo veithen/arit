@@ -89,6 +89,7 @@ public class WASModuleInspector implements ModuleInspector {
                             // Strip the ".ear" suffix
                             moduleName = dirName.substring(0, dirName.length()-4);
                             moduleStatus = ModuleStatus.STOPPED;
+                            url = Utils.dirToURL(earRoot);
                         } else {
                             moduleType = null;
                             // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
@@ -101,10 +102,12 @@ public class WASModuleInspector implements ModuleInspector {
                 moduleType = earModuleType;
                 moduleName = name.substring(4);
                 moduleStatus = ModuleStatus.STOPPED;
+                url = Utils.dirToURL(Utils.getEARRoot(ccl));
             } else if (name.startsWith("appwar:")) {
                 moduleType = appWarModuleType;
                 moduleName = name.substring(7);
                 moduleStatus = ModuleStatus.STOPPED;
+                url = Utils.dirToURL(Utils.getWebAppRoot(ccl));
             } else if (name.startsWith("war:")) {
                 moduleType = warModuleType;
                 moduleName = name.substring(name.lastIndexOf('/')+1);
