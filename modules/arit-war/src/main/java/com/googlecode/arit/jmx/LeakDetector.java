@@ -15,6 +15,8 @@
  */
 package com.googlecode.arit.jmx;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -64,13 +66,18 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     }
 
     public void afterPropertiesSet() throws Exception {
-        timer = new Timer("LeakDetectorTimer");
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runDetection();
+        timer = AccessController.doPrivileged(new PrivilegedAction<Timer>() {
+            public Timer run() {
+                timer = new Timer("LeakDetectorTimer");
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runDetection();
+                    }
+                }, 0, 60000);
+                return timer;
             }
-        }, 0, 60000);
+        });
     }
     
     private void runDetection() {
