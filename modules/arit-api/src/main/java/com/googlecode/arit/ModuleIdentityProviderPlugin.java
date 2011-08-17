@@ -19,5 +19,18 @@ import java.net.URL;
 import java.util.List;
 
 public interface ModuleIdentityProviderPlugin extends Plugin {
-    List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader);
+    /**
+     * Get a list of identities for the given module.
+     * 
+     * @param url
+     *            the root URL of the deployed module or <code>null</code> if the information is not
+     *            available; this information should be used with care if <code>moduleStatus</code>
+     *            is {@link ModuleStatus#STOPPED}
+     * @param classLoader
+     *            the class loader of the module
+     * @param moduleStatus
+     *            the module status
+     * @return a list of identities or <code>null</code> if no identities where discovered
+     */
+    List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader, ModuleStatus moduleStatus);
 }

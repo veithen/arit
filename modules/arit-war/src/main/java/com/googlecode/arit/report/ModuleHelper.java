@@ -119,7 +119,7 @@ public class ModuleHelper {
             variant = "default";
         }
         module.setIcon(moduleTypeIconManager.getIcon(moduleType == null ? unknownModuleType : moduleType).getIconImage(variant).getFileName());
-        for (ModuleIdentity identity : moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader)) {
+        for (ModuleIdentity identity : moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader, desc.getStatus())) {
             module.addIdentity(new Identity(identity.getType().getName(), identity.getValue()));
         }
         ModuleInfo moduleInfo = new ModuleInfo(module, desc.getUrl());

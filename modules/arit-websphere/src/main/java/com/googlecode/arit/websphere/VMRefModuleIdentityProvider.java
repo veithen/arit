@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
 import com.googlecode.arit.ModuleIdentityType;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
@@ -53,7 +54,7 @@ public class VMRefModuleIdentityProvider implements ModuleIdentityProviderPlugin
         return rbf != null;
     }
 
-    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader, ModuleStatus moduleStatus) {
         return Collections.singletonList(new ModuleIdentity(identityType, String.valueOf(rbf.createRBean(ClassLoaderRBean.class, classLoader).getVMRef())));
     }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
+import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.PluginManager;
 
 public class ModuleIdentityProvider extends PluginManager<ModuleIdentityProviderPlugin> {
@@ -28,10 +29,10 @@ public class ModuleIdentityProvider extends PluginManager<ModuleIdentityProvider
         super(ModuleIdentityProviderPlugin.class);
     }
     
-    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader, ModuleStatus moduleStatus) {
         List<ModuleIdentity> result = new ArrayList<ModuleIdentity>();
         for (ModuleIdentityProviderPlugin plugin : getPlugins()) {
-            List<ModuleIdentity> identities = plugin.getModuleIdentities(url, classLoader);
+            List<ModuleIdentity> identities = plugin.getModuleIdentities(url, classLoader, moduleStatus);
             if (identities != null) {
                 result.addAll(identities);
             }

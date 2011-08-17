@@ -31,6 +31,7 @@ import javax.annotation.Resource;
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
 import com.googlecode.arit.ModuleIdentityType;
+import com.googlecode.arit.ModuleStatus;
 
 public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProviderPlugin {
     @Resource(name="maven")
@@ -49,8 +50,8 @@ public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProvider
         return subDirs != null && subDirs.length == 1 ? subDirs[0] : null;
     }
     
-    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader) {
-        if (url == null) {
+    public List<ModuleIdentity> getModuleIdentities(URL url, ClassLoader classLoader, ModuleStatus moduleStatus) {
+        if (url == null || moduleStatus == ModuleStatus.STOPPED) {
             return null;
         }
         File deploymentDir;
