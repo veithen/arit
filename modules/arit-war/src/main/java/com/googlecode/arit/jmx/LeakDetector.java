@@ -17,12 +17,15 @@ package com.googlecode.arit.jmx;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.management.Notification;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +36,10 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.jmx.export.notification.NotificationPublisher;
 import org.springframework.jmx.export.notification.NotificationPublisherAware;
 
+import com.googlecode.arit.report.ClassLoaderLink;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.ReportGenerator;
+import com.googlecode.arit.report.Resource;
 
 @ManagedResource(objectName="com.googlecode.arit:type=LeakDetector", description="Detects applications with memory leaks")
 @ManagedNotifications(
@@ -42,6 +47,8 @@ import com.googlecode.arit.report.ReportGenerator;
 )
 public class LeakDetector implements InitializingBean, DisposableBean, NotificationPublisherAware {
     public final static String LEAK_DETECTED = "arit.leak.detected";
+    
+    private static final Log log = LogFactory.getLog(LeakDetector.class);
     
     @Autowired
     private ReportGenerator reportGenerator;
@@ -70,10 +77,52 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
         for (Module module : reportGenerator.generateReport().getRootModules()) {
             if (module.isStopped()) {
                 if (reportedModules.add(module.getId())) {
+                    if (log.isWarnEnabled()) {
+                        StringBuilder message = new StringBuilder();
+                        message.append("Leak detected:\n");
+                        dumpModule(module, message, 0);
+                        log.warn(message.toString());
+                    }
                     notificationPublisher.sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
                             "Resource leak detected in application " + module.getName()));
                 }
             }
+        }
+    }
+    
+    private void dumpModule(Module module, StringBuilder buffer, int indent) {
+        addIndent(buffer, indent);
+        buffer.append(module.getName());
+        buffer.append('\n');
+        List<Resource> resources = module.getResources();
+        if (!resources.isEmpty()) {
+            addIndent(buffer, indent+1);
+            buffer.append("Resources:\n");
+            for (Resource resource : resources) {
+                addIndent(buffer, indent+2);
+                buffer.append(resource.getDescription());
+                buffer.append('\n');
+                for (ClassLoaderLink link : resource.getLinks()) {
+                    addIndent(buffer, indent+3);
+                    buffer.append("~ ");
+                    buffer.append(link.getDescription());
+                    buffer.append('\n');
+                }
+            }
+        }
+        List<Module> children = module.getChildren();
+        if (!children.isEmpty()) {
+            addIndent(buffer, indent+1);
+            buffer.append("Submodules:\n");
+            for (Module child : children) {
+                dumpModule(child, buffer, indent+2);
+            }
+        }
+    }
+    
+    private void addIndent(StringBuilder buffer, int indent) {
+        for (int i=0; i<indent*2; i++) {
+            buffer.append(' ');
         }
     }
     
