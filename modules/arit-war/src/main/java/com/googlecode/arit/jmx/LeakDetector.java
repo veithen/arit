@@ -17,12 +17,14 @@ package com.googlecode.arit.jmx;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.management.Notification;
 
@@ -34,12 +36,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedNotification;
 import org.springframework.jmx.export.annotation.ManagedNotifications;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
+import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.jmx.export.notification.NotificationPublisher;
 import org.springframework.jmx.export.notification.NotificationPublisherAware;
 
 import com.googlecode.arit.report.ClassLoaderLink;
 import com.googlecode.arit.report.Module;
+import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
 import com.googlecode.arit.report.Resource;
 
@@ -58,7 +64,7 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     private NotificationPublisher notificationPublisher;
     
     private Timer timer;
-    private final Set<Integer> reportedModules = Collections.synchronizedSet(new HashSet<Integer>());
+    private final AtomicReference<Report> lastReport = new AtomicReference<Report>();
     private long notificationSequence;
     
     public void setNotificationPublisher(NotificationPublisher notificationPublisher) {
@@ -81,17 +87,32 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     }
     
     private void runDetection() {
-        for (Module module : reportGenerator.generateReport().getRootModules()) {
-            if (module.isStopped()) {
-                if (reportedModules.add(module.getId())) {
-                    if (log.isWarnEnabled()) {
-                        StringBuilder message = new StringBuilder();
-                        message.append("Leak detected:\n");
-                        dumpModule(module, message, 0);
-                        log.warn(message.toString());
+        Report report = reportGenerator.generateReport();
+        Report previousReport = lastReport.getAndSet(report);
+        if (previousReport != null) {
+            Map<Integer,Module> reportedModules = new HashMap<Integer,Module>();
+            for (Module module : previousReport.getRootModules()) {
+                if (module.isStopped()) {
+                    reportedModules.put(module.getId(), module);
+                }
+            }
+            for (Module module : report.getRootModules()) {
+                if (module.isStopped()) {
+                    if (reportedModules.remove(module.getId()) == null) {
+                        if (log.isWarnEnabled()) {
+                            StringBuilder message = new StringBuilder();
+                            message.append("Leak detected:\n");
+                            dumpModule(module, message, 0);
+                            log.warn(message.toString());
+                        }
+                        notificationPublisher.sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
+                                "Resource leak detected in application " + module.getName()));
                     }
-                    notificationPublisher.sendNotification(new Notification(LEAK_DETECTED, this, notificationSequence++,
-                            "Resource leak detected in application " + module.getName()));
+                }
+            }
+            if (log.isWarnEnabled()) {
+                for (Module module : reportedModules.values()) {
+                    log.warn("The resource leak previously reported for application " + module.getName() + " is now gone");
                 }
             }
         }
@@ -135,9 +156,32 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     
     @ManagedAttribute(description="The number of stopped application instances with memory leaks")
     public int getDetectedLeakCount() {
-        return reportedModules.size();
+        return getDetectedLeakCount(null);
     }
 
+    @ManagedAttribute(description="The list of all module names monitored by the leak detector")
+    public String[] getModuleNames() {
+        Set<String> moduleNames = new HashSet<String>();
+        for (Module module : lastReport.get().getRootModules()) {
+            moduleNames.add(module.getName());
+        }
+        return moduleNames.toArray(new String[moduleNames.size()]);
+    }
+    
+    @ManagedOperation(description="Get the number of stopped instances with resource leaks for a given application")
+    @ManagedOperationParameters(
+        @ManagedOperationParameter(name="moduleName", description="The module name for the application")
+    )
+    public int getDetectedLeakCount(String moduleName) {
+        int count = 0;
+        for (Module module : lastReport.get().getRootModules()) {
+            if (module.isStopped() && (moduleName == null || module.getName().equals(moduleName))) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
     public void destroy() throws Exception {
         if (timer != null) {
             timer.cancel();
