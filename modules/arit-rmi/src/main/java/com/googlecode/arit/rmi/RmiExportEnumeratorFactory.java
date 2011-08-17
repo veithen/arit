@@ -49,11 +49,11 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
         }
 
         public String getClassLoaderReferenceDescription() {
-            return "Exported oject implementation class";
+            return "Implementation class: " + exportedObject.getClass().getName();
         }
 
         public String getResourceDescription() {
-            return "Exported object (RMI): " + exportedObject.getClass().getName();
+            return "Exported object (RMI)";
         }
 
         protected boolean doNextResource() {

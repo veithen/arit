@@ -52,7 +52,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getClassLoaderReferenceDescription() {
-        return "MBean implementation class";
+        return "Implementation class: " + mbean.getClass().getName();
     }
 
     public Object getResourceObject() {
@@ -60,7 +60,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getResourceDescription() {
-        return "MBean: " + name.toString() + " (class: " + mbean.getClass().getName() + ")";
+        return "MBean: " + name;
     }
 
     protected boolean doNextResource() {

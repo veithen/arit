@@ -39,7 +39,7 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getClassLoaderReferenceDescription() {
-        return "Implementation class";
+        return "Implementation class: " + providers[index].getClass().getName();
     }
 
     public Object getResourceObject() {
@@ -47,7 +47,7 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
     }
 
     public String getResourceDescription() {
-        return "JCE provider: " + providers[index].getClass().getName();
+        return "JCE provider: " + providers[index].getName();
     }
 
     protected boolean doNextResource() {
