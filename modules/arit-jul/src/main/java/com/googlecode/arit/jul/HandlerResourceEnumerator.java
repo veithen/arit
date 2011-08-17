@@ -18,6 +18,7 @@ package com.googlecode.arit.jul;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -47,11 +48,11 @@ public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
         return getHandler();
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "JUL handler " + getHandler().getClass().getName() + " registered on logger " + Utils.getLoggerDisplayName(handlerEnumerator.getLogger());
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Implementation class";
     }
 

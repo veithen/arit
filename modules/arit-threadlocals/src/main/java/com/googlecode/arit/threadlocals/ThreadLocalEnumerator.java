@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 
@@ -38,7 +39,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
         return resourceType;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "Thread local";
     }
 
@@ -70,7 +71,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
         return valueClass.getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Value class: " + valueClass.getName();
     }
 

@@ -39,7 +39,7 @@ public class LoggingContextResourceEnumeratorTest {
             LoggingContextResourceEnumerator enumerator = factory.createEnumerator();
             while (enumerator.nextResource()) {
                 while (enumerator.nextClassLoaderReference()) {
-                    if (enumerator.getClassLoaderReferenceDescription().contains(handler.getClass().getName())) {
+                    if (enumerator.getClassLoaderReferenceDescription(null).contains(handler.getClass().getName())) {
                         found = true;
                         // Don't break the loop here so that we test that the loop terminates properly
                     }

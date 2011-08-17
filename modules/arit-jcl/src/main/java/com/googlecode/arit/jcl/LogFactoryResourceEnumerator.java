@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -43,7 +44,7 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
         return classLoader;
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Cache key";
     }
 
@@ -51,7 +52,7 @@ public class LogFactoryResourceEnumerator extends SimpleResourceEnumerator {
         return factory;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "LogFactory instance cached by " + logFactoryRef.getDescription() + "; class=" + factory.getClass().getName();
     }
 

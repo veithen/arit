@@ -18,6 +18,7 @@ package com.googlecode.arit.shutdown;
 import java.util.Iterator;
 import java.util.List;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
@@ -36,7 +37,7 @@ public class ShutdownHookEnumerator extends ThreadObjectEnumerator {
         return resourceType;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "Shutdown hook; type=" + threadObject.getClass().getName();
     }
 

@@ -41,16 +41,17 @@ public interface ResourceEnumerator {
     
     /**
      * Get a (human readable) description of the current resource.
+     * @param formatter TODO
      * 
      * @return the description of the current resource
      */
-    String getResourceDescription();
+    String getResourceDescription(Formatter formatter);
     
     boolean nextClassLoaderReference();
     
     ClassLoader getReferencedClassLoader();
     
-    String getClassLoaderReferenceDescription();
+    String getClassLoaderReferenceDescription(Formatter formatter);
     
     /**
      * Clean up this resource, i.e. attempt to break the link between the resource and the

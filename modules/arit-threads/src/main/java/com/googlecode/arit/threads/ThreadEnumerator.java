@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.threads;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadObjectEnumerator;
@@ -35,7 +36,7 @@ public class ThreadEnumerator extends ThreadObjectEnumerator {
         return description.getResourceType();
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return description.getDescription() + ": " + threadObject.getName() + " [" + threadObject.getId() + "]";
     }
 

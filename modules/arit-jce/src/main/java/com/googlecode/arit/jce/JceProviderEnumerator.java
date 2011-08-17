@@ -17,6 +17,7 @@ package com.googlecode.arit.jce;
 
 import java.security.Provider;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -38,7 +39,7 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
         return providers[index].getClass().getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Implementation class: " + providers[index].getClass().getName();
     }
 
@@ -46,7 +47,7 @@ public class JceProviderEnumerator extends SimpleResourceEnumerator {
         return providers[index];
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "JCE provider: " + providers[index].getName();
     }
 

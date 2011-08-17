@@ -20,6 +20,7 @@ import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 
 public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
@@ -94,14 +95,14 @@ public abstract class ThreadObjectEnumerator implements ResourceEnumerator {
         }
     }
     
-    public final String getClassLoaderReferenceDescription() {
+    public final String getClassLoaderReferenceDescription(Formatter formatter) {
         switch (clRef) {
             case REF_CCL: return "Context class loader";
             case REF_THREAD_CLASS: return "Thread class: " + threadObject.getClass().getName();
             case REF_TARGET: return "Target: " + threadRBean.getTarget().getClass();
             case REF_ACC:
                 CodeSource codeSource = ((ProtectionDomain)object).getCodeSource();
-                return "Access control context; code base: " + (codeSource == null ? "<unknown>" : codeSource.getLocation().toString());
+                return "Access control context; code base: " + (codeSource == null ? "<unknown>" : formatter.formatUrl(codeSource.getLocation()));
             case REF_OTHER: return getOtherClassLoaderReferenceDescription();
             default: return null;
         }

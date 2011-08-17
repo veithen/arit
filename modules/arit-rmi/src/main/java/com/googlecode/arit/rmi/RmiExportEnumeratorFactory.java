@@ -21,6 +21,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -48,11 +49,11 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
             return exportedObject.getClass().getClassLoader();
         }
 
-        public String getClassLoaderReferenceDescription() {
+        public String getClassLoaderReferenceDescription(Formatter formatter) {
             return "Implementation class: " + exportedObject.getClass().getName();
         }
 
-        public String getResourceDescription() {
+        public String getResourceDescription(Formatter formatter) {
             return "Exported object (RMI)";
         }
 

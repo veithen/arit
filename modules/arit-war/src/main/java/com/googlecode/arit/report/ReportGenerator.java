@@ -123,13 +123,14 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                     while (resourceEnumerator.nextClassLoaderReference()) {
                         ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
                         if (classLoader != null) { // TODO: do we really need this check??
-                            Module module = moduleHelper.getModule(classLoader);
-                            if (module != null) {
+                            ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
+                            if (moduleInfo != null) {
+                                Module module = moduleInfo.getModule();
                                 Resource resource = resourceMap.get(module);
                                 if (resource == null) {
                                     ResourceType resourceType = resourceEnumerator.getResourceType();
                                     if (resourceDescription == null) {
-                                        resourceDescription = resourceEnumerator.getResourceDescription();
+                                        resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
                                     }
                                     if (resourceId == null) {
                                         resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
@@ -138,7 +139,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                                     module.getResources().add(resource);
                                     resourceMap.put(module, resource);
                                 }
-                                resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription()));
+                                resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
                             }
                         }
                     }

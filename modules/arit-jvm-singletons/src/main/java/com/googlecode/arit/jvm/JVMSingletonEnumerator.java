@@ -18,6 +18,7 @@ package com.googlecode.arit.jvm;
 import java.util.Iterator;
 import java.util.List;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -40,7 +41,7 @@ public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
         return instance.getClass().getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Implementation class";
     }
 
@@ -48,7 +49,7 @@ public class JVMSingletonEnumerator extends SimpleResourceEnumerator {
         return instance;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return singleton.getDescription() + ": " + instance.getClass().getName();
     }
 

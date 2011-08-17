@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.threads;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -37,7 +38,7 @@ public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
         return threadGroup.getClass().getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "ThreadGroup implementation class";
     }
 
@@ -45,7 +46,7 @@ public class ThreadGroupEnumerator extends SimpleResourceEnumerator {
         return threadGroup;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "Thread group: " + threadGroup.getName() + "; class=" + threadGroup.getClass().getName();
     }
 

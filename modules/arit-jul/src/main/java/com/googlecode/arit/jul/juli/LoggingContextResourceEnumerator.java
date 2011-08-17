@@ -18,6 +18,7 @@ package com.googlecode.arit.jul.juli;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.jul.HandlerEnumerator;
@@ -61,7 +62,7 @@ public class LoggingContextResourceEnumerator implements ResourceEnumerator {
         return object;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "JULI per class loader logging context";
     }
 
@@ -89,7 +90,7 @@ public class LoggingContextResourceEnumerator implements ResourceEnumerator {
         }
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         switch (state) {
             case 1:
                 return "Context selector";

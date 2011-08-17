@@ -18,6 +18,7 @@ package com.googlecode.arit.bundlecache;
 import java.util.Iterator;
 import java.util.List;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -39,7 +40,7 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
         return bundle.getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Bundle class loader";
     }
 
@@ -47,7 +48,7 @@ public class CachedResourceBundleEnumerator extends SimpleResourceEnumerator {
         return bundle.getBundle();
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "Cached resource bundle: " + bundle.getName();
     }
 

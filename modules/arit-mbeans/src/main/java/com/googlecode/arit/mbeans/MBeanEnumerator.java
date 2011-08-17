@@ -22,6 +22,7 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -51,7 +52,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
         return mbean.getClass().getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Implementation class: " + mbean.getClass().getName();
     }
 
@@ -59,7 +60,7 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
         return mbean;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "MBean: " + name;
     }
 

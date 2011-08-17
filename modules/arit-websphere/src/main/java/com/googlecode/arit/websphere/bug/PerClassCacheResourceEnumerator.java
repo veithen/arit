@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere.bug;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -39,7 +40,7 @@ public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnum
         return clazz.getClassLoader();
     }
 
-    public final String getClassLoaderReferenceDescription() {
+    public final String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Cache key";
     }
 
@@ -47,7 +48,7 @@ public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnum
         return clazz;
     }
 
-    public final String getResourceDescription() {
+    public final String getResourceDescription(Formatter formatter) {
         return getDescription(clazz);
     }
     

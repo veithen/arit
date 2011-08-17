@@ -18,6 +18,7 @@ package com.googlecode.arit.jdbc;
 import java.util.Iterator;
 import java.util.List;
 
+import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.SimpleResourceEnumerator;
 
@@ -39,7 +40,7 @@ public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
         return driverClass.getClassLoader();
     }
 
-    public String getClassLoaderReferenceDescription() {
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
         return "Driver class";
     }
 
@@ -48,7 +49,7 @@ public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
         return driverClass;
     }
 
-    public String getResourceDescription() {
+    public String getResourceDescription(Formatter formatter) {
         return "JDBC driver: " + driverClass.getName();
     }
 

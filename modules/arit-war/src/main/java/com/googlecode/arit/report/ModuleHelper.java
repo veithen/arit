@@ -33,7 +33,7 @@ public class ModuleHelper {
     private final ModuleType unknownModuleType;
     private final ModuleTypeIconManager moduleTypeIconManager;
     private final ModuleIdentityProvider moduleIdentityProvider;
-    private final Map<ClassLoader,Module> moduleMap = new IdentityHashMap<ClassLoader,Module>();
+    private final Map<ClassLoader,ModuleInfo> moduleMap = new IdentityHashMap<ClassLoader,ModuleInfo>();
     
     public ModuleHelper(ModuleInspector moduleInspector,
             ClassLoaderIdProvider classLoaderIdProvider,
@@ -47,13 +47,13 @@ public class ModuleHelper {
         this.moduleIdentityProvider = moduleIdentityProvider;
     }
 
-    public Module getModule(ClassLoader classLoader) {
+    public ModuleInfo getModule(ClassLoader classLoader) {
         if (moduleMap.containsKey(classLoader)) {
             return moduleMap.get(classLoader);
         } else {
             ModuleDescription desc = moduleInspector.inspect(classLoader);
             if (desc == null) {
-                Module module;
+                ModuleInfo module;
                 // There may be intermediary class loaders that we don't identify as modules. Therefore
                 // multiple class loaders may correspond to a single module and we need to walk up the
                 // class loader hierarchy until we identify a module.
@@ -72,7 +72,7 @@ public class ModuleHelper {
         }
     }
     
-    public Module getModule(ModuleDescription desc) {
+    public ModuleInfo getModule(ModuleDescription desc) {
         ClassLoader classLoader = desc.getClassLoader();
         if (moduleMap.containsKey(classLoader)) {
             return moduleMap.get(classLoader);
@@ -83,24 +83,27 @@ public class ModuleHelper {
     
     public Set<Module> getModules() {
         Set<Module> result = new HashSet<Module>();
-        for (Module module : moduleMap.values()) {
+        for (ModuleInfo module : moduleMap.values()) {
             if (module != null) {
-                result.add(module);
+                result.add(module.getModule());
             }
         }
         return result;
     }
     
-    private Module loadModule(ModuleDescription desc) {
+    private ModuleInfo loadModule(ModuleDescription desc) {
         ClassLoader classLoader = desc.getClassLoader();
         Module module = new Module(classLoaderIdProvider.getClassLoaderId(classLoader, true), desc.getDisplayName(), desc.getType().getIdentifier(), desc.getStatus() == ModuleStatus.STOPPED);
         ModuleType moduleType = desc.getType();
         Module parentModule;
         ClassLoader parentClassLoader = classLoader.getParent();
         if (parentClassLoader != null) {
-            parentModule = getModule(parentClassLoader);
-            if (parentModule != null) {
+            ModuleInfo parentModuleInfo = getModule(parentClassLoader);
+            if (parentModuleInfo != null) {
+                parentModule = parentModuleInfo.getModule();
                 parentModule.addChild(module);
+            } else {
+                parentModule = null;
             }
         } else {
             parentModule = null;
@@ -119,7 +122,8 @@ public class ModuleHelper {
         for (ModuleIdentity identity : moduleIdentityProvider.getModuleIdentities(desc.getUrl(), classLoader)) {
             module.addIdentity(new Identity(identity.getType().getName(), identity.getValue()));
         }
-        moduleMap.put(classLoader, module);
-        return module;
+        ModuleInfo moduleInfo = new ModuleInfo(module, desc.getUrl());
+        moduleMap.put(classLoader, moduleInfo);
+        return moduleInfo;
     }
 }
