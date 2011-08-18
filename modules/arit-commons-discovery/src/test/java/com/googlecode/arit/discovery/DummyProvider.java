@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.bug;
+package com.googlecode.arit.discovery;
 
-import java.util.Map;
+public interface DummyProvider {
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
-
-@Target("org.apache.commons.discovery.tools.EnvironmentCache")
-public interface EnvironmentCacheRBean extends StaticRBean {
-    @Accessor(name="root_cache")
-    Map<ClassLoader,Object> getRootCache();
 }
