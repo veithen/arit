@@ -91,6 +91,7 @@ public class WASModuleInspector implements ModuleInspector {
                             moduleStatus = ModuleStatus.STOPPED;
                             url = Utils.dirToURL(earRoot);
                         } else {
+                            // We will get here in particular if the application has been undeployed.
                             moduleType = null;
                             // TODO: this should ultimately also be indicated as a null value; however, it is not sure how the rest of the application will react
                             moduleName = "<unknown>";
