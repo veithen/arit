@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
-    <core:resource-type identifier="jdbc-driver" iconFormat="GIF" resource="com/googlecode/arit/jdbc/icon.gif"/>
+    <core:resource-type identifier="jdbc-driver"/>
     <bean class="com.googlecode.arit.jdbc.DriverManagerInspector"/>
     <bean class="com.googlecode.arit.jdbc.JdbcDriverEnumeratorFactory"/>
     <bean class="com.googlecode.arit.jdbc.harmony.HarmonyDriverManagerInspectorPlugin"/>

@@ -71,12 +71,12 @@ public abstract class Systest extends TestCase {
             for (Resource resource : testAppModule.getResources()) {
                 icons.add(resource.getIcon());
             }
-            assertTrue(icons.contains("default/threadlocal.gif"));
+            assertTrue(icons.contains("default/threadlocal.png"));
             assertTrue(icons.contains("default/timerthread.png"));
             assertTrue(icons.contains("default/thread.png"));
             assertTrue(icons.contains("default/jce-provider.png"));
-            assertTrue(icons.contains("default/mbean.gif"));
-            assertTrue(icons.contains("default/jdbc-driver.gif"));
+            assertTrue(icons.contains("default/mbean.png"));
+            assertTrue(icons.contains("default/jdbc-driver.png"));
         } finally {
             container.stop();
         }

@@ -15,19 +15,16 @@
  */
 package com.googlecode.arit.spring;
 
-import java.io.IOException;
-import java.net.URL;
+import java.awt.Color;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.icon.ImageFormat;
 
 public class ResourceTypeFactory implements FactoryBean<ResourceType>, InitializingBean {
-    private ImageFormat iconFormat;
-    private String resource;
     private String identifier;
+    private Color color;
     private ResourceType resourceType;
     
     public Class<?> getObjectType() {
@@ -38,25 +35,16 @@ public class ResourceTypeFactory implements FactoryBean<ResourceType>, Initializ
         return true;
     }
 
-    public void setIconFormat(ImageFormat iconFormat) {
-        this.iconFormat = iconFormat;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
+    
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public void afterPropertiesSet() throws Exception {
-        URL url = ResourceTypeFactory.class.getClassLoader().getResource(resource);
-        if (url != null) {
-            resourceType = new ResourceType(iconFormat, url, identifier);
-        } else {
-            throw new IOException("Resource " + resource + " not found");
-        }
+        resourceType = new ResourceType(color, identifier);
     }
 
     public ResourceType getObject() throws Exception {

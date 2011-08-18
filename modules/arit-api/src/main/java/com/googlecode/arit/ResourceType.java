@@ -15,20 +15,29 @@
  */
 package com.googlecode.arit;
 
-import java.net.URL;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
-import com.googlecode.arit.icon.AbstractIconProvider;
-import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.icon.GeneratedIconProvider;
 
-public final class ResourceType extends AbstractIconProvider {
+public final class ResourceType extends GeneratedIconProvider {
+    private final Color color;
     private final String identifier;
     
-    public ResourceType(ImageFormat iconFormat, URL iconResource, String identifier) {
-        super(iconFormat, iconResource);
+    public ResourceType(Color color, String identifier) {
+        this.color = color;
         this.identifier = identifier;
     }
 
     public String getIdentifier() {
         return identifier;
+    }
+
+    @Override
+    protected void draw(Graphics2D g) {
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(color);
+        g.fillOval(4, 4, 8, 8);
     }
 }

@@ -17,10 +17,10 @@ package com.googlecode.arit;
 
 import java.net.URL;
 
-import com.googlecode.arit.icon.AbstractIconProvider;
+import com.googlecode.arit.icon.ResourceBasedIconProvider;
 import com.googlecode.arit.icon.ImageFormat;
 
-public final class ModuleType extends AbstractIconProvider {
+public final class ModuleType extends ResourceBasedIconProvider {
     private final String identifier;
     
     public ModuleType(ImageFormat iconFormat, URL iconResource, String identifier) {

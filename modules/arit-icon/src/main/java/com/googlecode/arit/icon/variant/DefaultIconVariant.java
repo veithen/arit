@@ -26,7 +26,7 @@ import com.googlecode.arit.icon.ImageData;
 public class DefaultIconVariant implements IconVariant {
     public ImageData createIconImage(IconProvider iconProvider) {
         try {
-            InputStream in = iconProvider.getIconResource().openStream();
+            InputStream in = iconProvider.getIconContent();
             try {
                 return new ImageData(iconProvider.getIconFormat(), IOUtils.toByteArray(in));
             } finally {

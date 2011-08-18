@@ -17,8 +17,6 @@
         <xsd:complexType>
             <xsd:sequence/>
             <xsd:attribute name="identifier" use="required" type="xsd:string"/>
-            <xsd:attribute name="iconFormat" use="required" type="xsd:string"/>
-            <xsd:attribute name="resource" use="required" type="xsd:string"/>
         </xsd:complexType>
     </xsd:element>
 </xsd:schema>

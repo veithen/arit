@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.googlecode.arit.icon.IconProvider;
 import com.googlecode.arit.icon.ImageData;
@@ -28,10 +29,15 @@ import com.googlecode.arit.icon.imageio.ImageIO;
 public abstract class TransformationVariant implements IconVariant {
     public final ImageData createIconImage(IconProvider iconProvider) {
         try {
-            BufferedImage image = ImageIO.read(iconProvider.getIconResource());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(transform(image), "PNG", baos);
-            return new ImageData(ImageFormat.PNG, baos.toByteArray());
+            InputStream in = iconProvider.getIconContent();
+            try {
+                BufferedImage image = ImageIO.read(in);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(transform(image), "PNG", baos);
+                return new ImageData(ImageFormat.PNG, baos.toByteArray());
+            } finally {
+                in.close();
+            }
         } catch (IOException ex) {
             throw new IconException(ex);
         }
