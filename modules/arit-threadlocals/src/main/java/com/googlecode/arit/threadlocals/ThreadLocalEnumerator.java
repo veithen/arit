@@ -27,6 +27,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
     private final Iterator<Map.Entry<ThreadLocal<?>,Set<Class<?>>>> threadLocalIterator;
     private ThreadLocal<?> threadLocal;
+    private int state;
     private Iterator<Class<?>> valueClassIterator;
     private Class<?> valueClass;
 
@@ -47,6 +48,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
         if (threadLocalIterator.hasNext()) {
             Map.Entry<ThreadLocal<?>,Set<Class<?>>> entry = threadLocalIterator.next();
             threadLocal = entry.getKey();
+            state = -1;
             valueClassIterator = entry.getValue().iterator();
             return true;
         } else {
@@ -59,20 +61,41 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
     }
 
     public boolean nextClassLoaderReference() {
-        if (valueClassIterator.hasNext()) {
-            valueClass = valueClassIterator.next();
-            return true;
-        } else {
-            return false;
+        switch (state) {
+            case -1:
+                state = 0;
+                return true;
+            case 0:
+                state = 1;
+                // Fall through
+            case 1:
+                if (valueClassIterator.hasNext()) {
+                    valueClass = valueClassIterator.next();
+                    return true;
+                } else {
+                    return false;
+                }
+           default:
+               throw new IllegalStateException();
         }
     }
 
     public ClassLoader getReferencedClassLoader() {
-        return valueClass.getClassLoader();
+        switch (state) {
+            case 0: return threadLocal.getClass().getClassLoader();
+            case 1: return valueClass.getClassLoader();
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     public String getClassLoaderReferenceDescription(Formatter formatter) {
-        return "Value class: " + valueClass.getName();
+        switch (state) {
+            case 0: return "ThreadLocal implementation: " + threadLocal.getClass().getName();
+            case 1: return "Value class: " + valueClass.getName();
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     public boolean cleanup() {
