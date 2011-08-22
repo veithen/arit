@@ -4,7 +4,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
+    <core:resource-type identifier="initial-context-props-cache"/>
     <core:resource-type identifier="websphere-bug"/>
+    <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityType" name="vmRef"/>
