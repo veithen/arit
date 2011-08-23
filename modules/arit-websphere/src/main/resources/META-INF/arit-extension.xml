@@ -18,4 +18,5 @@
     <bean class="com.googlecode.arit.websphere.bug.JavaReflectionAdapterResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
 </beans>
