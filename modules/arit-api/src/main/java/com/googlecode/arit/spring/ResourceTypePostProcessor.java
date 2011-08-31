@@ -19,6 +19,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
@@ -29,7 +31,11 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 public class ResourceTypePostProcessor implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         List<BeanDefinition> resourceTypeDefinitions = new ArrayList<BeanDefinition>();
-        List<String> resourceTypeIdentifiers = new ArrayList<String>();
+        // The order in which bean definitions are returned appears to be non deterministic
+        // (maybe because it depends on the order in which the arit-extension.xml files are
+        // discovered on the class path). However, assignColors only works will if the order
+        // is deterministic.
+        Set<String> resourceTypeIdentifiers = new TreeSet<String>();
         for (String beanName : beanFactory.getBeanDefinitionNames()) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
             if (beanDefinition.getBeanClassName().equals(ResourceTypeFactory.class.getName())) {
@@ -37,7 +43,7 @@ public class ResourceTypePostProcessor implements BeanFactoryPostProcessor {
                 resourceTypeIdentifiers.add((String)beanDefinition.getPropertyValues().getPropertyValue("identifier").getValue());
             }
         }
-        Map<String,Color> colors = ColorPaletteGenerator.assignColors(resourceTypeIdentifiers);
+        Map<String,Color> colors = ColorPaletteGenerator.assignColors(new ArrayList<String>(resourceTypeIdentifiers));
         for (BeanDefinition beanDefinition : resourceTypeDefinitions) {
             MutablePropertyValues properties = beanDefinition.getPropertyValues();
             String identifier = (String)properties.getPropertyValue("identifier").getValue();

@@ -16,8 +16,8 @@
 package com.googlecode.arit.spring;
 
 import java.awt.Color;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ColorPaletteGenerator {
@@ -66,7 +66,8 @@ public final class ColorPaletteGenerator {
      * colors such that the result is stable with respect to addition or removal of elements in the
      * collection. This means that the probability that adding or removing an element from the
      * collection would change the colors assigned to the remaining elements. Note that this only
-     * works if the items in the collection implement {@link Object#hashCode()} in a meaningful way.
+     * works if the items in the collection implement {@link Object#hashCode()} in a meaningful way
+     * and if the items in the collection have a deterministic order (e.g. if they are sorted).
      * 
      * @param <T>
      *            the type of items in the collection
@@ -75,7 +76,7 @@ public final class ColorPaletteGenerator {
      * @return a map that containing an entry with the assigned color for each item in the
      *         collection
      */
-    public static <T> Map<T,Color> assignColors(Collection<T> collection) {
+    public static <T> Map<T,Color> assignColors(List<T> collection) {
         Map<T,Color> result = new HashMap<T,Color>();
         Color[] palette = createColorPalette(collection.size());
         int paletteSize = palette.length;
