@@ -39,7 +39,7 @@ public class TomcatContainer implements Container {
         engine.addChild(host);
         engine.setDefaultHost(host.getName());
         container.addEngine(engine);
-        Connector httpConnector = container.createConnector("localhost", 8888, false);
+        Connector httpConnector = container.createConnector("localhost", 0, false);
         container.addConnector(httpConnector);
     }
     
