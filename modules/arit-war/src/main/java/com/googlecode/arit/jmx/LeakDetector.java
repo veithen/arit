@@ -112,7 +112,7 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
             }
             if (log.isWarnEnabled()) {
                 for (Module module : reportedModules.values()) {
-                    log.warn("The resource leak previously reported for application " + module.getName() + " is now gone");
+                    log.warn("The resource leak previously reported for application " + module.getName() + " (" + module.getId() + ") is now gone");
                 }
             }
         }
@@ -121,7 +121,9 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     private void dumpModule(Module module, StringBuilder buffer, int indent) {
         addIndent(buffer, indent);
         buffer.append(module.getName());
-        buffer.append('\n');
+        buffer.append(" (");
+        buffer.append(module.getId());
+        buffer.append(")\n");
         List<Resource> resources = module.getResources();
         if (!resources.isEmpty()) {
             addIndent(buffer, indent+1);
