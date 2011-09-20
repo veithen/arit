@@ -49,7 +49,12 @@ public class HarmonyResourceBundleCacheInspectorPlugin implements ResourceBundle
         List<CachedResourceBundle> result = new ArrayList<CachedResourceBundle>();
         for (Map.Entry<Object,Hashtable<String,ResourceBundle>> entry : cache.entrySet()) {
             for (Map.Entry<String,ResourceBundle> entry2 : entry.getValue().entrySet()) {
-                result.add(new CachedResourceBundle((ClassLoader)entry.getKey(), entry2.getKey(), entry2.getValue()));
+                Object key = entry.getKey();
+                // Some versions of Harmony or JREs derived from Harmony use a String with value "null"
+                // instead of a null value as key. This has been observed with IBM Java 6.0 SR1.
+                if (key != null && !key.equals("null")) {
+                    result.add(new CachedResourceBundle((ClassLoader)key, entry2.getKey(), entry2.getValue()));
+                }
             }
         }
         return result;
