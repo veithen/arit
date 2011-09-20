@@ -24,24 +24,26 @@ import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class JavaReflectionAdapterResourceEnumeratorFactory implements ResourceEnumeratorFactory<JavaReflectionAdapterResourceEnumerator> {
-    private final JavaReflectionAdapterRBean rbean;
+    private final RBeanFactory rbf;
+    private final JavaReflectionAdapterStaticRBean rbean;
     
     @Autowired
     @Qualifier("websphere-bug")
     private ResourceType resourceType;
     
     public JavaReflectionAdapterResourceEnumeratorFactory() {
-        JavaReflectionAdapterRBean rbean;
+        RBeanFactory rbf;
         try {
-            rbean = new RBeanFactory(JavaReflectionAdapterRBean.class).createRBean(JavaReflectionAdapterRBean.class);
+            rbf = new RBeanFactory(JavaReflectionAdapterStaticRBean.class, JavaReflectionAdapterRBean.class);
         } catch (RBeanFactoryException ex) {
-            rbean = null;
+            rbf = null;
         }
-        this.rbean = rbean;
+        this.rbf = rbf;
+        this.rbean = rbf == null ? null : rbf.createRBean(JavaReflectionAdapterStaticRBean.class);
     }
 
     public String getDescription() {
-        return "Cached JavaReflectionAdapter instances";
+        return "Cached JavaReflectionAdapter instances (JR40617)";
     }
 
     public boolean isAvailable() {
@@ -49,6 +51,6 @@ public class JavaReflectionAdapterResourceEnumeratorFactory implements ResourceE
     }
 
     public JavaReflectionAdapterResourceEnumerator createEnumerator() {
-        return new JavaReflectionAdapterResourceEnumerator(resourceType, rbean.getAdapters());
+        return new JavaReflectionAdapterResourceEnumerator(resourceType, rbf, rbean.getAdapters());
     }
 }

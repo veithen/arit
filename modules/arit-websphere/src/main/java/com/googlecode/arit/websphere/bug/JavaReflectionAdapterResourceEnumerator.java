@@ -15,16 +15,86 @@
  */
 package com.googlecode.arit.websphere.bug;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import com.googlecode.arit.Formatter;
+import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.rbeans.RBeanFactory;
 
-public class JavaReflectionAdapterResourceEnumerator extends PerClassCacheResourceEnumerator {
-    public JavaReflectionAdapterResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {
-        super(resourceType, cache);
+public class JavaReflectionAdapterResourceEnumerator implements ResourceEnumerator {
+    private final ResourceType resourceType;
+    private final RBeanFactory rbf;
+    private final Iterator<Map.Entry<Object,Object>> iterator;
+    private int state = -1;
+    private Object key;
+    private Class<?> clazz;
+    private Object adapter;
+    
+    public JavaReflectionAdapterResourceEnumerator(ResourceType resourceType, RBeanFactory rbf, Map<Object,Object> cache) {
+        this.resourceType = resourceType;
+        this.rbf = rbf;
+        iterator = cache.entrySet().iterator();
     }
 
-    protected String getDescription(Class<?> clazz) {
+    public boolean nextResource() {
+        if (iterator.hasNext()) {
+            Map.Entry<Object,Object> entry = iterator.next();
+            key = entry.getKey();
+            adapter = entry.getValue();
+            // In the original JavaReflectionAdapter code, the key was a Class object
+            // (causing the class loader leak). The interim fix changes this to a String.
+            if (key instanceof String) {
+                clazz = rbf.createRBean(JavaReflectionAdapterRBean.class, adapter).getClazz();
+            } else {
+                clazz = (Class<?>)key;
+            }
+            state = -1;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Object getResourceObject() {
+        return adapter;
+    }
+
+    public String getResourceDescription(Formatter formatter) {
         return "Cached JavaReflectionAdapter for class " + clazz.getName();
+    }
+
+    public ResourceType getResourceType() {
+        return resourceType;
+    }
+
+    public boolean nextClassLoaderReference() {
+        if (state == 1) {
+            return false;
+        } else {
+            state++;
+            if (state == 0 && key instanceof String) {
+                state = 1;
+            }
+            return true;
+        }
+    }
+    
+    public ClassLoader getReferencedClassLoader() {
+        return clazz.getClassLoader();
+    }
+
+    public String getClassLoaderReferenceDescription(Formatter formatter) {
+        switch (state) {
+            case 0: return "Cache key";
+            case 1: return "JavaReflectionAdapter instance";
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    public boolean cleanup() {
+        return false;
     }
 }

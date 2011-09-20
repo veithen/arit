@@ -15,12 +15,14 @@
  */
 package com.googlecode.arit.websphere.bug;
 
+import java.util.Map;
+
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.Target;
 
 @Target("com.ibm.ws.sca.internal.java.handler.JavaReflectionAdapter")
-public interface JavaReflectionAdapterRBean extends RBean {
-    @Accessor(name="clazz")
-    Class<?> getClazz();
+public interface JavaReflectionAdapterStaticRBean extends StaticRBean {
+    @Accessor(name="adapters")
+    Map<Object,Object> getAdapters();
 }
