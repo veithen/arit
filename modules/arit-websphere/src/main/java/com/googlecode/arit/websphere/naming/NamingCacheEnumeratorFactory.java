@@ -35,8 +35,6 @@ public class NamingCacheEnumeratorFactory implements ResourceEnumeratorFactory<N
         try {
             rbean = new RBeanFactory(CacheManagerRBean.class).createRBean(CacheManagerRBean.class);
         } catch (RBeanFactoryException ex) {
-            // TODO: remove this when we are done
-            ex.printStackTrace(System.out);
             rbean = null;
         }
         this.rbean = rbean;
