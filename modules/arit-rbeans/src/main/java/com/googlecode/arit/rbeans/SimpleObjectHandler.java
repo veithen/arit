@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,20 @@
  */
 package com.googlecode.arit.rbeans;
 
-public class ObjectWrapper implements ObjectHandler {
+/**
+ * {@link ObjectHandler} implementation that maps objects to corresponding RBeans.
+ * 
+ * @author Andreas Veithen
+ */
+public class SimpleObjectHandler extends ObjectHandler {
     private final RBeanFactory rbf;
 
-    public ObjectWrapper(RBeanFactory rbf) {
+    public SimpleObjectHandler(RBeanFactory rbf) {
         this.rbf = rbf;
     }
 
-    public Object handle(Object object) {
-        if (object == null) {
-            return null;
-        } else {
-            RBeanInfo rbeanInfo = rbf.getRBeanInfoForTargetClass(object.getClass());
-            return rbeanInfo == null ? object : rbf.createRBean(rbeanInfo, object);
-        }
+    protected Object doHandle(Object object) {
+        RBeanInfo rbeanInfo = rbf.getRBeanInfoForTargetClass(object.getClass());
+        return rbeanInfo == null ? object : rbf.createRBean(rbeanInfo, object);
     }
 }

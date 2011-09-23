@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.rbeans.test10;
 
-/**
- * Converts an object returned by a target object to an object returned by an RBean. With the
- * exception of {@link PassThroughHandler}, the returned will be an RBean.
- * 
- * @author Andreas Veithen
- */
-public abstract class ObjectHandler {
-    public final Object handle(Object object) {
-        return object == null ? null : doHandle(object);
+import java.util.Map;
+
+public class MapHolder2 {
+    private final Map<?,?> map;
+
+    public MapHolder2(Map<?, ?> map) {
+        this.map = map;
     }
-    
-    protected abstract Object doHandle(Object object);
+
+    public Map<?,?> getMap() {
+        return map;
+    }
 }

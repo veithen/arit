@@ -23,10 +23,14 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.googlecode.arit.rbeans.collections.CollectionHandler;
+import com.googlecode.arit.rbeans.collections.MapHandler;
 
 public class RBeanFactory {
     private final ClassLoader cl;
@@ -138,7 +142,7 @@ public class RBeanFactory {
                     field.setAccessible(true);
                     methodHandler = new AccessorHandler(field, valueHandler);
                 }
-            } else {
+            } else if (proxyMethod.getDeclaringClass() != RBean.class) {
                 Method targetMethod;
                 try {
                     targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
@@ -160,6 +164,8 @@ public class RBeanFactory {
                     }
                     methodHandler = new SimpleMethodHandler(targetMethod, returnHandler);
                 }
+            } else {
+                methodHandler = GetTargetObjectMethodHandler.INSTANCE;
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }
@@ -182,6 +188,9 @@ public class RBeanFactory {
         } else if (genericType instanceof TypeVariable<?>) {
             // TODO: not entirely correct
             return Object.class;
+        } else if (genericType instanceof WildcardType) {
+            Type[] lowerBounds = ((WildcardType)genericType).getLowerBounds();
+            return lowerBounds.length == 0 ? Object.class : getRawType(lowerBounds[0]);
         } else {
             throw new RBeanFactoryException("Unable to determine raw type for " + genericType);
         }
@@ -190,11 +199,36 @@ public class RBeanFactory {
     private ObjectHandler getObjectHandler(Type toType, Type fromType, boolean mapped) throws RBeanFactoryException {
         Class<?> toClass = getRawType(toType);
         Class<?> fromClass = getRawType(fromType);
-        if (mapped || RBean.class.isAssignableFrom(toClass)) {
+        if (toClass == Map.class) {
+            Type keyType;
+            Type valueType;
+            if (toType instanceof ParameterizedType) {
+                Type[] typeArguments = ((ParameterizedType)toType).getActualTypeArguments();
+                keyType = typeArguments[0];
+                valueType = typeArguments[1];
+                Class<?> keyClass = getRawType(keyType);
+                Class<?> valueClass = getRawType(valueType);
+                if (!mapped) {
+                    mapped = RBean.class.isAssignableFrom(keyClass) || RBean.class.isAssignableFrom(valueClass);
+                    if (mapped) {
+                        load(keyClass);
+                        load(valueClass);
+                    }
+                }
+            } else {
+                keyType = Object.class;
+                valueType = Object.class;
+            }
+            if (mapped) {
+                return new MapHandler(getObjectHandler(keyType, Object.class, false), getObjectHandler(valueType, Object.class, false));
+            } else {
+                return PassThroughHandler.INSTANCE;
+            }
+        } else if (mapped || RBean.class.isAssignableFrom(toClass)) {
             if (!mapped) {
                 load(toClass);
             }
-            return new ObjectWrapper(this);
+            return new SimpleObjectHandler(this);
         } else {
             Class<?> itemClass = null;
             boolean isArray = toClass.isArray();
@@ -205,32 +239,30 @@ public class RBeanFactory {
             }
             if (itemClass != null && RBean.class.isAssignableFrom(itemClass)) {
                 load(itemClass);
-                return new CollectionWrapper(this, itemClass, fromClass.isArray());
+                return new CollectionHandler(new SimpleObjectHandler(this), fromClass.isArray());
             } else {
                 return toClass.isAssignableFrom(fromClass) ? PassThroughHandler.INSTANCE : null;
             }
         }
     }
     
-    public <T> T createRBean(Class<T> rbeanClass) {
-        return createRBean(rbeanClass, null);
+    public <T extends StaticRBean> T createRBean(Class<T> rbeanClass) {
+        return rbeanClass.cast(internalCreateRBean(rbeanClass, null));
     }
     
     // TODO: maybe we should check the runtime type of the object and return a subclass if necessary!
-    public <T> T createRBean(Class<T> rbeanClass, Object object) {
-        return rbeanClass.cast(createRBean(getRBeanInfo(rbeanClass), object));
+    public <T extends RBean> T createRBean(Class<T> rbeanClass, Object object) {
+        if (object == null) {
+            throw new IllegalArgumentException("Object must not be null");
+        }
+        return rbeanClass.cast(internalCreateRBean(rbeanClass, object));
+    }
+    
+    private Object internalCreateRBean(Class<?> rbeanClass, Object object) {
+        return createRBean(getRBeanInfo(rbeanClass), object);
     }
     
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
-        if (rbeanInfo.isStatic()) {
-            if (object != null) {
-                throw new IllegalArgumentException("No object expected for static RBean " + rbeanInfo.getRBeanClass().getName());
-            }
-        } else {
-            if (object == null) {
-                throw new IllegalArgumentException("Object must not be null because " + rbeanInfo.getRBeanClass().getName() + " is not static");
-            }
-        }
         return Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),
                 new Class<?>[] { rbeanInfo.getRBeanClass() }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
     }

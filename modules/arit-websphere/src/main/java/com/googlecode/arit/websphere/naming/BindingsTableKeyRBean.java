@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.websphere.naming;
 
-/**
- * Converts an object returned by a target object to an object returned by an RBean. With the
- * exception of {@link PassThroughHandler}, the returned will be an RBean.
- * 
- * @author Andreas Veithen
- */
-public abstract class ObjectHandler {
-    public final Object handle(Object object) {
-        return object == null ? null : doHandle(object);
-    }
-    
-    protected abstract Object doHandle(Object object);
+import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.Target;
+
+@Target("com.ibm.ws.naming.ipbase.BindingsTableKey")
+public interface BindingsTableKeyRBean extends RBean {
+
 }

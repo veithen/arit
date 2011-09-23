@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.rbeans.collections;
 
 import java.util.Arrays;
 
-public class CollectionWrapper<T> implements ObjectHandler {
-    private final RBeanFactory rbf;
-    private final Class<T> rbeanClass;
+import com.googlecode.arit.rbeans.ObjectHandler;
+
+public class CollectionHandler extends ObjectHandler {
+    private final ObjectHandler objectHandler;
     private final boolean fromArray;
 
-    public CollectionWrapper(RBeanFactory rbf, Class<T> rbeanClass, boolean fromArray) {
-        this.rbf = rbf;
-        this.rbeanClass = rbeanClass;
+    public CollectionHandler(ObjectHandler objectHandler, boolean fromArray) {
+        this.objectHandler = objectHandler;
         this.fromArray = fromArray;
     }
 
-    public Object handle(Object object) {
-        if (object == null) {
-            return null;
-        } else {
-            return new RBeanCollection<T>(rbf, rbeanClass, fromArray ? Arrays.asList((Object[])object) : (Iterable<?>)object);
-        }
+    protected Object doHandle(Object object) {
+        return new IterableWrapper(objectHandler, fromArray ? Arrays.asList((Object[])object) : (Iterable<?>)object);
     }
 }

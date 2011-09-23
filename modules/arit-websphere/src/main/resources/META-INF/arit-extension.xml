@@ -6,6 +6,7 @@
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
     <core:resource-type identifier="initial-context-props-cache"/>
     <core:resource-type identifier="websphere-bug"/>
+    <core:resource-type identifier="ws-naming-cache"/>
     <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
@@ -19,4 +20,5 @@
     <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
 </beans>

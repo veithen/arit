@@ -16,15 +16,16 @@
 package com.googlecode.arit.rbeans;
 
 /**
- * Converts an object returned by a target object to an object returned by an RBean. With the
- * exception of {@link PassThroughHandler}, the returned will be an RBean.
+ * {@link MethodHandler} for {@link RBean#_getTargetObject()}.
  * 
  * @author Andreas Veithen
  */
-public abstract class ObjectHandler {
-    public final Object handle(Object object) {
-        return object == null ? null : doHandle(object);
-    }
+public class GetTargetObjectMethodHandler implements MethodHandler {
+    public static final GetTargetObjectMethodHandler INSTANCE = new GetTargetObjectMethodHandler();
     
-    protected abstract Object doHandle(Object object);
+    private GetTargetObjectMethodHandler() {}
+    
+    public Object invoke(Object target, Object[] args) throws Throwable {
+        return target;
+    }
 }

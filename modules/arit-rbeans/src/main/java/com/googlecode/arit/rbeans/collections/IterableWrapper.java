@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.rbeans;
+package com.googlecode.arit.rbeans.collections;
 
 import java.util.Iterator;
 
-public class RBeanCollection<T> implements Iterable<T> {
-    private final RBeanFactory rbf;
-    private final Class<T> rbeanClass;
-    private final Iterable<?> parent;
+import com.googlecode.arit.rbeans.ObjectHandler;
 
-    public RBeanCollection(RBeanFactory rbf, Class<T> rbeanClass, Iterable<?> parent) {
-        this.rbf = rbf;
-        this.rbeanClass = rbeanClass;
+@SuppressWarnings("unchecked")
+public class IterableWrapper implements Iterable {
+    private final ObjectHandler objectHandler;
+    protected final Iterable parent;
+
+    public IterableWrapper(ObjectHandler objectHandler, Iterable parent) {
+        this.objectHandler = objectHandler;
         this.parent = parent;
     }
 
-    public Iterator<T> iterator() {
-        return new RBeanIterator<T>(rbf, rbeanClass, parent.iterator());
+    public Iterator iterator() {
+        return new IteratorWrapper(objectHandler, parent.iterator());
     }
 }

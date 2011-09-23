@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,20 @@
  */
 package com.googlecode.arit.rbeans;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.junit.Test;
 
 import com.googlecode.arit.rbeans.test1.DummyClass1;
 import com.googlecode.arit.rbeans.test1.DummyClass1RBean;
+import com.googlecode.arit.rbeans.test10.MapHolder2;
+import com.googlecode.arit.rbeans.test10.MapHolder2RBean;
 import com.googlecode.arit.rbeans.test2.Parent;
 import com.googlecode.arit.rbeans.test2.ParentRBean;
 import com.googlecode.arit.rbeans.test3.Car;
@@ -42,28 +50,36 @@ import com.googlecode.arit.rbeans.test7.DriverManager;
 import com.googlecode.arit.rbeans.test7.DriverManagerRBean;
 import com.googlecode.arit.rbeans.test7.DriverRBean;
 import com.googlecode.arit.rbeans.test8.IncompatibleAttributeTypeRBean;
+import com.googlecode.arit.rbeans.test9.Key;
+import com.googlecode.arit.rbeans.test9.KeyRBean;
+import com.googlecode.arit.rbeans.test9.MapHolder;
+import com.googlecode.arit.rbeans.test9.MapHolderRBean;
+import com.googlecode.arit.rbeans.test9.Value;
+import com.googlecode.arit.rbeans.test9.ValueRBean;
 
 public class RBeanTest {
     @Test
     public void testPrivateAttributeAccess() throws Exception {
         RBeanFactory rbf = new RBeanFactory(DummyClass1RBean.class);
-        DummyClass1RBean rbean = rbf.createRBean(DummyClass1RBean.class, new DummyClass1());
-        Assert.assertEquals("somevalue", rbean.getValue());
-        Assert.assertEquals("Hello (my value is somevalue)", rbean.sayHello());
+        DummyClass1 target = new DummyClass1();
+        DummyClass1RBean rbean = rbf.createRBean(DummyClass1RBean.class, target);
+        assertEquals("somevalue", rbean.getValue());
+        assertEquals("Hello (my value is somevalue)", rbean.sayHello());
+        assertSame(target, rbean._getTargetObject());
     }
     
     @Test
     public void testReturnValueWrapping() throws Exception {
         RBeanFactory rbf = new RBeanFactory(ParentRBean.class);
         ParentRBean rbean = rbf.createRBean(ParentRBean.class, new Parent());
-        Assert.assertEquals("Hello", rbean.getChild().sayHello());
+        assertEquals("Hello", rbean.getChild().sayHello());
     }
     
     @Test
     public void testSeeAlso() throws Exception {
         RBeanFactory rbf = new RBeanFactory(VehicleHolderRBean.class);
         VehicleHolderRBean rbean = rbf.createRBean(VehicleHolderRBean.class, new VehicleHolder(new Car()));
-        Assert.assertTrue(rbean.getVehicle() instanceof CarRBean);
+        assertTrue(rbean.getVehicle() instanceof CarRBean);
     }
     
     @Test
@@ -72,21 +88,7 @@ public class RBeanTest {
         StuffRegistryRBean rbean = rbf.createRBean(StuffRegistryRBean.class);
         Stuff stuff = new Stuff();
         StuffRegistry.registerStuff(stuff);
-        Assert.assertSame(stuff, rbean.getRegisteredStuff().get(0));
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testCreateRBeanWithInvalidArguments1() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(TruckRBean.class);
-        // TruckRBean is not a static RBean -> should throw exception
-        rbf.createRBean(TruckRBean.class);
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testCreateRBeanWithInvalidArguments2() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(StuffRegistryRBean.class);
-        // StuffRegistryRBean is a static RBean -> should throw exception
-        rbf.createRBean(StuffRegistryRBean.class, new StuffRegistry());
+        assertSame(stuff, rbean.getRegisteredStuff().get(0));
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -129,11 +131,55 @@ public class RBeanTest {
         driverManager.registerDriver(new Driver("test"));
         DriverManagerRBean driverManagerRBean = rbf.createRBean(DriverManagerRBean.class, driverManager);
         DriverRBean driverRBean = driverManagerRBean.getDrivers().iterator().next();
-        Assert.assertEquals("test", driverRBean.getName());
+        assertEquals("test", driverRBean.getName());
     }
     
     @Test(expected=TargetMemberNotFoundException.class)
     public void testIncompatibleAttributeType() throws Exception {
         new RBeanFactory(IncompatibleAttributeTypeRBean.class);
+    }
+    
+    @Test
+    public void testMappedMap() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
+        MapHolder mapHolder = new MapHolder();
+        mapHolder.getMap().put(new Key("key"), new Value("value"));
+        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
+        Map<KeyRBean,ValueRBean> map = rbean.getMap();
+        assertEquals(1, map.size());
+    }
+    
+    @Test
+    public void testMappedMapEntrySet() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
+        MapHolder mapHolder = new MapHolder();
+        mapHolder.getMap().put(new Key("key"), new Value("value"));
+        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
+        Iterator<Map.Entry<KeyRBean,ValueRBean>> it = rbean.getMap().entrySet().iterator();
+        assertTrue(it.hasNext());
+        Map.Entry<KeyRBean,ValueRBean> entry = it.next();
+        assertEquals("key", entry.getKey().getString());
+        assertEquals("value", entry.getValue().getString());
+    }
+    
+    @Test
+    public void testMappedMapValues() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
+        MapHolder mapHolder = new MapHolder();
+        mapHolder.getMap().put(new Key("key"), new Value("value"));
+        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
+        Iterator<ValueRBean> it = rbean.getMap().values().iterator();
+        assertTrue(it.hasNext());
+        ValueRBean value = it.next();
+        assertEquals("value", value.getString());
+    }
+    
+    @Test
+    public void testUnmappedMapWithWildcards() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(MapHolder2RBean.class);
+        Map<String,String> map = new HashMap<String,String>();
+        MapHolder2 mapHolder = new MapHolder2(map);
+        MapHolder2RBean rbean = rbf.createRBean(MapHolder2RBean.class, mapHolder);
+        assertSame(map, rbean.getMap());
     }
 }
