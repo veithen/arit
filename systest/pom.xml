@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.googlecode.arit</groupId>
         <artifactId>arit</artifactId>
-        <version>0.7-beta6</version>
+        <version>0.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>systest</artifactId>
-    <version>0.7-beta6</version>
+    <version>0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Arit :: Systests</name>
     <modules>
