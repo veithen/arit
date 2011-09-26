@@ -34,11 +34,12 @@ public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFacto
         LogManager logManager = LogManager.getLogManager();
         Class<? extends LogManager> clazz = logManager.getClass();
         try {
-            // We only enable the plugin if the getLogger and getLoggerNames methods have not
-            // been overridden. For LogManager implementations that override these methods
-            // (such as Tomcat's ClassLoaderLogManager), we need specialized plugins. 
-            if (clazz.getMethod("getLogger", String.class).getDeclaringClass().equals(LogManager.class)
-                    && clazz.getMethod("getLoggerNames").getDeclaringClass().equals(LogManager.class)) {
+            // We only enable the plugin if the getLoggerNames method has not been overridden.
+            // An overridden getLoggerNames method is an indication that the log manager maintains
+            // multiple logger name spaces and that we need a specialized plugin. This is the
+            // case for Tomcat's ClassLoaderLogManager. Note that WebSphere's WsLogManager
+            // overrides getLogger, but not getLoggerNames.
+            if (clazz.getMethod("getLoggerNames").getDeclaringClass().equals(LogManager.class)) {
                 this.logManager = logManager;
             } else {
                 this.logManager = null;
