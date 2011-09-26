@@ -94,6 +94,10 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     
     @ManagedOperation(description="Generate an Arit report")
     public Report generateReport() {
+        return generateReport(false);
+    }
+    
+    public Report generateReport(boolean leaksOnly) {
         List<Message> messages = new ArrayList<Message>();
         List<Module> rootModules = new ArrayList<Module>();
 //        ThreadLocalLogger.setTarget(messages);
@@ -146,7 +150,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                 }
             }
             for (Module module : moduleHelper.getModules()) {
-                if (module != null && module.getParent() == null) {
+                if (module != null && module.getParent() == null && (!leaksOnly || module.isStopped())) {
                     rootModules.add(module);
                 }
             }
