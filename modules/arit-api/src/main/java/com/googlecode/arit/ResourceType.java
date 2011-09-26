@@ -24,14 +24,20 @@ import com.googlecode.arit.icon.GeneratedIconProvider;
 public final class ResourceType extends GeneratedIconProvider {
     private final Color color;
     private final String identifier;
+    private final boolean showResourceId;
     
-    public ResourceType(Color color, String identifier) {
+    public ResourceType(Color color, String identifier, boolean showResourceId) {
         this.color = color;
         this.identifier = identifier;
+        this.showResourceId = showResourceId;
     }
 
     public String getIdentifier() {
         return identifier;
+    }
+
+    public boolean isShowResourceId() {
+        return showResourceId;
     }
 
     @Override

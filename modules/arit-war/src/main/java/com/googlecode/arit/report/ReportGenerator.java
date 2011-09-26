@@ -133,11 +133,14 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                                 Resource resource = resourceMap.get(module);
                                 if (resource == null) {
                                     ResourceType resourceType = resourceEnumerator.getResourceType();
-                                    if (resourceDescription == null) {
-                                        resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
-                                    }
                                     if (resourceId == null) {
                                         resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
+                                    }
+                                    if (resourceDescription == null) {
+                                        resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
+                                        if (resourceType.isShowResourceId()) {
+                                            resourceDescription = resourceDescription + " (" + resourceId + ")";
+                                        }
                                     }
                                     resource = new Resource(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
                                     module.getResources().add(resource);

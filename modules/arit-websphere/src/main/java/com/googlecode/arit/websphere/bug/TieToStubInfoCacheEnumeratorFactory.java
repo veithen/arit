@@ -28,7 +28,7 @@ public class TieToStubInfoCacheEnumeratorFactory implements ResourceEnumeratorFa
     private final TieToStubInfoCacheRBean rbean;
     
     @Autowired
-    @Qualifier("websphere-bug")
+    @Qualifier("ws-tie-to-stub-info-cache")
     private ResourceType resourceType;
     
     public TieToStubInfoCacheEnumeratorFactory() {

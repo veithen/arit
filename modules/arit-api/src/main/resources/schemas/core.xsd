@@ -17,6 +17,7 @@
         <xsd:complexType>
             <xsd:sequence/>
             <xsd:attribute name="identifier" use="required" type="xsd:string"/>
+            <xsd:attribute name="showResourceId" use="optional" type="xsd:boolean" default="false"/>
         </xsd:complexType>
     </xsd:element>
 </xsd:schema>

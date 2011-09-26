@@ -24,6 +24,7 @@ import com.googlecode.arit.ResourceType;
 
 public class ResourceTypeFactory implements FactoryBean<ResourceType>, InitializingBean {
     private String identifier;
+    private boolean showResourceId;
     private Color color;
     private ResourceType resourceType;
     
@@ -39,12 +40,16 @@ public class ResourceTypeFactory implements FactoryBean<ResourceType>, Initializ
         this.identifier = identifier;
     }
     
+    public void setShowResourceId(boolean showResourceId) {
+        this.showResourceId = showResourceId;
+    }
+
     public void setColor(Color color) {
         this.color = color;
     }
 
     public void afterPropertiesSet() throws Exception {
-        resourceType = new ResourceType(color, identifier);
+        resourceType = new ResourceType(color, identifier, showResourceId);
     }
 
     public ResourceType getObject() throws Exception {
