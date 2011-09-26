@@ -171,7 +171,8 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                 } else if (name2 == null) {
                     return 1;
                 } else {
-                    return name1.compareTo(name2);
+                    int c = name1.compareTo(name2);
+                    return c != 0 ? c : o1.getId().compareTo(o2.getId());
                 }
             }
         });

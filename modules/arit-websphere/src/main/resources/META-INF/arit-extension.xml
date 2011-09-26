@@ -8,6 +8,7 @@
     <core:resource-type identifier="websphere-bug"/>
     <core:resource-type identifier="ws-tie-to-stub-info-cache" showResourceId="true"/>
     <core:resource-type identifier="ws-naming-cache"/>
+    <core:resource-type identifier="ws-cached-jaxb-object"/>
     <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
@@ -21,5 +22,6 @@
     <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
 </beans>
