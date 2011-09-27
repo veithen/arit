@@ -89,6 +89,7 @@ public class RBeanTest {
         Stuff stuff = new Stuff();
         StuffRegistry.registerStuff(stuff);
         assertSame(stuff, rbean.getRegisteredStuff().get(0));
+        assertSame(StuffRegistry.class, rbean._getTargetClass());
     }
     
     @Test(expected=IllegalArgumentException.class)

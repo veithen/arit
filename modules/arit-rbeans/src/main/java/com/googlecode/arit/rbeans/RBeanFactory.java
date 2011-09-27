@@ -142,7 +142,11 @@ public class RBeanFactory {
                     field.setAccessible(true);
                     methodHandler = new AccessorHandler(field, valueHandler);
                 }
-            } else if (proxyMethod.getDeclaringClass() != RBean.class) {
+            } else if (proxyMethod.getDeclaringClass() == RBean.class) {
+                methodHandler = GetTargetObjectMethodHandler.INSTANCE;
+            } else if (proxyMethod.getDeclaringClass() == StaticRBean.class) {
+                methodHandler = new GetTargetClassMethodHandler(targetClass);
+            } else {
                 Method targetMethod;
                 try {
                     targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
@@ -164,8 +168,6 @@ public class RBeanFactory {
                     }
                     methodHandler = new SimpleMethodHandler(targetMethod, returnHandler);
                 }
-            } else {
-                methodHandler = GetTargetObjectMethodHandler.INSTANCE;
             }
             methodHandlers.put(proxyMethod, methodHandler);
         }

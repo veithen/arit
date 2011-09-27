@@ -15,15 +15,20 @@
  */
 package com.googlecode.arit.discovery;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-public class EnvironmentCacheEnumeratorFactory implements ResourceEnumeratorFactory<EnvironmentCacheEnumerator> {
+public class EnvironmentCacheEnumeratorFactory implements ResourceEnumeratorFactory<EnvironmentCacheEnumerator>, CleanerPlugin {
+    private static final Log log = LogFactory.getLog(EnvironmentCacheEnumeratorFactory.class);
+    
     private final EnvironmentCacheRBean rbean;
     
     @Autowired
@@ -50,5 +55,15 @@ public class EnvironmentCacheEnumeratorFactory implements ResourceEnumeratorFact
 
     public EnvironmentCacheEnumerator createEnumerator() {
         return new EnvironmentCacheEnumerator(resourceType, rbean.getRootCache());
+    }
+
+    public void clean(ClassLoader classLoader) {
+        boolean removed;
+        synchronized (rbean._getTargetClass()) {
+            removed = rbean.getRootCache().remove(classLoader) != null;
+        }
+        if (removed) {
+            log.info("Cleaned up EnvironmentCache entries");
+        }
     }
 }

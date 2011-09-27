@@ -30,4 +30,25 @@ public class ClassLoaderIdProvider {
         }
         return id;
     }
+
+    /**
+     * Get the class loader for the given ID.
+     * 
+     * @param id
+     *            the class loader ID (as returned by
+     *            {@link #getClassLoaderId(ClassLoader, boolean)}
+     * @return the class loader ID or <code>null</code> if no class loader with the given ID was
+     *         found (which may occur if the class loader has been garbage collected in the
+     *         meantime)
+     */
+    public synchronized ClassLoader getClassLoader(Integer id) {
+        // Note that we can't use a reverse lookup map here because we can only
+        // hold weak references to the class loaders
+        for (Map.Entry<ClassLoader,Integer> entry : idMap.entrySet()) {
+            if (entry.getValue().equals(id)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }

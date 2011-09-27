@@ -17,37 +17,65 @@ package com.googlecode.arit.jmx;
 
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
+import com.googlecode.arit.CleanerPlugin;
+import com.googlecode.arit.ModuleDescription;
+import com.googlecode.arit.ModuleInspector;
+import com.googlecode.arit.PluginManager;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.report.ClassLoaderIdProvider;
+import com.googlecode.arit.servlet.ModuleInspectorFactory;
 
 @ManagedResource(objectName="com.googlecode.arit:type=Cleaner", description="Cleans resources that cause memory leaks")
-public class Cleaner {
+public class Cleaner extends PluginManager<CleanerPlugin> {
+    private static final Log log = LogFactory.getLog(Cleaner.class);
+    
     @Autowired
     private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
     
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
     
+    @Autowired
+    private ModuleInspectorFactory moduleInspectorFactory;
+    
+    public Cleaner() {
+        super(CleanerPlugin.class);
+    }
+
     @ManagedOperation(description="Clean resources linked to a given class loader")
     @ManagedOperationParameters(
         @ManagedOperationParameter(name="classLoaderId", description="The ID of the class loader")
     )
     public void clean(Integer classLoaderId) {
-        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
-            if (resourceEnumeratorFactory.isAvailable()) {
-                ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
-                while (resourceEnumerator.nextResource()) {
-                    while (resourceEnumerator.nextClassLoaderReference()) {
-                        Integer id = classLoaderIdProvider.getClassLoaderId(resourceEnumerator.getReferencedClassLoader(), false);
-                        if (id != null && id.equals(classLoaderId)) {
-                            resourceEnumerator.cleanup();
+        ClassLoader classLoader = classLoaderIdProvider.getClassLoader(classLoaderId);
+        if (classLoader == null) {
+            log.info("Class loader with ID " + classLoaderId + " not found");
+        } else {
+            ModuleDescription moduleDescription = moduleInspectorFactory.createModuleInspector().inspect(classLoader);
+            log.info("Starting cleanup for " + moduleDescription.getDisplayName() + " (" + classLoaderId + ")");
+            for (CleanerPlugin plugin : getPlugins()) {
+                plugin.clean(classLoader);
+            }
+            
+            // TODO: this is the support for the old API; this will probably be removed
+            for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
+                if (resourceEnumeratorFactory.isAvailable()) {
+                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
+                    while (resourceEnumerator.nextResource()) {
+                        while (resourceEnumerator.nextClassLoaderReference()) {
+                            Integer id = classLoaderIdProvider.getClassLoaderId(resourceEnumerator.getReferencedClassLoader(), false);
+                            if (id != null && id.equals(classLoaderId)) {
+                                resourceEnumerator.cleanup();
+                            }
                         }
                     }
                 }
