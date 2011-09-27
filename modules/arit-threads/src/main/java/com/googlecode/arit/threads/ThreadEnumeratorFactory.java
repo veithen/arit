@@ -15,13 +15,18 @@
  */
 package com.googlecode.arit.threads;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
-public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<ThreadEnumerator> {
+public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<ThreadEnumerator>, CleanerPlugin {
+    private static final Log log = LogFactory.getLog(ThreadEnumeratorFactory.class);
+    
     @Autowired
     private ThreadHelper threadHelper;
     
@@ -38,5 +43,14 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<Thread
 
     public ThreadEnumerator createEnumerator() {
         return new ThreadEnumerator(threadHelper, inspectorManager, ThreadUtils.getAllThreads());
+    }
+
+    public void clean(ClassLoader classLoader) {
+        for (Thread thread : ThreadUtils.getAllThreads()) {
+            if (thread.getContextClassLoader() == classLoader) {
+                thread.setContextClassLoader(String.class.getClassLoader());
+                log.info("Unset context class loader for thread " + thread.getName());
+            }
+        }
     }
 }
