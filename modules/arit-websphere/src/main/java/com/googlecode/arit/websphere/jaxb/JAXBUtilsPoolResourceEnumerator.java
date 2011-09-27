@@ -15,22 +15,19 @@
  */
 package com.googlecode.arit.websphere.jaxb;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 
 import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
+    private final JAXBUtilsPoolResourceEnumeratorFactory factory;
     private final ResourceType resourceType;
-    private final RBeanFactory rbf;
     private final Iterator<Map.Entry<Class<?>,PoolRBean>> poolIterator;
     private Class<?> cachedObjectType;
     private Iterator<Map.Entry<JAXBContext,List<?>>> contextIterator;
@@ -38,9 +35,9 @@ public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
     private Iterator<ClassLoader> classLoaderIterator;
     private ClassLoader classLoader;
     
-    public JAXBUtilsPoolResourceEnumerator(ResourceType resourceType, RBeanFactory rbf, Map<Class<?>,PoolRBean> poolMap) {
+    public JAXBUtilsPoolResourceEnumerator(JAXBUtilsPoolResourceEnumeratorFactory factory, ResourceType resourceType, Map<Class<?>,PoolRBean> poolMap) {
+        this.factory = factory;
         this.resourceType = resourceType;
-        this.rbf = rbf;
         poolIterator = poolMap.entrySet().iterator();
     }
     
@@ -60,11 +57,7 @@ public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
             } else {
                 if (contextIterator.hasNext()) {
                     entry = contextIterator.next();
-                    Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-                    for (ValueTypeInformationRBean typeInformation : rbf.createRBean(JAXBContextImplRBean.class, entry.getKey()).getModel().getTypeInformation()) {
-                        classLoaders.add(typeInformation.getJavaType().getClassLoader());
-                    }
-                    classLoaderIterator = classLoaders.iterator();
+                    classLoaderIterator = factory.getClassLoaders(entry.getKey()).iterator();
                     return true;
                 } else {
                     contextIterator = null;

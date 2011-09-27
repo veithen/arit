@@ -16,21 +16,31 @@
 package com.googlecode.arit.websphere.jaxb;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumeratorFactory<JAXBUtilsPoolResourceEnumerator> {
+public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumeratorFactory<JAXBUtilsPoolResourceEnumerator>, CleanerPlugin {
+    private final Log log = LogFactory.getLog(JAXBUtilsPoolResourceEnumeratorFactory.class);
+    
     private final RBeanFactory rbf;
     private final JAXBUtilsRBean jaxbUtils;
 
@@ -56,12 +66,41 @@ public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumerato
     public String getDescription() {
         return "Cached JAXB objects";
     }
-
-    public JAXBUtilsPoolResourceEnumerator createEnumerator() {
+    
+    private Map<Class<?>,PoolRBean> getPools() {
         Map<Class<?>,PoolRBean> pools = new HashMap<Class<?>,PoolRBean>();
         pools.put(JAXBIntrospector.class, jaxbUtils.getIPool());
         pools.put(Marshaller.class, jaxbUtils.getMPool());
         pools.put(Unmarshaller.class, jaxbUtils.getUPool());
-        return new JAXBUtilsPoolResourceEnumerator(resourceType, rbf, pools);
+        return pools;
+    }
+    
+    public JAXBUtilsPoolResourceEnumerator createEnumerator() {
+        return new JAXBUtilsPoolResourceEnumerator(this, resourceType, getPools());
+    }
+    
+    public Set<ClassLoader> getClassLoaders(JAXBContext context) {
+        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+        for (ValueTypeInformationRBean typeInformation : rbf.createRBean(JAXBContextImplRBean.class, context).getModel().getTypeInformation()) {
+            classLoaders.add(typeInformation.getJavaType().getClassLoader());
+        }
+        return classLoaders;
+    }
+
+    public void clean(ClassLoader classLoader) {
+        for (Map.Entry<Class<?>,PoolRBean> poolsEntry : getPools().entrySet()) {
+            Class<?> pooledObjectType = poolsEntry.getKey();
+            Map<JAXBContext,List<?>> map = poolsEntry.getValue().getSoftMap().get();
+            if (map != null) {
+                // The map is a ConcurrentHashMap, so no synchronization is required
+                for (Iterator<Map.Entry<JAXBContext,List<?>>> it = map.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry<JAXBContext,List<?>> entry = it.next();
+                    if (getClassLoaders(entry.getKey()).contains(classLoader)) {
+                        it.remove();
+                        log.info("Removed pooled " + pooledObjectType.getSimpleName() + "(s)");
+                    }
+                }
+            }
+        }
     }
 }
