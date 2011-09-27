@@ -33,10 +33,13 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<T
     private ResourceType resourceType;
     
     @Autowired
-    private ThreadLocalInspector inspector;
+    private ThreadLocalInspector threadLocalInspector;
+    
+    @Autowired
+    private ThreadLocalValueInspector threadLocalValueInspector;
     
     public boolean isAvailable() {
-        return inspector.isAvailable();
+        return threadLocalInspector.isAvailable();
     }
 
     public String getDescription() {
@@ -44,47 +47,54 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<T
     }
 
     public ThreadLocalEnumerator createEnumerator() {
-        Map<ThreadLocal<?>,Set<Class<?>>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<Class<?>>>();
+        Map<ThreadLocal<?>,Set<ThreadLocalValueDescription>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<ThreadLocalValueDescription>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {
-            for (Map.Entry<ThreadLocal<?>,Object> entry : inspector.getThreadLocalMap(thread).entrySet()) {
+            for (Map.Entry<ThreadLocal<?>,Object> entry : threadLocalInspector.getThreadLocalMap(thread).entrySet()) {
                 ThreadLocal<?> threadLocal = entry.getKey();
                 Object value = entry.getValue();
                 if (value != null) {
-                    Set<Class<?>> classes = threadLocals.get(threadLocal);
-                    if (classes == null) {
-                        classes = new HashSet<Class<?>>();
-                        threadLocals.put(threadLocal, classes);
+                    Set<ThreadLocalValueDescription> descriptions = threadLocals.get(threadLocal);
+                    if (descriptions == null) {
+                        descriptions = new HashSet<ThreadLocalValueDescription>();
+                        threadLocals.put(threadLocal, descriptions);
                     }
-                    collectClasses(classes, value);
+                    collectValues(descriptions, value);
                 }
             }
         }
         return new ThreadLocalEnumerator(resourceType, threadLocals);
     }
     
-    private void collectClasses(Set<Class<?>> classes, Object value) {
+    private void collectValues(Set<ThreadLocalValueDescription> descriptions, Object value) {
         if (value instanceof Class<?>) {
-            classes.add((Class<?>)value);
+            descriptions.add(new SimpleThreadLocalValueDescription((Class<?>)value));
         } else {
             // Even if it is a collection, the actual implementation may be loaded from the
             // application class loader. Therefore we always add the class.
-            classes.add(value.getClass());
-            if (value instanceof Map<?,?>) {
-                // This should allow us situations such as described in AXIS-2674
-                try {
+            descriptions.add(new SimpleThreadLocalValueDescription(value.getClass()));
+            threadLocalValueInspector.identify(descriptions, value);
+            // This should allow us to identify situations such as described in AXIS-2674
+            try {
+                if (value instanceof Iterable<?>) {
+                    for (Object item : (Iterable<?>)value) {
+                        if (item != null) {
+                            collectValues(descriptions, item);
+                        }
+                    }
+                } else if (value instanceof Map<?,?>) {
                     for (Map.Entry<?,?> mapEntry : ((Map<?,?>)value).entrySet()) {
                         Object mapKey = mapEntry.getKey();
                         if (mapKey != null) {
-                            collectClasses(classes, mapKey);
+                            collectValues(descriptions, mapKey);
                         }
                         Object mapValue = mapEntry.getValue();
                         if (mapValue != null) {
-                            collectClasses(classes, mapValue);
+                            collectValues(descriptions, mapValue);
                         }
                     }
-                } catch (UnsupportedOperationException ex) {
-                    return;
                 }
+            } catch (UnsupportedOperationException ex) {
+                return;
             }
         }
     }

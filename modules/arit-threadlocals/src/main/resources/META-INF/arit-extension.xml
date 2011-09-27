@@ -7,6 +7,7 @@
     <core:resource-type identifier="threadlocal"/>
     <bean class="com.googlecode.arit.threadlocals.ThreadLocalEnumeratorFactory"/>
     <bean class="com.googlecode.arit.threadlocals.ThreadLocalInspector"/>
+    <bean class="com.googlecode.arit.threadlocals.ThreadLocalValueInspector"/>
     <bean class="com.googlecode.arit.threadlocals.harmony.HarmonyThreadLocalInspectorPlugin"/>
     <bean class="com.googlecode.arit.threadlocals.sun.SunThreadLocalInspectorPlugin"/>
 </beans>

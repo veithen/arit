@@ -7,4 +7,5 @@
     <core:module-type identifier="mar" iconFormat="PNG" resource="com/googlecode/arit/axis2/mar.png"/>
     <core:module-type identifier="aar" iconFormat="GIF" resource="com/googlecode/arit/axis2/aar.gif"/>
     <bean class="com.googlecode.arit.axis2.Axis2ModuleInspectorPlugin"/>
+    <bean class="com.googlecode.arit.axis2.Axis2ThreadLocalValueInspectorPlugin"/>
 </beans>

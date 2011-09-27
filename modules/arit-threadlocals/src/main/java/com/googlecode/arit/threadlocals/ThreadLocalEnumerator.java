@@ -25,13 +25,13 @@ import com.googlecode.arit.ResourceType;
 
 public class ThreadLocalEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;
-    private final Iterator<Map.Entry<ThreadLocal<?>,Set<Class<?>>>> threadLocalIterator;
+    private final Iterator<Map.Entry<ThreadLocal<?>,Set<ThreadLocalValueDescription>>> threadLocalIterator;
     private ThreadLocal<?> threadLocal;
     private int state;
-    private Iterator<Class<?>> valueClassIterator;
-    private Class<?> valueClass;
+    private Iterator<ThreadLocalValueDescription> valueClassIterator;
+    private ThreadLocalValueDescription valueClass;
 
-    public ThreadLocalEnumerator(ResourceType resourceType, Map<ThreadLocal<?>,Set<Class<?>>> threadLocals) {
+    public ThreadLocalEnumerator(ResourceType resourceType, Map<ThreadLocal<?>,Set<ThreadLocalValueDescription>> threadLocals) {
         this.resourceType = resourceType;
         threadLocalIterator = threadLocals.entrySet().iterator();
     }
@@ -46,7 +46,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
 
     public boolean nextResource() {
         if (threadLocalIterator.hasNext()) {
-            Map.Entry<ThreadLocal<?>,Set<Class<?>>> entry = threadLocalIterator.next();
+            Map.Entry<ThreadLocal<?>,Set<ThreadLocalValueDescription>> entry = threadLocalIterator.next();
             threadLocal = entry.getKey();
             state = -1;
             valueClassIterator = entry.getValue().iterator();
@@ -92,7 +92,7 @@ public class ThreadLocalEnumerator implements ResourceEnumerator {
     public String getClassLoaderReferenceDescription(Formatter formatter) {
         switch (state) {
             case 0: return "ThreadLocal implementation: " + threadLocal.getClass().getName();
-            case 1: return "Value class: " + valueClass.getName();
+            case 1: return valueClass.getDescription();
             default:
                 throw new IllegalStateException();
         }
