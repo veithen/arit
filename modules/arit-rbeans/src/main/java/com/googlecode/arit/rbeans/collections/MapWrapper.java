@@ -33,6 +33,10 @@ public class MapWrapper implements Map {
         this.parent = parent;
     }
 
+    public Map getTargetObject() {
+        return parent;
+    }
+
     public ObjectHandler getKeyHandler() {
         return keyHandler;
     }

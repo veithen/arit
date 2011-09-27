@@ -15,15 +15,24 @@
  */
 package com.googlecode.arit.websphere.orb;
 
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.googlecode.arit.rbeans.collections.MapWrapper;
 
-public class WLMProxyEnumeratorFactory implements ResourceEnumeratorFactory<WLMProxyEnumerator> {
+public class WLMProxyEnumeratorFactory implements ResourceEnumeratorFactory<WLMProxyEnumerator>, CleanerPlugin {
+    private static final Log log = LogFactory.getLog(WLMProxyEnumeratorFactory.class);
+    
     private final SelectionManagerRBean rbean;
     
     @Autowired
@@ -50,5 +59,23 @@ public class WLMProxyEnumeratorFactory implements ResourceEnumeratorFactory<WLMP
     
     public WLMProxyEnumerator createEnumerator() {
         return new WLMProxyEnumerator(resourceType, rbean.getProxies().values().iterator());
+    }
+
+    public void clean(ClassLoader classLoader) {
+        Map<DelegateRBean,MasterProxyRBean> proxies = rbean.getProxies();
+        // TODO: referring directly to MapWrapper is suboptimal
+        synchronized (((MapWrapper)proxies).getTargetObject()) {
+            for (Iterator<MasterProxyRBean> it = proxies.values().iterator(); it.hasNext(); ) {
+                MasterProxyRBean proxy = it.next();
+                IORRBean ior = proxy.getIOR();
+                if (ior != null) {
+                    Object servant = ior.getServant();
+                    if (servant != null && servant.getClass().getClassLoader() == classLoader) {
+                        it.remove();
+                        log.info("Removed WLM master proxy for servant " + servant.getClass().getName());
+                    }
+                }
+            }
+        }
     }
 }
