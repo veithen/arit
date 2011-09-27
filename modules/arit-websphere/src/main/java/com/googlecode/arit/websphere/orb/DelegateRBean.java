@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.naming;
+package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.Mapped;
+import org.omg.CORBA.portable.Delegate;
+
 import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.Target;
-import com.googlecode.arit.websphere.orb.ObjectImplRBean;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@Target("com.ibm.ws.naming.ipbase.BindingsTableData")
-@SeeAlso(ObjectImplRBean.class)
-public interface BindingsTableDataRBean extends RBean {
-    String getName();
-    
-    @Mapped
-    Object getObject();
+@TargetClass(Delegate.class)
+@SeeAlso(ClientDelegateRBean.class)
+public interface DelegateRBean extends RBean {
 }

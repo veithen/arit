@@ -9,6 +9,7 @@
     <core:resource-type identifier="ws-tie-to-stub-info-cache" showResourceId="true"/>
     <core:resource-type identifier="ws-naming-cache"/>
     <core:resource-type identifier="ws-cached-jaxb-object"/>
+    <core:resource-type identifier="ws-wlm-proxy"/>
     <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
@@ -24,4 +25,5 @@
     <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.orb.WLMProxyEnumeratorFactory"/>
 </beans>

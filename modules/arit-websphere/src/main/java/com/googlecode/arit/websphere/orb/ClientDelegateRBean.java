@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.naming;
+package com.googlecode.arit.websphere.orb;
 
-import org.omg.CORBA.portable.Delegate;
+import com.googlecode.arit.rbeans.Accessor;
+import com.googlecode.arit.rbeans.Target;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.TargetClass;
-
-@TargetClass(Delegate.class)
-public interface DelegateRBean extends RBean {
+@Target("com.ibm.rmi.corba.ClientDelegate")
+public interface ClientDelegateRBean extends DelegateRBean {
+    @Accessor(name="ior")
+    IORRBean getIOR();
 }

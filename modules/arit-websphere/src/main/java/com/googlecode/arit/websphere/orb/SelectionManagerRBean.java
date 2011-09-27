@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.naming;
+package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.Mapped;
+import java.util.Map;
+
+import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
-import com.googlecode.arit.websphere.orb.ObjectImplRBean;
 
-@Target("com.ibm.ws.naming.ipbase.BindingsTableData")
-@SeeAlso(ObjectImplRBean.class)
-public interface BindingsTableDataRBean extends RBean {
-    String getName();
-    
-    @Mapped
-    Object getObject();
+@Target("com.ibm.ws.cluster.router.selection.SelectionManager")
+public interface SelectionManagerRBean extends RBean {
+    @Accessor(name="proxies")
+    Map<DelegateRBean,MasterProxyRBean> getProxies();
 }

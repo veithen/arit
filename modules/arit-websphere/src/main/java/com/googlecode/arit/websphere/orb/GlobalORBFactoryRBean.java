@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.naming;
+package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.StaticRBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("com.ibm.rmi.IOR")
-public interface IORRBean extends RBean {
-    @Accessor(name="servant")
-    Object getServant();
+@Target("com.ibm.ws.orb.GlobalORBFactory")
+public interface GlobalORBFactoryRBean extends StaticRBean {
+    ORBRBean globalORB();
 }
