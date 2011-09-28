@@ -42,33 +42,38 @@ public class TieToStubInfoCacheEnumerator implements ResourceEnumerator {
 
     public boolean nextResource() {
         while (true) {
-            if (listEntry != null) {
-                Object next = listEntry.getNext();
-                listEntry = next == null ? null : rbf.createRBean(DataValueListEntryRBean.class, next);
+            while (true) {
                 if (listEntry != null) {
-                    break;
-                }
-            } else if (valueIterator == null) {
-                if (mapIndex == maps.length) {
-                    return false;
+                    Object next = listEntry.getNext();
+                    listEntry = next == null ? null : rbf.createRBean(DataValueListEntryRBean.class, next);
+                    if (listEntry != null) {
+                        break;
+                    }
+                } else if (valueIterator == null) {
+                    if (mapIndex == maps.length) {
+                        return false;
+                    } else {
+                        valueIterator = maps[mapIndex].values().iterator();
+                    }
                 } else {
-                    valueIterator = maps[mapIndex].values().iterator();
-                }
-            } else {
-                if (valueIterator.hasNext()) {
-                    listEntry = rbf.createRBean(DataValueListEntryRBean.class, valueIterator.next());
-                    break;
-                } else {
-                    valueIterator = null;
-                    listEntry = null;
-                    mapIndex++;
+                    if (valueIterator.hasNext()) {
+                        listEntry = rbf.createRBean(DataValueListEntryRBean.class, valueIterator.next());
+                        break;
+                    } else {
+                        valueIterator = null;
+                        listEntry = null;
+                        mapIndex++;
+                    }
                 }
             }
+            tie = listEntry.getKey();
+            stub = rbf.createRBean(StubInfoRBean.class, listEntry.getData()).getStub();
+            // Apparently, in some rare cases, the result of getStub is null
+            if (stub != null) {
+                clRef = -1;
+                return true;
+            }
         }
-        tie = listEntry.getKey();
-        stub = rbf.createRBean(StubInfoRBean.class, listEntry.getData()).getStub();
-        clRef = -1;
-        return true;
     }
 
     public ResourceType getResourceType() {
