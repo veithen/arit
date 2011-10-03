@@ -15,17 +15,8 @@
  */
 package com.ibm.ejs.ras;
 
-public class Tr {
-    public static TraceComponent register(Class<?> clazz, String group, String resourceBundleName) {
-        return null;
-    }
-
-    public static void debug(TraceComponent tc, String msgKey) {
-    }
-
-    public static void info(TraceComponent tc, String msgKey) {
-    }
-
-    public static void error(TraceComponent tc, String msgKey) {
+public class TraceElement {
+    public boolean isDebugEnabled() {
+        return false;
     }
 }

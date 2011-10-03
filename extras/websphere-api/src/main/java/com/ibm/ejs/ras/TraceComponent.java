@@ -15,6 +15,6 @@
  */
 package com.ibm.ejs.ras;
 
-public class TraceComponent {
+public class TraceComponent extends TraceElement {
 
 }

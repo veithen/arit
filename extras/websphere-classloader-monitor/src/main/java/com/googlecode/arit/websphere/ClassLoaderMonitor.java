@@ -77,6 +77,9 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
                 if (classLoaderInfo.getClassLoader() == null) {
                     it.remove();
                     count++;
+                    if (TC.isDebugEnabled()) {
+                        Tr.debug(TC, "Detected class loader that has been garbage collected: " + classLoaderInfo);
+                    }
                 } else {
                     String name = classLoaderInfo.getName();
                     Integer currentCount = leakStats.get(name);
@@ -101,6 +104,9 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
     public synchronized void stateChanged(DeployedObjectEvent event) throws RuntimeError, RuntimeWarning {
         String state = (String)event.getNewValue();
         DeployedObject deployedObject = event.getDeployedObject();
+        if (TC.isDebugEnabled()) {
+            Tr.debug(TC, "Got a stateChanged event for " + deployedObject.getName() + "; state " + event.getOldValue() + "->" + event.getNewValue());
+        }
         ClassLoader classLoader = deployedObject.getClassLoader();
         if (classLoader == null) {
             Tr.error(TC, "DeployedObject#getClassLoader() returned null");
@@ -108,12 +114,21 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
             if (state.equals("STARTING")) {
                 classLoaderInfos.add(new ClassLoaderInfo(classLoader, deployedObject.getName()));
                 createCount++;
+                if (TC.isDebugEnabled()) {
+                    Tr.debug(TC, "Incremented createCount; new value: " + createCount);
+                }
                 lastUpdated = System.currentTimeMillis();
             } else if (state.equals("DESTROYED")) {
                 for (ClassLoaderInfo info : classLoaderInfos) {
                     if (info.getClassLoader() == classLoader) {
+                        if (TC.isDebugEnabled()) {
+                            Tr.debug(TC, "Identified class loader: " + info);
+                        }
                         info.setStopped(true);
                         stopCount++;
+                        if (TC.isDebugEnabled()) {
+                            Tr.debug(TC, "Incremented stopCount; new value: " + stopCount);
+                        }
                         lastUpdated = System.currentTimeMillis();
                         break;
                     }

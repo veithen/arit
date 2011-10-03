@@ -42,4 +42,9 @@ public class ClassLoaderInfo {
     public void setStopped(boolean stopped) {
         this.stopped = stopped;
     }
+
+    @Override
+    public String toString() {
+        return "ClassLoaderInfo[name=" + name + ",stopped=" + stopped + ",destroyed=" + (ref.get() == null) + "]";
+    }
 }
