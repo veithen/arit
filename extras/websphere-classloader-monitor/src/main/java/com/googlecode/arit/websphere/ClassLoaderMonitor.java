@@ -29,6 +29,8 @@ import com.ibm.ejs.ras.TraceComponent;
 import com.ibm.websphere.runtime.CustomService;
 import com.ibm.ws.exception.RuntimeError;
 import com.ibm.ws.exception.RuntimeWarning;
+import com.ibm.ws.runtime.deploy.DeployedApplication;
+import com.ibm.ws.runtime.deploy.DeployedModule;
 import com.ibm.ws.runtime.deploy.DeployedObject;
 import com.ibm.ws.runtime.deploy.DeployedObjectEvent;
 import com.ibm.ws.runtime.deploy.DeployedObjectListener;
@@ -105,12 +107,16 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
         String state = (String)event.getNewValue();
         DeployedObject deployedObject = event.getDeployedObject();
         if (TC.isDebugEnabled()) {
-            Tr.debug(TC, "Got a stateChanged event for " + deployedObject.getName() + "; state " + event.getOldValue() + "->" + event.getNewValue());
+            Tr.debug(TC, "Got a stateChanged event for " + deployedObject.getName() + "; state " + event.getOldValue() + "->" + event.getNewValue()
+                    + "; deployed object type: " + deployedObject.getClass().getName());
         }
         ClassLoader classLoader = deployedObject.getClassLoader();
         if (classLoader == null) {
             Tr.error(TC, "DeployedObject#getClassLoader() returned null");
-        } else {
+        } else if (deployedObject instanceof DeployedApplication
+                || deployedObject instanceof DeployedModule && ((DeployedModule)deployedObject).getDeployedApplication().getClassLoader() != classLoader) {
+            // The condition above excludes EJB modules (which don't have a separate class loader)
+            // as well as applications that are configured with a single class loader.
             if (state.equals("STARTING")) {
                 classLoaderInfos.add(new ClassLoaderInfo(classLoader, deployedObject.getName()));
                 createCount++;
