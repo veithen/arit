@@ -72,6 +72,7 @@
         <module>legal-files</module>
         <module>modules</module>
         <module>systest</module>
+        <module>extras</module>
         <module>arit-distribution</module>
     </modules>
     <properties>
