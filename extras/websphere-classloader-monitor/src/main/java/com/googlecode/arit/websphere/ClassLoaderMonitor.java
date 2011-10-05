@@ -40,6 +40,21 @@ import com.ibm.wsspi.runtime.service.WsServiceRegistry;
 public class ClassLoaderMonitor implements CustomService, DeployedObjectListener {
     private static final TraceComponent TC = Tr.register(ClassLoaderMonitor.class, "CustomServices", null);
     
+    /**
+     * Delay between the last update of the class loader statistics and the moment these statistics
+     * are logged. The purpose of this is to reduce the amount of logging in situations where
+     * multiple applications are started or stopped in a row. It also gives the garbage collector
+     * some time to do its work after an application is stopped.
+     */
+    private static final int STATS_MIN_DELAY = 5000;
+    
+    /**
+     * The maximum delay before updated class loader statistics are logged. Normally class loader
+     * statistics are only logged if they have been unchanged for at least {@link #STATS_MIN_DELAY}.
+     * This value forces a dump of the statistics after the specified delay.
+     */
+    private static final int STATS_MAX_DELAY = 30000;
+    
     private ApplicationMgr applicationMgr;
     private int createCount;
     private int stopCount;
@@ -97,7 +112,8 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
         if (count > 0) {
             destroyedCount += count;
             lastUpdated = System.currentTimeMillis();
-        } else if (lastUpdated > lastDumped && timestamp - lastUpdated > 5000) {
+        }
+        if (lastUpdated > lastDumped && ((timestamp - lastUpdated > STATS_MIN_DELAY) || (timestamp - lastDumped > STATS_MAX_DELAY))) {
             lastDumped = timestamp;
             Tr.info(TC, "Class loader stats: created=" + createCount + "; stopped=" + stopCount + "; destroyed=" + destroyedCount + "; leakStats=" + leakStats);
         }
