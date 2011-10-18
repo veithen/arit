@@ -7,7 +7,7 @@
         <version>0.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>modules</artifactId>
+    <artifactId>extras</artifactId>
     <version>0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Arit :: Extras</name>
