@@ -15,9 +15,18 @@
  */
 package com.googlecode.arit;
 
+import java.util.ConcurrentModificationException;
+
 // TODO: rename to ResourceType
 public interface ResourceEnumeratorFactory<T extends ResourceEnumerator> {
     boolean isAvailable();
     String getDescription();
+    
+    /**
+     * 
+     * @return
+     * @throws ConcurrentModificationException
+     *             if the underlying resources change while creating the enumerator
+     */
     T createEnumerator();
 }

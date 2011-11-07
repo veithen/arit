@@ -15,12 +15,16 @@
  */
 package com.googlecode.arit;
 
+import java.util.ConcurrentModificationException;
+
 public interface ResourceEnumerator {
     /**
      * Fetch the next resource from the enumerator.
      * 
      * @return <code>true</code> if a resource has been fetched; <code>false</code> if there are no
      *         more resources
+     * @throws ConcurrentModificationException
+     *             if the underlying resources have changed
      */
     boolean nextResource();
     

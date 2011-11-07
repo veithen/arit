@@ -18,11 +18,14 @@ package com.googlecode.arit.report;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,8 @@ import com.googlecode.arit.servlet.ResourceTypeIconManager;
 
 @ManagedResource(objectName="com.googlecode.arit:type=ReportGenerator", description="Generates Arit reports")
 public class ReportGenerator implements InitializingBean, DisposableBean {
+    private static final Log log = LogFactory.getLog(ReportGenerator.class);
+    
     @Autowired
     private ModuleInspectorFactory moduleInspectorFactory;
     
@@ -98,6 +103,23 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     }
     
     public Report generateReport(boolean leaksOnly) {
+        int failures = 0;
+        while (true) {
+            try {
+                return internalGenerateReport(leaksOnly);
+            } catch (ConcurrentModificationException ex) {
+                if (++failures == 3) {
+                    throw ex;
+                } else {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Attempt " + failures + " to generate a report failed, keep trying", ex);
+                    }
+                }
+            }
+        }
+    }
+    
+    private Report internalGenerateReport(boolean leaksOnly) {
         List<Message> messages = new ArrayList<Message>();
         List<Module> rootModules = new ArrayList<Module>();
 //        ThreadLocalLogger.setTarget(messages);

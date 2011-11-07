@@ -56,7 +56,7 @@ import com.googlecode.arit.report.Resource;
 public class LeakDetector implements InitializingBean, DisposableBean, NotificationPublisherAware {
     public final static String LEAK_DETECTED = "arit.leak.detected";
     
-    private static final Log log = LogFactory.getLog(LeakDetector.class);
+    static final Log log = LogFactory.getLog(LeakDetector.class);
     
     @Autowired
     private ReportGenerator reportGenerator;
@@ -78,7 +78,11 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        runDetection();
+                        try {
+                            runDetection();
+                        } catch (Throwable ex) {
+                            log.error("Leak detection failed", ex);
+                        }
                     }
                 }, 0, 60000);
                 return timer;
