@@ -68,6 +68,12 @@ public class RBeanTest {
         assertSame(target, rbean._getTargetObject());
     }
     
+    @Test(expected=IllegalArgumentException.class)
+    public void testCreateRBeanWithIncorrectType() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(DummyClass1RBean.class);
+        rbf.createRBean(DummyClass1RBean.class, new Object());
+    }
+    
     @Test
     public void testReturnValueWrapping() throws Exception {
         RBeanFactory rbf = new RBeanFactory(ParentRBean.class);

@@ -249,7 +249,7 @@ public class RBeanFactory {
     }
     
     public <T extends StaticRBean> T createRBean(Class<T> rbeanClass) {
-        return rbeanClass.cast(internalCreateRBean(rbeanClass, null));
+        return rbeanClass.cast(createRBean(getRBeanInfo(rbeanClass), null));
     }
     
     // TODO: maybe we should check the runtime type of the object and return a subclass if necessary!
@@ -257,11 +257,12 @@ public class RBeanFactory {
         if (object == null) {
             throw new IllegalArgumentException("Object must not be null");
         }
-        return rbeanClass.cast(internalCreateRBean(rbeanClass, object));
-    }
-    
-    private Object internalCreateRBean(Class<?> rbeanClass, Object object) {
-        return createRBean(getRBeanInfo(rbeanClass), object);
+        RBeanInfo rbeanInfo = getRBeanInfo(rbeanClass);
+        if (!rbeanInfo.getTargetClass().isInstance(object)) {
+            throw new IllegalArgumentException(object.getClass().getName() + " is incompatble with "
+                    + rbeanClass.getName() + "'s target class " + rbeanInfo.getTargetClass().getName());
+        }
+        return rbeanClass.cast(createRBean(rbeanInfo, object));
     }
     
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
