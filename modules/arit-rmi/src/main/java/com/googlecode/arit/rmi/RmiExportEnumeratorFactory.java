@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.Formatter;
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
@@ -83,7 +84,7 @@ public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExport
         return "RMI exports";
     }
 
-    public ResourceEnumerator createEnumerator() {
+    public ResourceEnumerator createEnumerator(Logger logger) {
         return new RmiExportEnumeratorImpl(getPlugin().getExportedObjects());
     }
 }

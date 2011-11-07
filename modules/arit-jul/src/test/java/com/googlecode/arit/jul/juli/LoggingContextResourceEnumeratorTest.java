@@ -36,7 +36,7 @@ public class LoggingContextResourceEnumeratorTest {
         try {
             LoggingContextResourceEnumeratorFactory factory = new LoggingContextResourceEnumeratorFactory(logManager);
             assertTrue(factory.isAvailable());
-            LoggingContextResourceEnumerator enumerator = factory.createEnumerator();
+            LoggingContextResourceEnumerator enumerator = factory.createEnumerator(com.googlecode.arit.Logger.NULL);
             while (enumerator.nextResource()) {
                 while (enumerator.nextClassLoaderReference()) {
                     if (enumerator.getClassLoaderReferenceDescription(null).contains(handler.getClass().getName())) {

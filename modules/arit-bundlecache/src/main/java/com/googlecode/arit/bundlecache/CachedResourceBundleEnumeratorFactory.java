@@ -18,6 +18,7 @@ package com.googlecode.arit.bundlecache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
@@ -37,7 +38,7 @@ public class CachedResourceBundleEnumeratorFactory implements ResourceEnumerator
         return "Cached resource bundles";
     }
 
-    public CachedResourceBundleEnumerator createEnumerator() {
+    public CachedResourceBundleEnumerator createEnumerator(Logger logger) {
         return new CachedResourceBundleEnumerator(resourceType, inspector.getCachedResourceBundles());
     }
 }

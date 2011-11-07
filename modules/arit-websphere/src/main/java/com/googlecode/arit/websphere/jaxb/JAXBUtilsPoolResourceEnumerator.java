@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 
 import com.googlecode.arit.Formatter;
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 
@@ -29,16 +30,18 @@ public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
     private final JAXBUtilsPoolResourceEnumeratorFactory factory;
     private final ResourceType resourceType;
     private final Iterator<Map.Entry<Class<?>,PoolRBean>> poolIterator;
+    private final Logger logger;
     private Class<?> cachedObjectType;
     private Iterator<Map.Entry<JAXBContext,List<?>>> contextIterator;
     private Map.Entry<JAXBContext,List<?>> entry;
     private Iterator<ClassLoader> classLoaderIterator;
     private ClassLoader classLoader;
     
-    public JAXBUtilsPoolResourceEnumerator(JAXBUtilsPoolResourceEnumeratorFactory factory, ResourceType resourceType, Map<Class<?>,PoolRBean> poolMap) {
+    public JAXBUtilsPoolResourceEnumerator(JAXBUtilsPoolResourceEnumeratorFactory factory, ResourceType resourceType, Map<Class<?>,PoolRBean> poolMap, Logger logger) {
         this.factory = factory;
         this.resourceType = resourceType;
         poolIterator = poolMap.entrySet().iterator();
+        this.logger = logger;
     }
     
     public boolean nextResource() {
@@ -57,7 +60,7 @@ public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
             } else {
                 if (contextIterator.hasNext()) {
                     entry = contextIterator.next();
-                    classLoaderIterator = factory.getClassLoaders(entry.getKey()).iterator();
+                    classLoaderIterator = factory.getClassLoaders(entry.getKey(), logger).iterator();
                     return true;
                 } else {
                     contextIterator = null;

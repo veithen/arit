@@ -45,7 +45,7 @@ public class HandlerResourceEnumeratorTest {
         logger.addHandler(handler);
         boolean found = false;
         try {
-            HandlerResourceEnumerator enumerator = context.getBean(HandlerResourceEnumeratorFactory.class).createEnumerator();
+            HandlerResourceEnumerator enumerator = context.getBean(HandlerResourceEnumeratorFactory.class).createEnumerator(com.googlecode.arit.Logger.NULL);
             while (enumerator.nextResource()) {
                 if (enumerator.getHandler() == handler) {
                     found = true;
@@ -71,7 +71,7 @@ public class HandlerResourceEnumeratorTest {
             Logger.getLogger("testlogger" + i);
         }
         for (int i=0; i<10; i++) {
-            HandlerResourceEnumerator enumerator = factory.createEnumerator();
+            HandlerResourceEnumerator enumerator = factory.createEnumerator(com.googlecode.arit.Logger.NULL);
             while (enumerator.nextResource()) {
                 // Just loop
             }

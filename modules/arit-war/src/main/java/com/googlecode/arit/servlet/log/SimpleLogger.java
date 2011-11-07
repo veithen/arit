@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,19 @@
  */
 package com.googlecode.arit.servlet.log;
 
-import org.codehaus.plexus.logging.BaseLoggerManager;
-import org.codehaus.plexus.logging.Logger;
+import java.util.List;
 
-public class ThreadLocalLoggerManager extends BaseLoggerManager {
-    @Override
-    protected Logger createLogger(String key) {
-        return new ThreadLocalLogger(getThreshold(), key);
+import com.googlecode.arit.Logger;
+import com.googlecode.arit.report.Message;
+
+public class SimpleLogger implements Logger {
+    private final List<Message> messages;
+    
+    public SimpleLogger(List<Message> messages) {
+        this.messages = messages;
+    }
+    
+    public void log(String message) {
+        messages.add(new Message(message));
     }
 }

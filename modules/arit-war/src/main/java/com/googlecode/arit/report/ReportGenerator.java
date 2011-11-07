@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleType;
@@ -42,6 +43,7 @@ import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
+import com.googlecode.arit.servlet.log.SimpleLogger;
 
 @ManagedResource(objectName="com.googlecode.arit:type=ReportGenerator", description="Generates Arit reports")
 public class ReportGenerator implements InitializingBean, DisposableBean {
@@ -121,66 +123,62 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     
     private Report internalGenerateReport(boolean leaksOnly) {
         List<Message> messages = new ArrayList<Message>();
+        Logger logger = new SimpleLogger(messages);
         List<Module> rootModules = new ArrayList<Module>();
-//        ThreadLocalLogger.setTarget(messages);
-        try {
-            ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
-            ModuleHelper moduleHelper = new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager, moduleIdentityProvider);
-            
-            // If the application server supports this, load the entire module list before starting
-            // to inspect the resources.
-            List<ModuleDescription> moduleDescriptions = moduleInspector.listModules();
-            if (moduleDescriptions != null) {
-                for (ModuleDescription desc : moduleDescriptions) {
-                    moduleHelper.getModule(desc);
-                }
+        ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
+        ModuleHelper moduleHelper = new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager, moduleIdentityProvider);
+        
+        // If the application server supports this, load the entire module list before starting
+        // to inspect the resources.
+        List<ModuleDescription> moduleDescriptions = moduleInspector.listModules();
+        if (moduleDescriptions != null) {
+            for (ModuleDescription desc : moduleDescriptions) {
+                moduleHelper.getModule(desc);
             }
+        }
 
-            // A resource has class loader references to multiple class loaders and therefore to multiple
-            // modules. In this case the report contains several Resource instances for a single resource.
-            // This map is used to keep track of these instances.
-            Map<Module,Resource> resourceMap = new HashMap<Module,Resource>();
-            for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
-                ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
-                while (resourceEnumerator.nextResource()) {
-                    resourceMap.clear();
-                    String resourceDescription = null;
-                    Integer resourceId = null;
-                    while (resourceEnumerator.nextClassLoaderReference()) {
-                        ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
-                        if (classLoader != null) { // TODO: do we really need this check??
-                            ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
-                            if (moduleInfo != null) {
-                                Module module = moduleInfo.getModule();
-                                Resource resource = resourceMap.get(module);
-                                if (resource == null) {
-                                    ResourceType resourceType = resourceEnumerator.getResourceType();
-                                    if (resourceId == null) {
-                                        resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
-                                    }
-                                    if (resourceDescription == null) {
-                                        resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
-                                        if (resourceType.isShowResourceId()) {
-                                            resourceDescription = resourceDescription + " (" + resourceId + ")";
-                                        }
-                                    }
-                                    resource = new Resource(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
-                                    module.getResources().add(resource);
-                                    resourceMap.put(module, resource);
+        // A resource has class loader references to multiple class loaders and therefore to multiple
+        // modules. In this case the report contains several Resource instances for a single resource.
+        // This map is used to keep track of these instances.
+        Map<Module,Resource> resourceMap = new HashMap<Module,Resource>();
+        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
+            ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(logger);
+            while (resourceEnumerator.nextResource()) {
+                resourceMap.clear();
+                String resourceDescription = null;
+                Integer resourceId = null;
+                while (resourceEnumerator.nextClassLoaderReference()) {
+                    ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
+                    if (classLoader != null) { // TODO: do we really need this check??
+                        ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
+                        if (moduleInfo != null) {
+                            Module module = moduleInfo.getModule();
+                            Resource resource = resourceMap.get(module);
+                            if (resource == null) {
+                                ResourceType resourceType = resourceEnumerator.getResourceType();
+                                if (resourceId == null) {
+                                    resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
                                 }
-                                resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
+                                if (resourceDescription == null) {
+                                    resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
+                                    if (resourceType.isShowResourceId()) {
+                                        resourceDescription = resourceDescription + " (" + resourceId + ")";
+                                    }
+                                }
+                                resource = new Resource(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
+                                module.getResources().add(resource);
+                                resourceMap.put(module, resource);
                             }
+                            resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
                         }
                     }
                 }
             }
-            for (Module module : moduleHelper.getModules()) {
-                if (module != null && module.getParent() == null && (!leaksOnly || module.isStopped())) {
-                    rootModules.add(module);
-                }
+        }
+        for (Module module : moduleHelper.getModules()) {
+            if (module != null && module.getParent() == null && (!leaksOnly || module.isStopped())) {
+                rootModules.add(module);
             }
-        } finally {
-//            ThreadLocalLogger.setTarget(null);
         }
         Collections.sort(rootModules, new Comparator<Module>() {
             public int compare(Module o1, Module o2) {

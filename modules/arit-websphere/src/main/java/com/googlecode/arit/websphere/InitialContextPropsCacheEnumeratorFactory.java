@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -51,7 +52,7 @@ public class InitialContextPropsCacheEnumeratorFactory implements ResourceEnumer
         return rbean != null;
     }
 
-    public PerClassLoaderCacheResourceEnumerator createEnumerator() {
+    public PerClassLoaderCacheResourceEnumerator createEnumerator(Logger logger) {
         return new PerClassLoaderCacheResourceEnumerator(resourceType, "Cached initial context properties", rbean.getPropsCache());
     }
 }

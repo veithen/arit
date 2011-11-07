@@ -24,6 +24,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.googlecode.arit.Logger;
+
 public class EnvironmentCacheEnumeratorTest {
     private static ClassPathXmlApplicationContext context;
     
@@ -43,7 +45,7 @@ public class EnvironmentCacheEnumeratorTest {
         Object instance = DiscoverSingleton.find(DummyProvider.class);
         EnvironmentCacheEnumeratorFactory enumeratorFactory = context.getBean(EnvironmentCacheEnumeratorFactory.class);
         assertTrue(enumeratorFactory.isAvailable());
-        EnvironmentCacheEnumerator enumerator = enumeratorFactory.createEnumerator();
+        EnvironmentCacheEnumerator enumerator = enumeratorFactory.createEnumerator(Logger.NULL);
         assertTrue(enumerator.nextResource());
         assertSame(instance, enumerator.getResourceObject());
     }

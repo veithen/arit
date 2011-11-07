@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere.bug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -49,7 +50,7 @@ public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFacto
         return rbean != null;
     }
 
-    public IZ67457ResourceEnumerator createEnumerator() {
+    public IZ67457ResourceEnumerator createEnumerator(Logger logger) {
         return new IZ67457ResourceEnumerator(resourceType, rbean.getMethodDescriptorCache());
     }
 }

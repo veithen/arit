@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.arit.CleanerPlugin;
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
@@ -41,7 +42,7 @@ public class ThreadEnumeratorFactory implements ResourceEnumeratorFactory<Thread
         return "Threads and timers";
     }
 
-    public ThreadEnumerator createEnumerator() {
+    public ThreadEnumerator createEnumerator(Logger logger) {
         return new ThreadEnumerator(threadHelper, inspectorManager, ThreadUtils.getAllThreads());
     }
 

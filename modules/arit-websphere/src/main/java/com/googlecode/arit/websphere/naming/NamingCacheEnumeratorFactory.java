@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere.naming;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -48,7 +49,7 @@ public class NamingCacheEnumeratorFactory implements ResourceEnumeratorFactory<N
         return "Cached JNDI lookups";
     }
     
-    public NamingCacheEnumerator createEnumerator() {
+    public NamingCacheEnumerator createEnumerator(Logger logger) {
         return new NamingCacheEnumerator(resourceType, rbean.getCaches());
     }
 }

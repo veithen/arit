@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere.bug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -50,7 +51,7 @@ public class TieToStubInfoCacheEnumeratorFactory implements ResourceEnumeratorFa
         return rbean != null;
     }
 
-    public TieToStubInfoCacheEnumerator createEnumerator() {
+    public TieToStubInfoCacheEnumerator createEnumerator(Logger logger) {
         return new TieToStubInfoCacheEnumerator(resourceType, rbf, rbean.getMap().getMaps());
     }
 }

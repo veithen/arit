@@ -21,6 +21,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
@@ -48,7 +49,7 @@ public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory<
         return "JVM singletons";
     }
 
-    public JVMSingletonEnumerator createEnumerator() {
+    public JVMSingletonEnumerator createEnumerator(Logger logger) {
         return new JVMSingletonEnumerator(resourceType, singletons);
     }
 }

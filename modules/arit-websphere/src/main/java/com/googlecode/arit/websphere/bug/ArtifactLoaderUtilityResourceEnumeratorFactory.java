@@ -18,6 +18,7 @@ package com.googlecode.arit.websphere.bug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -48,7 +49,7 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
         return rbean != null;
     }
 
-    public PerClassLoaderCacheResourceEnumerator createEnumerator() {
+    public PerClassLoaderCacheResourceEnumerator createEnumerator(Logger logger) {
         return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry (JR40014)", rbean.getAppNameCache());
     }
 }

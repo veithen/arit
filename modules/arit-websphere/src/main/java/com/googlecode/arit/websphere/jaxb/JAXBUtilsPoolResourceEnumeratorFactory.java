@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.CleanerPlugin;
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
@@ -75,14 +76,18 @@ public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumerato
         return pools;
     }
     
-    public JAXBUtilsPoolResourceEnumerator createEnumerator() {
-        return new JAXBUtilsPoolResourceEnumerator(this, resourceType, getPools());
+    public JAXBUtilsPoolResourceEnumerator createEnumerator(Logger logger) {
+        return new JAXBUtilsPoolResourceEnumerator(this, resourceType, getPools(), logger);
     }
     
-    public Set<ClassLoader> getClassLoaders(JAXBContext context) {
+    public Set<ClassLoader> getClassLoaders(JAXBContext context, Logger logger) {
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-        for (ValueTypeInformationRBean typeInformation : rbf.createRBean(JAXBContextImplRBean.class, context).getModel().getTypeInformation()) {
-            classLoaders.add(typeInformation.getJavaType().getClassLoader());
+        if (rbf.getRBeanInfo(JAXBContextImplRBean.class).getTargetClass().isInstance(context)) {
+            for (ValueTypeInformationRBean typeInformation : rbf.createRBean(JAXBContextImplRBean.class, context).getModel().getTypeInformation()) {
+                classLoaders.add(typeInformation.getJavaType().getClassLoader());
+            }
+        } else {
+            logger.log("Encountered unexpected JAXBContext implementation " + context.getClass().getName());
         }
         return classLoaders;
     }
@@ -95,7 +100,8 @@ public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumerato
                 // The map is a ConcurrentHashMap, so no synchronization is required
                 for (Iterator<Map.Entry<JAXBContext,List<?>>> it = map.entrySet().iterator(); it.hasNext(); ) {
                     Map.Entry<JAXBContext,List<?>> entry = it.next();
-                    if (getClassLoaders(entry.getKey()).contains(classLoader)) {
+                    // TODO: invocation of clean should also get a Logger instance
+                    if (getClassLoaders(entry.getKey(), Logger.NULL).contains(classLoader)) {
                         it.remove();
                         log.info("Removed pooled " + pooledObjectType.getSimpleName() + "(s)");
                     }

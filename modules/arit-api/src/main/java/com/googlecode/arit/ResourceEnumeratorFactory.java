@@ -24,9 +24,10 @@ public interface ResourceEnumeratorFactory<T extends ResourceEnumerator> {
     
     /**
      * 
+     * @param logger TODO
      * @return
      * @throws ConcurrentModificationException
      *             if the underlying resources change while creating the enumerator
      */
-    T createEnumerator();
+    T createEnumerator(Logger logger);
 }

@@ -18,6 +18,7 @@ package com.googlecode.arit.shutdown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
@@ -41,7 +42,7 @@ public class ShutdownHookEnumeratorFactory implements ResourceEnumeratorFactory<
         return "Shutdown hooks";
     }
 
-    public ShutdownHookEnumerator createEnumerator() {
+    public ShutdownHookEnumerator createEnumerator(Logger logger) {
         return new ShutdownHookEnumerator(resourceType, inspector.getShutdownHooks(), threadHelper);
     }
 }

@@ -199,16 +199,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!-- TODO: excludes are broken in 2.2 and 2.3.x -->
-                <version>2.1</version>
-                <configuration>
-                    <excludes>
-                        <exclude>com/googlecode/arit/servlet/log/**</exclude>
-                    </excludes>
-                </configuration>
-             </plugin>
-            <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>6.1.22</version>

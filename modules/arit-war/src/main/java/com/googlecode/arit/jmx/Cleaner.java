@@ -26,6 +26,7 @@ import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import com.googlecode.arit.CleanerPlugin;
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.PluginManager;
@@ -69,7 +70,7 @@ public class Cleaner extends PluginManager<CleanerPlugin> {
             // TODO: this is the support for the old API; this will probably be removed
             for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
                 if (resourceEnumeratorFactory.isAvailable()) {
-                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator();
+                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(Logger.NULL);
                     while (resourceEnumerator.nextResource()) {
                         while (resourceEnumerator.nextClassLoaderReference()) {
                             Integer id = classLoaderIdProvider.getClassLoaderId(resourceEnumerator.getReferencedClassLoader(), false);

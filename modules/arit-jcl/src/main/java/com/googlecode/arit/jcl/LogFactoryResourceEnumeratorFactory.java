@@ -18,6 +18,7 @@ package com.googlecode.arit.jcl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 
@@ -37,7 +38,7 @@ public class LogFactoryResourceEnumeratorFactory implements ResourceEnumeratorFa
         return logFactoryLoader.isAvailable();
     }
 
-    public LogFactoryResourceEnumerator createEnumerator() {
+    public LogFactoryResourceEnumerator createEnumerator(Logger logger) {
         return new LogFactoryResourceEnumerator(resourceType, logFactoryLoader.getLogFactories());
     }
 }

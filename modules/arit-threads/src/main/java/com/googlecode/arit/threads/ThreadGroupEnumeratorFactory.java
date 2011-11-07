@@ -18,6 +18,7 @@ package com.googlecode.arit.threads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
@@ -46,7 +47,7 @@ public class ThreadGroupEnumeratorFactory implements ResourceEnumeratorFactory<T
         return "Thread groups";
     }
 
-    public ThreadGroupEnumerator createEnumerator() {
+    public ThreadGroupEnumerator createEnumerator(Logger logger) {
         return new ThreadGroupEnumerator(resourceType, ThreadUtils.getAllThreadGroups());
     }
 }
