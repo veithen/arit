@@ -4,6 +4,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    
+    <!-- Initialize these with empty Properties objects to avoid unnecessary SECJ0314W warnings on
+         WebSphere. We don't need access to system properties and environment variables, but Spring
+         will always attempt to call System#getProperties() and System#getenv() before constructing
+         read-only maps that call System#getProperty(String) and System#getenv(String) on demand. -->
+    <bean name="systemProperties" class="java.util.Properties"/>
+    <bean name="systemEnvironment" class="java.util.Properties"/>
+    
     <import resource="classpath*:META-INF/arit-extension.xml"/>
     <context:annotation-config/>
     <bean class="com.googlecode.arit.spring.ResourceTypePostProcessor"/>
