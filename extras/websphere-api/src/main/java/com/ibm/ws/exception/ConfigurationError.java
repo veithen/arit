@@ -15,20 +15,20 @@
  */
 package com.ibm.ws.exception;
 
-public class RuntimeError extends Exception {
-    public RuntimeError() {
+public class ConfigurationError extends Exception {
+    public ConfigurationError() {
         super();
     }
 
-    public RuntimeError(String message, Throwable cause) {
+    public ConfigurationError(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RuntimeError(String message) {
+    public ConfigurationError(String message) {
         super(message);
     }
 
-    public RuntimeError(Throwable cause) {
+    public ConfigurationError(Throwable cause) {
         super(cause);
     }
 }

@@ -10,4 +10,11 @@
     <artifactId>websphere-api</artifactId>
     <packaging>jar</packaging>
     <name>Arit :: Extras :: WebSphere APIs</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+    </dependencies>
 </project>

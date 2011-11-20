@@ -19,14 +19,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
 import com.ibm.ejs.ras.Tr;
 import com.ibm.ejs.ras.TraceComponent;
-import com.ibm.websphere.runtime.CustomService;
+import com.ibm.ws.exception.ComponentDisabledException;
+import com.ibm.ws.exception.ConfigurationError;
+import com.ibm.ws.exception.ConfigurationWarning;
 import com.ibm.ws.exception.RuntimeError;
 import com.ibm.ws.exception.RuntimeWarning;
 import com.ibm.ws.runtime.deploy.DeployedApplication;
@@ -35,9 +36,10 @@ import com.ibm.ws.runtime.deploy.DeployedObject;
 import com.ibm.ws.runtime.deploy.DeployedObjectEvent;
 import com.ibm.ws.runtime.deploy.DeployedObjectListener;
 import com.ibm.ws.runtime.service.ApplicationMgr;
+import com.ibm.wsspi.runtime.component.WsComponent;
 import com.ibm.wsspi.runtime.service.WsServiceRegistry;
 
-public class ClassLoaderMonitor implements CustomService, DeployedObjectListener {
+public class ClassLoaderMonitor implements WsComponent, DeployedObjectListener {
     private static final TraceComponent TC = Tr.register(ClassLoaderMonitor.class, "CustomServices", null);
     
     /**
@@ -56,6 +58,7 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
     private static final int STATS_MAX_DELAY = 30000;
     
     private ApplicationMgr applicationMgr;
+    private String state;
     private int createCount;
     private int stopCount;
     private int destroyedCount;
@@ -64,8 +67,25 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
     private List<ClassLoaderInfo> classLoaderInfos;
     private Timer timer;
     
-    public void initialize(Properties props) throws Exception {
-        applicationMgr = WsServiceRegistry.getService(this, ApplicationMgr.class);
+    public String getName() {
+        return ClassLoaderMonitor.class.getName();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void initialize(Object object) throws ComponentDisabledException, ConfigurationWarning, ConfigurationError {
+        state = INITIALIZED;
+    }
+
+    public void start() throws RuntimeError, RuntimeWarning {
+        state = STARTING;
+        try {
+            applicationMgr = WsServiceRegistry.getService(this, ApplicationMgr.class);
+        } catch (Exception ex) {
+            throw new RuntimeError(ex);
+        }
         applicationMgr.addDeployedObjectListener(this);
         classLoaderInfos = new LinkedList<ClassLoaderInfo>();
         timer = new Timer("Class Loader Monitor");
@@ -76,14 +96,21 @@ public class ClassLoaderMonitor implements CustomService, DeployedObjectListener
             }
         }, 1000, 1000);
         Tr.info(TC, "Class loader monitor started");
+        state = STARTED;
     }
 
-    public void shutdown() throws Exception {
+    public void stop() {
+        state = STOPPING;
         applicationMgr.removeDeployedObjectListener(this);
         timer.cancel();
         Tr.info(TC, "Class loader monitor stopped");
+        state = STOPPED;
     }
     
+    public void destroy() {
+        state = DESTROYED;
+    }
+
     synchronized void monitor() {
         Iterator<ClassLoaderInfo> it = classLoaderInfos.iterator();
         Map<String,Integer> leakStats = new TreeMap<String,Integer>();
