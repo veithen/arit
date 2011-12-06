@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.orb;
+package com.googlecode.arit.rbeans.test9;
 
-import com.googlecode.arit.rbeans.Accessor;
+import java.util.Dictionary;
+
 import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.googlecode.arit.rbeans.TargetClass;
 
-@Target("com.ibm.CORBA.iiop.ORB")
-public interface ORBRBean extends RBean {
-    WLMPluginRBean getWLMPlugin();
-    
-    @Accessor(name="objectResolver")
-    ObjectResolverRBean getObjectResolver();
+@TargetClass(DictionaryHolder.class)
+public interface DictionaryHolderRBean extends RBean {
+    Dictionary<KeyRBean,ValueRBean> getDictionary();
 }

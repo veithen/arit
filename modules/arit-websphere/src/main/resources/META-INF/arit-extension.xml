@@ -4,6 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
+    <core:resource-type identifier="cached-servant-object"/>
     <core:resource-type identifier="initial-context-props-cache"/>
     <core:resource-type identifier="websphere-bug"/>
     <core:resource-type identifier="ws-tie-to-stub-info-cache" showResourceId="true"/>
@@ -26,5 +27,6 @@
     <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.jaxws.JAXWSThreadLocalValueInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.orb.CachedServantObjectEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.orb.WLMProxyEnumeratorFactory"/>
 </beans>

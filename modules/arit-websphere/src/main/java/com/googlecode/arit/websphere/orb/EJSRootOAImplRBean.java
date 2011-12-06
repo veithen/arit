@@ -15,14 +15,13 @@
  */
 package com.googlecode.arit.websphere.orb;
 
+import java.util.Dictionary;
+
 import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("com.ibm.CORBA.iiop.ORB")
-public interface ORBRBean extends RBean {
-    WLMPluginRBean getWLMPlugin();
-    
-    @Accessor(name="objectResolver")
-    ObjectResolverRBean getObjectResolver();
+@Target("com.ibm.ejs.oa.EJSRootOAImpl")
+public interface EJSRootOAImplRBean extends ObjectResolverRBean {
+    @Accessor(name="ivServantObjects")
+    Dictionary<UserKeyRBean,ObjectImplRBean> getServantObjects();
 }

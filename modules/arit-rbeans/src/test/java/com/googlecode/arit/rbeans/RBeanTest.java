@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,6 +52,8 @@ import com.googlecode.arit.rbeans.test7.DriverManager;
 import com.googlecode.arit.rbeans.test7.DriverManagerRBean;
 import com.googlecode.arit.rbeans.test7.DriverRBean;
 import com.googlecode.arit.rbeans.test8.IncompatibleAttributeTypeRBean;
+import com.googlecode.arit.rbeans.test9.DictionaryHolder;
+import com.googlecode.arit.rbeans.test9.DictionaryHolderRBean;
 import com.googlecode.arit.rbeans.test9.Key;
 import com.googlecode.arit.rbeans.test9.KeyRBean;
 import com.googlecode.arit.rbeans.test9.MapHolder;
@@ -178,6 +182,28 @@ public class RBeanTest {
         Iterator<ValueRBean> it = rbean.getMap().values().iterator();
         assertTrue(it.hasNext());
         ValueRBean value = it.next();
+        assertEquals("value", value.getString());
+    }
+    
+    @Test
+    public void testMappedDictionary() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(DictionaryHolderRBean.class);
+        DictionaryHolder dictionaryHolder = new DictionaryHolder();
+        dictionaryHolder.getDictionary().put(new Key("key"), new Value("value"));
+        DictionaryHolderRBean rbean = rbf.createRBean(DictionaryHolderRBean.class, dictionaryHolder);
+        Dictionary<KeyRBean,ValueRBean> dictionary = rbean.getDictionary();
+        assertEquals(1, dictionary.size());
+    }
+    
+    @Test
+    public void testMappedDictionaryElements() throws Exception {
+        RBeanFactory rbf = new RBeanFactory(DictionaryHolderRBean.class);
+        DictionaryHolder dictionaryHolder = new DictionaryHolder();
+        dictionaryHolder.getDictionary().put(new Key("key"), new Value("value"));
+        DictionaryHolderRBean rbean = rbf.createRBean(DictionaryHolderRBean.class, dictionaryHolder);
+        Enumeration<ValueRBean> e = rbean.getDictionary().elements();
+        assertTrue(e.hasMoreElements());
+        ValueRBean value = e.nextElement();
         assertEquals("value", value.getString());
     }
     

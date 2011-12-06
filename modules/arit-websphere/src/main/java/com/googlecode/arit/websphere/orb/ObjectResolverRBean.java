@@ -15,14 +15,12 @@
  */
 package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.Accessor;
 import com.googlecode.arit.rbeans.RBean;
+import com.googlecode.arit.rbeans.SeeAlso;
 import com.googlecode.arit.rbeans.Target;
 
-@Target("com.ibm.CORBA.iiop.ORB")
-public interface ORBRBean extends RBean {
-    WLMPluginRBean getWLMPlugin();
-    
-    @Accessor(name="objectResolver")
-    ObjectResolverRBean getObjectResolver();
+@Target("com.ibm.CORBA.iiop.ObjectResolver")
+@SeeAlso(EJSRootOAImplRBean.class)
+public interface ObjectResolverRBean extends RBean {
+
 }

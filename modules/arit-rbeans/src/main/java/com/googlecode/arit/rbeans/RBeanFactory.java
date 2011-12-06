@@ -25,11 +25,13 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.googlecode.arit.rbeans.collections.CollectionHandler;
+import com.googlecode.arit.rbeans.collections.DictionaryHandler;
 import com.googlecode.arit.rbeans.collections.MapHandler;
 
 public class RBeanFactory {
@@ -118,14 +120,20 @@ public class RBeanFactory {
                 Field field = null;
                 ObjectHandler valueHandler = null;
                 for (String name : accessorAnnotation.name()) {
-                    try {
-                        field = targetClass.getDeclaredField(name);
+                    Class<?> declaringClass = targetClass;
+                    while (declaringClass != null) {
+                        try {
+                            field = declaringClass.getDeclaredField(name);
+                            break;
+                        } catch (NoSuchFieldException ex) {
+                            declaringClass = declaringClass.getSuperclass();
+                        }
+                    }
+                    if (field != null) {
                         valueHandler = getObjectHandler(proxyMethod.getGenericReturnType(), field.getGenericType(), proxyMethod.getAnnotation(Mapped.class) != null);
                         if (valueHandler != null) {
                             break;
                         }
-                    } catch (NoSuchFieldException ex) {
-                        // Continue
                     }
                 }
                 if (valueHandler == null) {
@@ -201,7 +209,7 @@ public class RBeanFactory {
     private ObjectHandler getObjectHandler(Type toType, Type fromType, boolean mapped) throws RBeanFactoryException {
         Class<?> toClass = getRawType(toType);
         Class<?> fromClass = getRawType(fromType);
-        if (toClass == Map.class) {
+        if (toClass == Map.class || toClass == Dictionary.class) {
             Type keyType;
             Type valueType;
             if (toType instanceof ParameterizedType) {
@@ -222,7 +230,11 @@ public class RBeanFactory {
                 valueType = Object.class;
             }
             if (mapped) {
-                return new MapHandler(getObjectHandler(keyType, Object.class, false), getObjectHandler(valueType, Object.class, false));
+                if (toClass == Map.class) {
+                    return new MapHandler(getObjectHandler(keyType, Object.class, false), getObjectHandler(valueType, Object.class, false));
+                } else {
+                    return new DictionaryHandler(getObjectHandler(keyType, Object.class, false), getObjectHandler(valueType, Object.class, false));
+                }
             } else {
                 return PassThroughHandler.INSTANCE;
             }
