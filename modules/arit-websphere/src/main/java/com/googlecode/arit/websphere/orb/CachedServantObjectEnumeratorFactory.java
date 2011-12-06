@@ -15,7 +15,6 @@
  */
 package com.googlecode.arit.websphere.orb;
 
-import java.util.Dictionary;
 import java.util.Enumeration;
 
 import org.apache.commons.logging.Log;
@@ -62,17 +61,15 @@ public class CachedServantObjectEnumeratorFactory implements ResourceEnumeratorF
     }
 
     public void clean(ClassLoader classLoader) {
-        Dictionary<UserKeyRBean,ObjectImplRBean> servantObjects = rbean.getServantObjects();
-        Enumeration<UserKeyRBean> keys = servantObjects.keys();
-        while (keys.hasMoreElements()) {
-            UserKeyRBean key = keys.nextElement();
-            DelegateRBean delegate = servantObjects.get(key).getDelegate();
+        Enumeration<ObjectImplRBean> e = rbean.getServantObjects().elements();
+        while (e.hasMoreElements()) {
+            ObjectImplRBean objectImpl = e.nextElement();
+            DelegateRBean delegate = objectImpl.getDelegate();
             if (delegate instanceof ClientDelegateRBean) {
                 Object servant = ((ClientDelegateRBean)delegate).getIOR().getServant();
                 if (servant != null && servant.getClass().getClassLoader() == classLoader) {
-                    if (servantObjects.remove(key) != null) {
-                        log.info("Removed cached servant object " + servant.getClass().getName());
-                    }
+                    rbean.unregisterServant((org.omg.CORBA.Object)objectImpl._getTargetObject());
+                    log.info("Removed cached servant object " + servant.getClass().getName());
                 }
             }
         }

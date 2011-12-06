@@ -156,10 +156,24 @@ public class RBeanFactory {
                 methodHandler = new GetTargetClassMethodHandler(targetClass);
             } else {
                 Method targetMethod;
+                // First try getMethod (because the method may actually be abstract) ...
                 try {
                     targetMethod = targetClass.getMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
                 } catch (NoSuchMethodException ex) {
                     targetMethod = null;
+                }
+                // ... then try getDeclaredMethod (on the class and its superclasses) so that we can invoke non public methods
+                if (targetMethod == null) {
+                    Class<?> declaringClass = targetClass;
+                    while (declaringClass != null) {
+                        try {
+                            targetMethod = declaringClass.getDeclaredMethod(proxyMethod.getName(), proxyMethod.getParameterTypes());
+                            targetMethod.setAccessible(true);
+                            break;
+                        } catch (NoSuchMethodException ex) {
+                            declaringClass = declaringClass.getSuperclass();
+                        }
+                    }
                 }
                 if (targetMethod == null) {
                     if (optional) {

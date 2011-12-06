@@ -64,7 +64,12 @@ public class Cleaner extends PluginManager<CleanerPlugin> {
             ModuleDescription moduleDescription = moduleInspectorFactory.createModuleInspector().inspect(classLoader);
             log.info("Starting cleanup for " + moduleDescription.getDisplayName() + " (" + classLoaderId + ")");
             for (CleanerPlugin plugin : getPlugins()) {
-                plugin.clean(classLoader);
+                try {
+                    plugin.clean(classLoader);
+                } catch (RuntimeException ex) {
+                    log.error("Caught runtime exception", ex);
+                    throw ex;
+                }
             }
             
             // TODO: this is the support for the old API; this will probably be removed

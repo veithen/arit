@@ -24,4 +24,6 @@ import com.googlecode.arit.rbeans.Target;
 public interface EJSRootOAImplRBean extends ObjectResolverRBean {
     @Accessor(name="ivServantObjects")
     Dictionary<UserKeyRBean,ObjectImplRBean> getServantObjects();
+    
+    void unregisterServant(org.omg.CORBA.Object servant);
 }
