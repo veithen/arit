@@ -15,16 +15,24 @@
  */
 package com.googlecode.arit.websphere.orb;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.rbeans.RBeanFactory;
 import com.googlecode.arit.rbeans.RBeanFactoryException;
 
-public class CachedServantObjectEnumeratorFactory implements ResourceEnumeratorFactory<CachedServantObjectEnumerator> {
+public class CachedServantObjectEnumeratorFactory implements ResourceEnumeratorFactory<CachedServantObjectEnumerator>, CleanerPlugin {
+    private static final Log log = LogFactory.getLog(CachedServantObjectEnumeratorFactory.class);
+    
     private final EJSRootOAImplRBean rbean;
     
     @Autowired
@@ -51,5 +59,22 @@ public class CachedServantObjectEnumeratorFactory implements ResourceEnumeratorF
 
     public CachedServantObjectEnumerator createEnumerator(Logger logger) {
         return new CachedServantObjectEnumerator(resourceType, rbean.getServantObjects().elements());
+    }
+
+    public void clean(ClassLoader classLoader) {
+        Dictionary<UserKeyRBean,ObjectImplRBean> servantObjects = rbean.getServantObjects();
+        Enumeration<UserKeyRBean> keys = servantObjects.keys();
+        while (keys.hasMoreElements()) {
+            UserKeyRBean key = keys.nextElement();
+            DelegateRBean delegate = servantObjects.get(key).getDelegate();
+            if (delegate instanceof ClientDelegateRBean) {
+                Object servant = ((ClientDelegateRBean)delegate).getIOR().getServant();
+                if (servant != null && servant.getClass().getClassLoader() == classLoader) {
+                    if (servantObjects.remove(key) != null) {
+                        log.info("Removed cached servant object " + servant.getClass().getName());
+                    }
+                }
+            }
+        }
     }
 }

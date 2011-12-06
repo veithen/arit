@@ -19,6 +19,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 
 import com.googlecode.arit.rbeans.ObjectHandler;
+import com.googlecode.arit.rbeans.RBean;
 
 @SuppressWarnings("unchecked")
 public class DictionaryWrapper extends Dictionary {
@@ -31,7 +32,7 @@ public class DictionaryWrapper extends Dictionary {
         this.valueHandler = valueHandler;
         this.parent = parent;
     }
-
+    
     @Override
     public Enumeration elements() {
         return new EnumerationWrapper(valueHandler, parent.elements());
@@ -39,8 +40,10 @@ public class DictionaryWrapper extends Dictionary {
 
     @Override
     public Object get(Object key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        if (key instanceof RBean) {
+            key = ((RBean)key)._getTargetObject();
+        }
+        return valueHandler.handle(parent.get(key));
     }
 
     @Override
@@ -51,8 +54,7 @@ public class DictionaryWrapper extends Dictionary {
 
     @Override
     public Enumeration keys() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        return new EnumerationWrapper(keyHandler, parent.keys());
     }
 
     @Override
@@ -63,8 +65,10 @@ public class DictionaryWrapper extends Dictionary {
 
     @Override
     public Object remove(Object key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        if (key instanceof RBean) {
+            key = ((RBean)key)._getTargetObject();
+        }
+        return valueHandler.handle(parent.remove(key));
     }
 
     @Override

@@ -19,18 +19,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.junit.Test;
 
 import com.googlecode.arit.rbeans.test1.DummyClass1;
 import com.googlecode.arit.rbeans.test1.DummyClass1RBean;
-import com.googlecode.arit.rbeans.test10.MapHolder2;
-import com.googlecode.arit.rbeans.test10.MapHolder2RBean;
 import com.googlecode.arit.rbeans.test2.Parent;
 import com.googlecode.arit.rbeans.test2.ParentRBean;
 import com.googlecode.arit.rbeans.test3.Car;
@@ -52,14 +44,6 @@ import com.googlecode.arit.rbeans.test7.DriverManager;
 import com.googlecode.arit.rbeans.test7.DriverManagerRBean;
 import com.googlecode.arit.rbeans.test7.DriverRBean;
 import com.googlecode.arit.rbeans.test8.IncompatibleAttributeTypeRBean;
-import com.googlecode.arit.rbeans.test9.DictionaryHolder;
-import com.googlecode.arit.rbeans.test9.DictionaryHolderRBean;
-import com.googlecode.arit.rbeans.test9.Key;
-import com.googlecode.arit.rbeans.test9.KeyRBean;
-import com.googlecode.arit.rbeans.test9.MapHolder;
-import com.googlecode.arit.rbeans.test9.MapHolderRBean;
-import com.googlecode.arit.rbeans.test9.Value;
-import com.googlecode.arit.rbeans.test9.ValueRBean;
 
 public class RBeanTest {
     @Test
@@ -148,71 +132,5 @@ public class RBeanTest {
     @Test(expected=TargetMemberNotFoundException.class)
     public void testIncompatibleAttributeType() throws Exception {
         new RBeanFactory(IncompatibleAttributeTypeRBean.class);
-    }
-    
-    @Test
-    public void testMappedMap() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
-        MapHolder mapHolder = new MapHolder();
-        mapHolder.getMap().put(new Key("key"), new Value("value"));
-        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
-        Map<KeyRBean,ValueRBean> map = rbean.getMap();
-        assertEquals(1, map.size());
-    }
-    
-    @Test
-    public void testMappedMapEntrySet() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
-        MapHolder mapHolder = new MapHolder();
-        mapHolder.getMap().put(new Key("key"), new Value("value"));
-        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
-        Iterator<Map.Entry<KeyRBean,ValueRBean>> it = rbean.getMap().entrySet().iterator();
-        assertTrue(it.hasNext());
-        Map.Entry<KeyRBean,ValueRBean> entry = it.next();
-        assertEquals("key", entry.getKey().getString());
-        assertEquals("value", entry.getValue().getString());
-    }
-    
-    @Test
-    public void testMappedMapValues() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(MapHolderRBean.class);
-        MapHolder mapHolder = new MapHolder();
-        mapHolder.getMap().put(new Key("key"), new Value("value"));
-        MapHolderRBean rbean = rbf.createRBean(MapHolderRBean.class, mapHolder);
-        Iterator<ValueRBean> it = rbean.getMap().values().iterator();
-        assertTrue(it.hasNext());
-        ValueRBean value = it.next();
-        assertEquals("value", value.getString());
-    }
-    
-    @Test
-    public void testMappedDictionary() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(DictionaryHolderRBean.class);
-        DictionaryHolder dictionaryHolder = new DictionaryHolder();
-        dictionaryHolder.getDictionary().put(new Key("key"), new Value("value"));
-        DictionaryHolderRBean rbean = rbf.createRBean(DictionaryHolderRBean.class, dictionaryHolder);
-        Dictionary<KeyRBean,ValueRBean> dictionary = rbean.getDictionary();
-        assertEquals(1, dictionary.size());
-    }
-    
-    @Test
-    public void testMappedDictionaryElements() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(DictionaryHolderRBean.class);
-        DictionaryHolder dictionaryHolder = new DictionaryHolder();
-        dictionaryHolder.getDictionary().put(new Key("key"), new Value("value"));
-        DictionaryHolderRBean rbean = rbf.createRBean(DictionaryHolderRBean.class, dictionaryHolder);
-        Enumeration<ValueRBean> e = rbean.getDictionary().elements();
-        assertTrue(e.hasMoreElements());
-        ValueRBean value = e.nextElement();
-        assertEquals("value", value.getString());
-    }
-    
-    @Test
-    public void testUnmappedMapWithWildcards() throws Exception {
-        RBeanFactory rbf = new RBeanFactory(MapHolder2RBean.class);
-        Map<String,String> map = new HashMap<String,String>();
-        MapHolder2 mapHolder = new MapHolder2(map);
-        MapHolder2RBean rbean = rbf.createRBean(MapHolder2RBean.class, mapHolder);
-        assertSame(map, rbean.getMap());
     }
 }

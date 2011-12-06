@@ -25,4 +25,18 @@ public class Key {
     public String getString() {
         return string;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Key) {
+            return ((Key)obj).string.equals(string);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return string.hashCode();
+    }
 }
