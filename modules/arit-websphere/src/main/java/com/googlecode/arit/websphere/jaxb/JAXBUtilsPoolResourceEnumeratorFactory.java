@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,8 +83,12 @@ public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumerato
     public Set<ClassLoader> getClassLoaders(JAXBContext context, Logger logger) {
         Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
         if (rbf.getRBeanInfo(JAXBContextImplRBean.class).getTargetClass().isInstance(context)) {
-            for (ValueTypeInformationRBean typeInformation : rbf.createRBean(JAXBContextImplRBean.class, context).getModel().getTypeInformation()) {
-                classLoaders.add(typeInformation.getJavaType().getClassLoader());
+            JAXBModelRBean model = rbf.createRBean(JAXBContextImplRBean.class, context).getModel();
+            // The model may be null if the JAXBContextImpl failed to create the model
+            if (model != null) {
+                for (ValueTypeInformationRBean typeInformation : model.getTypeInformation()) {
+                    classLoaders.add(typeInformation.getJavaType().getClassLoader());
+                }
             }
         } else {
             logger.log("Encountered unexpected JAXBContext implementation " + context.getClass().getName());
