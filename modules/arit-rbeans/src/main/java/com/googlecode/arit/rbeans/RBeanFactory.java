@@ -292,7 +292,7 @@ public class RBeanFactory {
     }
     
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
-        return Proxy.newProxyInstance(RBeanFactory.class.getClassLoader(),
+        return Proxy.newProxyInstance(cl,
                 new Class<?>[] { rbeanInfo.getRBeanClass() }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
     }
 }
