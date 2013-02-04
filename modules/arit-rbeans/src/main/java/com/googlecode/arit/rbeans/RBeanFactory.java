@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010-2011, 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,16 +35,29 @@ import com.googlecode.arit.rbeans.collections.DictionaryHandler;
 import com.googlecode.arit.rbeans.collections.MapHandler;
 
 public class RBeanFactory {
-    private final ClassLoader cl;
+    private final ClassLoader targetClassLoader;
     // TODO: we use a LinkedHashMap to make the behavior of the factory reproducible (there seems to be a bug...)
     private final Map<Class<?>,RBeanInfo> rbeanInfoMap = new LinkedHashMap<Class<?>,RBeanInfo>();
     
     public RBeanFactory(Class<?>... rbeanClasses) throws RBeanFactoryException {
-        this(RBeanFactory.class.getClassLoader(), rbeanClasses);
+        this(null, rbeanClasses);
     }
     
-    public RBeanFactory(ClassLoader cl, Class<?>... rbeanClasses) throws RBeanFactoryException {
-        this.cl = cl;
+    /**
+     * Constructor.
+     * 
+     * @param targetClassLoader
+     *            Determines how target classes specified by {@link Target} are loaded. If a class
+     *            loader is specified, then all target classes will be loaded from that class
+     *            loader. If the parameter is <code>null</code>, then the target class specified by
+     *            a {@link Target} annotation will be loaded from the class loader of the interface
+     *            on which the annotation is used.
+     * @param rbeanClasses
+     *            a list of interfaces extending {@link RBean} or {@link StaticRBean}
+     * @throws RBeanFactoryException
+     */
+    public RBeanFactory(ClassLoader targetClassLoader, Class<?>... rbeanClasses) throws RBeanFactoryException {
+        this.targetClassLoader = targetClassLoader;
         for (Class<?> rbeanClass : rbeanClasses) {
             load(rbeanClass);
         }
@@ -83,6 +96,7 @@ public class RBeanFactory {
                 throw new RBeanFactoryException("Unexpected annotation @Target; already found @TargetClass");
             }
             String targetClassName = targetAnnotation.value();
+            ClassLoader cl = targetClassLoader == null ? rbeanClass.getClassLoader() : targetClassLoader;
             try {
                 targetClass = cl.loadClass(targetClassName);
             } catch (ClassNotFoundException ex) {
@@ -292,7 +306,11 @@ public class RBeanFactory {
     }
     
     Object createRBean(RBeanInfo rbeanInfo, Object object) {
-        return Proxy.newProxyInstance(cl,
-                new Class<?>[] { rbeanInfo.getRBeanClass() }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
+        // The proxy should always be defined in the class loader from which the RBean interface
+        // is loaded. Since that interface must extend RBean or StaticRBean, we are sure that
+        // this is an application class loader.
+        Class<?> rbeanClass = rbeanInfo.getRBeanClass();
+        return Proxy.newProxyInstance(rbeanClass.getClassLoader(),
+                new Class<?>[] { rbeanClass }, new RBeanInvocationHandler(rbeanInfo.getMethodHandlers(), object));
     }
 }
