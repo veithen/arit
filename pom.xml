@@ -34,6 +34,18 @@
         <connection>scm:svn:http://arit.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://arit.googlecode.com/svn/trunk</developerConnection>
     </scm>
+    <repositories>
+        <repository>
+            <id>bintray</id>
+            <url>https://api.bintray.com/maven/veithen/maven/rbeans</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -69,7 +81,7 @@
             <dependency>
                 <groupId>com.github.veithen.rbeans</groupId>
                 <artifactId>rbeans</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
+                <version>0.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
