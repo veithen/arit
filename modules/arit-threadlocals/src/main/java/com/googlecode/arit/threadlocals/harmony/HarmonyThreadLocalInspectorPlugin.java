@@ -19,8 +19,8 @@ import java.lang.ref.WeakReference;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threadlocals.ThreadLocalInspectorPlugin;
 
 public class HarmonyThreadLocalInspectorPlugin implements ThreadLocalInspectorPlugin {

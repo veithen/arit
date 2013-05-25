@@ -22,10 +22,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.WeakHashMap;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.bundlecache.CachedResourceBundle;
 import com.googlecode.arit.bundlecache.ResourceBundleCacheInspectorPlugin;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class HarmonyResourceBundleCacheInspectorPlugin implements ResourceBundleCacheInspectorPlugin {
     private final RBeanFactory rbf;

@@ -41,7 +41,6 @@
         <module>arit-jvm-singletons</module>
         <module>arit-maven</module>
         <module>arit-mbeans</module>
-        <module>arit-rbeans</module>
         <module>arit-report</module>
         <module>arit-report-xml</module>
         <module>arit-rhq-plugin</module>

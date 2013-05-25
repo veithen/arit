@@ -17,11 +17,11 @@ package com.googlecode.arit.tomcat;
 
 import javax.naming.directory.DirContext;
 
-import com.googlecode.arit.rbeans.Mapped;
-import com.googlecode.arit.rbeans.Optional;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Mapped;
+import com.github.veithen.rbeans.Optional;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.SeeAlso;
+import com.github.veithen.rbeans.Target;
 
 @Target("org.apache.catalina.loader.WebappClassLoader")
 @SeeAlso(ProxyDirContextRBean.class)

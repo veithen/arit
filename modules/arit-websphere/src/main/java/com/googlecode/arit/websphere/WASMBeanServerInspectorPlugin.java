@@ -19,12 +19,12 @@ import javax.management.MBeanServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
 import com.googlecode.arit.mbeans.sun.java5.SunJava5MBeanServerInspectorPlugin;
 import com.googlecode.arit.mbeans.sun.java6.SunJava6MBeanServerInspectorPlugin;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class WASMBeanServerInspectorPlugin implements MBeanServerInspectorPlugin {
     private final RBeanFactory rbf;

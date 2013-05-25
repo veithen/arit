@@ -17,9 +17,9 @@ package com.googlecode.arit.websphere.orb;
 
 import java.util.Map;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.cluster.router.selection.SelectionManager")
 public interface SelectionManagerRBean extends RBean {

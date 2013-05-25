@@ -17,9 +17,9 @@ package com.googlecode.arit.shutdown.ibm;
 
 import java.util.IdentityHashMap;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("java.lang.ApplicationShutdownHooks")
 public interface ApplicationShutdownHooksRBean extends StaticRBean {

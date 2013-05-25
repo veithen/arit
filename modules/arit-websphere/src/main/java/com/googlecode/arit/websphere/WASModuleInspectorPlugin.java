@@ -32,6 +32,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
@@ -39,8 +41,6 @@ import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, InitializingBean {
     @Autowired

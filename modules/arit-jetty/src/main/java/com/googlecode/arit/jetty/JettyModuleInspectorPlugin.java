@@ -18,11 +18,11 @@ package com.googlecode.arit.jetty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleInspectorPlugin;
 import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class JettyModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;

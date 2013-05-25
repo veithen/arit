@@ -18,9 +18,9 @@ package com.googlecode.arit.mbeans.sun;
 import javax.management.DynamicMBean;
 import javax.management.modelmbean.RequiredModelMBean;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(RequiredModelMBean.class)
 public interface RequiredModelMBeanRBean extends RBean, DynamicMBean {

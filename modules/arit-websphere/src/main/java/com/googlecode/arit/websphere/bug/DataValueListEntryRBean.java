@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.jtc.orb.map.DataValueListEntry")
 public interface DataValueListEntryRBean extends RBean {

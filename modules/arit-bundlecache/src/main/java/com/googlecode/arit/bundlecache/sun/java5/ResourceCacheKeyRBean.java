@@ -17,9 +17,9 @@ package com.googlecode.arit.bundlecache.sun.java5;
 
 import java.lang.ref.WeakReference;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("java.util.ResourceBundle$ResourceCacheKey")
 public interface ResourceCacheKeyRBean extends RBean {

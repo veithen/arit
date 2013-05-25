@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.geronimo;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("org.apache.geronimo.kernel.classloader.JarFileClassLoader")
 public interface JarFileClassLoaderRBean extends RBean {

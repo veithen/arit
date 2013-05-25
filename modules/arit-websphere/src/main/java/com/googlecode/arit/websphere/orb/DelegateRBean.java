@@ -17,9 +17,9 @@ package com.googlecode.arit.websphere.orb;
 
 import org.omg.CORBA.portable.Delegate;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.SeeAlso;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(Delegate.class)
 @SeeAlso(ClientDelegateRBean.class)

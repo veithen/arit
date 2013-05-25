@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.orb.GlobalORBFactory")
 public interface GlobalORBFactoryRBean extends StaticRBean {

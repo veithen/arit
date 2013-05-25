@@ -15,10 +15,10 @@
  */
 package com.googlecode.arit.websphere.naming;
 
-import com.googlecode.arit.rbeans.Mapped;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Mapped;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.SeeAlso;
+import com.github.veithen.rbeans.Target;
 import com.googlecode.arit.websphere.orb.ObjectImplRBean;
 
 @Target("com.ibm.ws.naming.ipbase.BindingsTableData")

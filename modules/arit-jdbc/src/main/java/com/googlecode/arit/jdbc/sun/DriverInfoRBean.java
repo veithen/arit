@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.jdbc.sun;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("java.sql.DriverInfo")
 public interface DriverInfoRBean extends RBean {

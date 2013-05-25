@@ -19,9 +19,9 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.util.List;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(DriverManager.class)
 public interface DriverManagerRBean extends StaticRBean {

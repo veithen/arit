@@ -17,8 +17,8 @@ package com.googlecode.arit.websphere;
 
 import javax.management.MBeanServer;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.websphere.management.MBeanFactory")
 public interface MBeanFactoryRBean extends RBean {

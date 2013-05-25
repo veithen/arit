@@ -18,9 +18,9 @@ package com.googlecode.arit.threadutils;
 import java.security.AccessControlContext;
 import java.security.ProtectionDomain;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(AccessControlContext.class)
 public interface AccessControlContextRBean extends RBean {

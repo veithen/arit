@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere.orb;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.cluster.router.selection.WLMClientForCommonRouterImpl")
 public interface WLMClientForCommonRouterImplRBean extends WLMPluginRBean {

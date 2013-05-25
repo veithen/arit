@@ -17,9 +17,9 @@ package com.googlecode.arit.websphere;
 
 import javax.management.MBeanServer;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.jmx.MBeanServerProvider;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class WASMBeanServerProvider implements MBeanServerProvider {
     public MBeanServer getMBeanServer() {

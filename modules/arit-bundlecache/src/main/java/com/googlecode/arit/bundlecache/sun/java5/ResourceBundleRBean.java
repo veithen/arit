@@ -18,9 +18,9 @@ package com.googlecode.arit.bundlecache.sun.java5;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(ResourceBundle.class)
 public interface ResourceBundleRBean extends StaticRBean {

@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.websphere.jaxb;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("org.apache.axis2.jaxws.message.databinding.JAXBUtils")
 public interface JAXBUtilsRBean extends StaticRBean {

@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.shutdown.sun;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("java.lang.Shutdown")
 public interface ShutdownRBean extends StaticRBean {

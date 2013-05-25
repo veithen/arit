@@ -18,9 +18,9 @@ package com.googlecode.arit.jdbc.sun;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.jdbc.DriverManagerInspectorPlugin;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class SunDriverManagerInspectorPlugin implements DriverManagerInspectorPlugin {
     private final DriverManagerRBean driverManager;

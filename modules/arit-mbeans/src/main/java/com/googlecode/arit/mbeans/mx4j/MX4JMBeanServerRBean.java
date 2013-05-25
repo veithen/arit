@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.mbeans.mx4j;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("mx4j.server.MX4JMBeanServer")
 public interface MX4JMBeanServerRBean extends RBean {

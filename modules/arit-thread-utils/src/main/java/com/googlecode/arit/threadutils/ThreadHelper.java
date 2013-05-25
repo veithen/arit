@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.threadutils;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 
 public class ThreadHelper {
     private final RBeanFactory rbf;

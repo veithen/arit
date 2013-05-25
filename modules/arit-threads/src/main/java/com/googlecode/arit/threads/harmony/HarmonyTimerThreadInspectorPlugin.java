@@ -17,8 +17,8 @@ package com.googlecode.arit.threads.harmony;
 
 import java.util.TimerTask;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threads.AbstractTimerThreadInspectorPlugin;
 
 public class HarmonyTimerThreadInspectorPlugin extends AbstractTimerThreadInspectorPlugin {

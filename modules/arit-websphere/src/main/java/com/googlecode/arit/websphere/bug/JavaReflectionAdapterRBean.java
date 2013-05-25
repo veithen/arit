@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.websphere.bug;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.sca.internal.java.handler.JavaReflectionAdapter")
 public interface JavaReflectionAdapterRBean extends RBean {

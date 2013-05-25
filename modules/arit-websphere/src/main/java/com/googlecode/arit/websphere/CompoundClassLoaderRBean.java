@@ -15,10 +15,10 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.Optional;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.Optional;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.classloader.CompoundClassLoader")
 public interface CompoundClassLoaderRBean extends RBean {

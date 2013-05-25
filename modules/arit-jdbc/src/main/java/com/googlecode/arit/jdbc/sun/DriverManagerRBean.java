@@ -17,9 +17,9 @@ package com.googlecode.arit.jdbc.sun;
 
 import java.sql.DriverManager;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(DriverManager.class)
 public interface DriverManagerRBean extends StaticRBean {

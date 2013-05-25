@@ -17,9 +17,9 @@ package com.googlecode.arit.mbeans.sun.java5;
 
 import javax.management.ObjectName;
 
-import com.googlecode.arit.rbeans.Mapped;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Mapped;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.sun.jmx.mbeanserver.Repository")
 public interface RepositoryRBean extends RBean {

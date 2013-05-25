@@ -18,12 +18,12 @@ package com.googlecode.arit.jul.juli;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.github.veithen.rbeans.RBeanFactory;
 import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.jul.HandlerEnumerator;
 import com.googlecode.arit.jul.Utils;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class LoggingContextResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;

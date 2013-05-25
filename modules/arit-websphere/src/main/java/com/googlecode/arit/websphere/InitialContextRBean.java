@@ -20,9 +20,9 @@ import java.util.WeakHashMap;
 
 import javax.naming.InitialContext;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(InitialContext.class)
 public interface InitialContextRBean extends StaticRBean {

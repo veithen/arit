@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.SeeAlso;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.SeeAlso;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.runtime.deploy.DeployedObject")
 @SeeAlso(DeployedApplicationRBean.class)

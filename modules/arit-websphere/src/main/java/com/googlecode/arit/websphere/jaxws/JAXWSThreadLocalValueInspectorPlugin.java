@@ -20,10 +20,10 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.axis2.AxisServiceRBean;
 import com.googlecode.arit.axis2.AxisServiceThreadLocalValueDescription;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threadlocals.ThreadLocalValueDescription;
 import com.googlecode.arit.threadlocals.ThreadLocalValueInspectorPlugin;
 

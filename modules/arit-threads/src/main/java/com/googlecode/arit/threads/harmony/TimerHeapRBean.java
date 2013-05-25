@@ -17,9 +17,9 @@ package com.googlecode.arit.threads.harmony;
 
 import java.util.TimerTask;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("java.util.Timer$TimerImpl$TimerHeap")
 public interface TimerHeapRBean extends RBean {

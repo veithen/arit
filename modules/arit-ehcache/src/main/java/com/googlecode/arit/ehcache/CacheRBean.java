@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.ehcache;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("net.sf.ehcache.Cache")
 public interface CacheRBean extends RBean {

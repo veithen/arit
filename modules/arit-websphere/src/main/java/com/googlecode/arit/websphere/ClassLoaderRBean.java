@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(ClassLoader.class)
 public interface ClassLoaderRBean extends RBean {

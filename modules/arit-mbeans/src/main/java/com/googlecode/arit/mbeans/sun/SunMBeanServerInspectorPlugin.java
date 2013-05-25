@@ -17,10 +17,10 @@ package com.googlecode.arit.mbeans.sun;
 
 import javax.management.MBeanServer;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspectorPlugin;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public abstract class SunMBeanServerInspectorPlugin<T extends MBeanServerInterceptorRBean> implements MBeanServerInspectorPlugin {
     private final Class<T> defaultMBeanServerInterceptorClass;

@@ -17,9 +17,9 @@ package com.googlecode.arit.jul.juli;
 
 import java.util.Map;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("org.apache.juli.ClassLoaderLogManager")
 public interface ClassLoaderLogManagerRBean extends RBean {

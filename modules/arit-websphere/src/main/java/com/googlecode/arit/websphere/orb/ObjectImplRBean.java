@@ -17,9 +17,9 @@ package com.googlecode.arit.websphere.orb;
 
 import org.omg.CORBA.portable.ObjectImpl;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(ObjectImpl.class)
 public interface ObjectImplRBean extends RBean {

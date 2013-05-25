@@ -17,8 +17,8 @@ package com.googlecode.arit.mbeans.sun.java6;
 
 import javax.management.DynamicMBean;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.sun.jmx.mbeanserver.DynamicMBean2")
 public interface DynamicMBean2RBean extends RBean, DynamicMBean {

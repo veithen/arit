@@ -18,10 +18,10 @@ package com.googlecode.arit.websphere.bug;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.github.veithen.rbeans.RBeanFactory;
 import com.googlecode.arit.Formatter;
 import com.googlecode.arit.ResourceEnumerator;
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class JavaReflectionAdapterResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;

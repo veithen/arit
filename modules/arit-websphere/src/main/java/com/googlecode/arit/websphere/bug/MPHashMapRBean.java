@@ -17,9 +17,9 @@ package com.googlecode.arit.websphere.bug;
 
 import java.util.Map;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.rmi.util.MPHashMap")
 public interface MPHashMapRBean extends RBean {

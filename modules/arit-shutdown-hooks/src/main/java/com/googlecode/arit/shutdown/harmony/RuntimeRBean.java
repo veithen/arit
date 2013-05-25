@@ -17,9 +17,9 @@ package com.googlecode.arit.shutdown.harmony;
 
 import java.util.ArrayList;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.TargetClass;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(Runtime.class)
 public interface RuntimeRBean extends StaticRBean {

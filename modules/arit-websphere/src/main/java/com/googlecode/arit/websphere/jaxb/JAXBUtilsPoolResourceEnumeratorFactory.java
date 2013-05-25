@@ -32,12 +32,12 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class JAXBUtilsPoolResourceEnumeratorFactory implements ResourceEnumeratorFactory<JAXBUtilsPoolResourceEnumerator>, CleanerPlugin {
     private final Log log = LogFactory.getLog(JAXBUtilsPoolResourceEnumeratorFactory.class);

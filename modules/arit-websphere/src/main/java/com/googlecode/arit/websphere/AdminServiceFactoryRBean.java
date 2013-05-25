@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.rbeans.StaticRBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.StaticRBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.websphere.management.AdminServiceFactory")
 public interface AdminServiceFactoryRBean extends StaticRBean {

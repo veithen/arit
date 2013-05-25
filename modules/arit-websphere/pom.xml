@@ -30,9 +30,8 @@
             <artifactId>jsr250-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>arit-rbeans</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.github.veithen.rbeans</groupId>
+            <artifactId>rbeans</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

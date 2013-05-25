@@ -17,8 +17,8 @@ package com.googlecode.arit.tomcat;
 
 import javax.naming.directory.DirContext;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("org.apache.naming.resources.ProxyDirContext")
 public interface ProxyDirContextRBean extends RBean, DirContext {

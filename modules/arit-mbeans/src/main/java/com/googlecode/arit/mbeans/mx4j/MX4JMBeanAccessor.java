@@ -18,8 +18,8 @@ package com.googlecode.arit.mbeans.mx4j;
 import javax.management.ObjectName;
 import javax.management.modelmbean.RequiredModelMBean;
 
+import com.github.veithen.rbeans.RBeanFactory;
 import com.googlecode.arit.mbeans.MBeanAccessor;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class MX4JMBeanAccessor implements MBeanAccessor {
     private final MBeanRepositoryRBean repository;

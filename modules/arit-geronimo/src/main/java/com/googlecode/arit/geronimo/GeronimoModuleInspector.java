@@ -17,11 +17,11 @@ package com.googlecode.arit.geronimo;
 
 import java.util.List;
 
+import com.github.veithen.rbeans.RBeanFactory;
 import com.googlecode.arit.ModuleDescription;
 import com.googlecode.arit.ModuleInspector;
 import com.googlecode.arit.ModuleStatus;
 import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.rbeans.RBeanFactory;
 
 public class GeronimoModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;

@@ -21,12 +21,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.ModuleIdentity;
 import com.googlecode.arit.ModuleIdentityProviderPlugin;
 import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 /**
  * Extracts the (IBM specific) <code>vmRef</code> attribute from the class loader. This may be used

@@ -17,8 +17,8 @@ package com.googlecode.arit.axis2;
 
 import java.util.Set;
 
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.threadlocals.ThreadLocalValueDescription;
 import com.googlecode.arit.threadlocals.ThreadLocalValueInspectorPlugin;
 

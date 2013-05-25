@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.mbeans.sun.java6;
 
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.Target;
 import com.googlecode.arit.mbeans.sun.MBeanServerInterceptorRBean;
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.Target;
 
 @Target("com.sun.jmx.interceptor.DefaultMBeanServerInterceptor")
 public interface DefaultMBeanServerInterceptorRBean extends MBeanServerInterceptorRBean {

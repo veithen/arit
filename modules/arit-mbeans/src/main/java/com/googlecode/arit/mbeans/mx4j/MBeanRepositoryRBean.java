@@ -17,8 +17,8 @@ package com.googlecode.arit.mbeans.mx4j;
 
 import javax.management.ObjectName;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("mx4j.server.MBeanRepository")
 public interface MBeanRepositoryRBean extends RBean {

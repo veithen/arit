@@ -18,11 +18,11 @@ package com.googlecode.arit.websphere.bug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.github.veithen.rbeans.RBeanFactory;
+import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.Logger;
 import com.googlecode.arit.ResourceEnumeratorFactory;
 import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.rbeans.RBeanFactory;
-import com.googlecode.arit.rbeans.RBeanFactoryException;
 
 public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceEnumeratorFactory<PerClassLoaderCacheResourceEnumerator> {
     private final ArtifactLoaderUtilityRBean rbean;

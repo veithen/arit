@@ -15,10 +15,10 @@
  */
 package com.googlecode.arit.websphere.jaxws;
 
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 import com.googlecode.arit.axis2.AxisServiceRBean;
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
 
 @Target("com.ibm.ws.wsaddressing.jaxws.urimap.EndpointData")
 public interface EndpointDataRBean extends RBean {

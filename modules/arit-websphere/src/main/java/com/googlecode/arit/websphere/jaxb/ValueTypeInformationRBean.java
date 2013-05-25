@@ -15,9 +15,9 @@
  */
 package com.googlecode.arit.websphere.jaxb;
 
-import com.googlecode.arit.rbeans.Accessor;
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.Accessor;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.xml.xlxp2.jaxb.model.ValueTypeInformation")
 public interface ValueTypeInformationRBean extends RBean {

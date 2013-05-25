@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere.naming;
 
-import com.googlecode.arit.rbeans.RBean;
-import com.googlecode.arit.rbeans.Target;
+import com.github.veithen.rbeans.RBean;
+import com.github.veithen.rbeans.Target;
 
 @Target("com.ibm.ws.naming.jcache.CacheKey")
 public interface CacheKeyRBean extends RBean {
