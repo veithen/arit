@@ -20,8 +20,11 @@ import java.sql.Driver;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class MyDriver implements Driver {
+	private static final Logger logger = Logger.getLogger(MyDriver.class.getName());
+	
     public boolean acceptsURL(String url) throws SQLException {
         return false;
     }
@@ -44,5 +47,9 @@ public class MyDriver implements Driver {
 
     public boolean jdbcCompliant() {
         return true;
+    }
+    
+    public Logger getParentLogger() {
+    	return logger;
     }
 }
