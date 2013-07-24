@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.github.veithen.rbeans.TargetClass;
 public interface DriverManagerRBean extends StaticRBean {
     // Java 1.5 uses "drivers" attribute.
     // Java 1.6 has some copy-on-write feature and uses "readDrivers".
-    @Accessor(name={"drivers", "readDrivers"})
+    // Java 1.7 uses "registeredDrivers".
+    @Accessor(name={"drivers", "readDrivers", "registeredDrivers"})
     Iterable<DriverInfoRBean> getDrivers();
 }

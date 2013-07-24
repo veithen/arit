@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class SunDriverManagerInspectorPlugin implements DriverManagerInspectorPl
         // is replaced when a new driver is added.
         List<Class<?>> driverClasses = new ArrayList<Class<?>>();
         for (DriverInfoRBean driverInfo : driverManager.getDrivers()) {
-            driverClasses.add(driverInfo.getDriverClass());
+            driverClasses.add(driverInfo.getDriver().getClass());
         }
         return driverClasses;
     }

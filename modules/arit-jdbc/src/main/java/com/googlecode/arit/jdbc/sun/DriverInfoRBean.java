@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,16 @@
  */
 package com.googlecode.arit.jdbc.sun;
 
+import java.sql.Driver;
+
 import com.github.veithen.rbeans.Accessor;
 import com.github.veithen.rbeans.RBean;
 import com.github.veithen.rbeans.Target;
 
 @Target("java.sql.DriverInfo")
 public interface DriverInfoRBean extends RBean {
-    @Accessor(name="driverClass")
-    Class<?> getDriverClass();
+    // The "driver" attribute exists in Java 1.5, 1.6 and 1.7. Java 1.5 and 1.6 also have
+    // a "driverClass" attribute, but it's always set to driver.getClass().
+    @Accessor(name="driver")
+    Driver getDriver();
 }
