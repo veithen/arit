@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Andreas Veithen
+ * Copyright 2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,11 @@ import com.github.veithen.rbeans.TargetClass;
 
 @TargetClass(ResourceBundle.class)
 public interface ResourceBundleRBean extends StaticRBean {
+    // In early IBM JRE 6.0 versions, the type of the cache attribute is
+    // WeakHashMap<Object,Hashtable<String,ResourceBundle>>. In recent versions,
+    // this was changed to WeakHashMap<ClassLoader,Hashtable<String,ResourceBundleSoftRef>>
+    // where ResourceBundleSoftRef extends SoftReference (and stores a ResourceBundle)
+    // reference.
     @Accessor(name="cache")
-    WeakHashMap<Object,Hashtable<String,ResourceBundle>> getCache();
+    WeakHashMap<?,Hashtable<String,?>> getCache();
 }

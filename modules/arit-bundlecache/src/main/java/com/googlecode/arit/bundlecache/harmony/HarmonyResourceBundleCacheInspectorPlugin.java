@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.arit.bundlecache.harmony;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -45,15 +46,17 @@ public class HarmonyResourceBundleCacheInspectorPlugin implements ResourceBundle
     }
 
     public List<CachedResourceBundle> getCachedResourceBundles() {
-        WeakHashMap<Object,Hashtable<String,ResourceBundle>> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
+        WeakHashMap<?,Hashtable<String,?>> cache = rbf.createRBean(ResourceBundleRBean.class).getCache();
         List<CachedResourceBundle> result = new ArrayList<CachedResourceBundle>();
-        for (Map.Entry<Object,Hashtable<String,ResourceBundle>> entry : cache.entrySet()) {
-            for (Map.Entry<String,ResourceBundle> entry2 : entry.getValue().entrySet()) {
+        for (Map.Entry<?,Hashtable<String,?>> entry : cache.entrySet()) {
+            for (Map.Entry<String,?> entry2 : entry.getValue().entrySet()) {
                 Object key = entry.getKey();
                 // Some versions of Harmony or JREs derived from Harmony use a String with value "null"
                 // instead of a null value as key. This has been observed with IBM Java 6.0 SR1.
                 if (key != null && !key.equals("null")) {
-                    result.add(new CachedResourceBundle((ClassLoader)key, entry2.getKey(), entry2.getValue()));
+                    Object value = entry2.getValue();
+                    result.add(new CachedResourceBundle((ClassLoader)key, entry2.getKey(),
+                            (ResourceBundle)(value instanceof Reference<?> ? ((Reference<?>)value).get() : value)));
                 }
             }
         }
