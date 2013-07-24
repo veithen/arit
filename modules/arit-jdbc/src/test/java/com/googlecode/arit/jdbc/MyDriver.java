@@ -23,8 +23,8 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class MyDriver implements Driver {
-	private static final Logger logger = Logger.getLogger(MyDriver.class.getName());
-	
+    private static final Logger logger = Logger.getLogger(MyDriver.class.getName());
+    
     public boolean acceptsURL(String url) throws SQLException {
         return false;
     }
@@ -50,6 +50,6 @@ public class MyDriver implements Driver {
     }
     
     public Logger getParentLogger() {
-    	return logger;
+        return logger;
     }
 }
