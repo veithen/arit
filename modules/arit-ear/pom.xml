@@ -19,7 +19,7 @@
     <parent>
         <groupId>com.googlecode.arit</groupId>
         <artifactId>modules</artifactId>
-        <version>0.7.4</version>
+        <version>0.8-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>arit-ear</artifactId>
