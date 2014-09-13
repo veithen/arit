@@ -18,10 +18,9 @@ package com.googlecode.arit.websphere.bug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.threads.SimpleThreadDescription;
-import com.googlecode.arit.threads.ThreadDescription;
+import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.threads.ThreadInspectorPlugin;
+import com.googlecode.arit.threads.ThreadResource;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
 public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
@@ -40,10 +39,10 @@ public class PM04639ThreadInspectorPlugin implements ThreadInspectorPlugin {
         return threadHelper.isAvailable();
     }
     
-    public ThreadDescription getDescription(Thread thread) {
+	public ThreadResource getThreadResource(Thread thread) {
         Runnable target = threadHelper.getTarget(thread);
         if (target != null && target.getClass().getName().equals("org.eclipse.jdt.internal.core.search.indexing.IndexManager")) {
-            return new SimpleThreadDescription(resourceType, "JDT indexer thread (PM04639; Eclipse bug 296343)");
+			return new ThreadResource(thread, resourceType, "JDT indexer thread (PM04639; Eclipse bug 296343)");
         } else {
             return null;
         }

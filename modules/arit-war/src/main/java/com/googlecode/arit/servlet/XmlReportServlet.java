@@ -34,7 +34,7 @@ import com.googlecode.arit.report.Identity;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
-import com.googlecode.arit.report.Resource;
+import com.googlecode.arit.report.ResourceTypePresentation;
 import com.googlecode.arit.report.xml.ClassLoaderLinkType;
 import com.googlecode.arit.report.xml.IdentityType;
 import com.googlecode.arit.report.xml.ModuleType;
@@ -94,7 +94,7 @@ public class XmlReportServlet extends HttpServlet {
         }
         result.setIdentities(identities);
         List<ResourceType> resources = new ArrayList<ResourceType>();
-        for (Resource resource : module.getResources()) {
+        for (ResourceTypePresentation resource : module.getResources()) {
             resources.add(convert(resource));
         }
         result.setResources(resources);
@@ -109,7 +109,7 @@ public class XmlReportServlet extends HttpServlet {
         return result;
     }
     
-    private ResourceType convert(Resource resource) {
+    private ResourceType convert(ResourceTypePresentation resource) {
         ResourceType result = new ResourceType();
         result.setId(resource.getId());
         result.setType(resource.getType());

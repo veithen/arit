@@ -24,8 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<ThreadLocalEnumerator> {

@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.ResourceType;
 
 public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory<MBeanEnumerator> {
     @Autowired

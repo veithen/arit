@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.AbstractPluginManager;
+import com.googlecode.arit.plugin.AbstractPluginManager;
 
 public class LogFactoryLoader extends AbstractPluginManager<LogFactoryLoaderPlugin> {
     private final List<LogFactoryRef> logFactories = new ArrayList<LogFactoryRef>();

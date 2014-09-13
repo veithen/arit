@@ -18,7 +18,7 @@ package com.googlecode.arit.threads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceType;
 
 /**
  * Thread inspector that retrieves the {@link Runnable} from the thread.
@@ -34,8 +34,8 @@ public class DefaultThreadInspectorPlugin implements ThreadInspectorPlugin {
         return true;
     }
 
-    public ThreadDescription getDescription(Thread thread) {
-        return new SimpleThreadDescription(resourceType, "Thread");
+	public ThreadResource getThreadResource(Thread thread) {
+		return new ThreadResource(thread, resourceType, "Thread");
     }
 
     public int getPriority() {

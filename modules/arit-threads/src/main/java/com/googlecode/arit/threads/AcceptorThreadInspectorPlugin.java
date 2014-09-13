@@ -21,7 +21,7 @@ import java.net.ServerSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.threadutils.ThreadHelper;
 
 /**
@@ -71,7 +71,7 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
         return null;
     }
     
-    public ThreadDescription getDescription(Thread thread) {
+	public ThreadResource getThreadResource(Thread thread) {
         ServerSocket socket;
         Runnable target = threadHelper.getTarget(thread);
         if (target == null) {
@@ -80,7 +80,7 @@ public class AcceptorThreadInspectorPlugin implements ThreadInspectorPlugin {
             socket = findSocket(target, Object.class);
         }
         if (socket != null) {
-            return new SimpleThreadDescription(resourceType, "TCP acceptor thread (port " + socket.getLocalPort() + ")");
+			return new ThreadResource(thread, resourceType, "TCP acceptor thread (port " + socket.getLocalPort() + ")");
         } else {
             return null;
         }

@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.ResourceType;
 
 // TODO: the IZ67457 issue may actually come from Apache Harmony; check this and if necessary move the code out of the WebSphere module
 public class IZ67457ResourceEnumeratorFactory implements ResourceEnumeratorFactory<IZ67457ResourceEnumerator> {

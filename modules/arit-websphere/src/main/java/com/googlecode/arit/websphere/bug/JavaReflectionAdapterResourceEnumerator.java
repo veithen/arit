@@ -20,8 +20,8 @@ import java.util.Map;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
 
 public class JavaReflectionAdapterResourceEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;

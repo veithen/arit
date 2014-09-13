@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.websphere;
 
-import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.module.ModuleIdentityType;
 
 public class VMRefModuleIdentityType extends ModuleIdentityType {
     public VMRefModuleIdentityType() {

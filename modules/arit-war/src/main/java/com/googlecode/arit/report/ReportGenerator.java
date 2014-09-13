@@ -34,12 +34,17 @@ import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleType;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleType;
+import com.googlecode.arit.resource.ClassLoaderReference;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.Resource;
+import com.googlecode.arit.resource.ResourceScanner;
+import com.googlecode.arit.resource.ResourceScannerFacet;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.ResourceScanner.ResourceListener;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
@@ -53,7 +58,10 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     private ModuleInspectorFactory moduleInspectorFactory;
     
     @Autowired
-    private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
+	private Set<ResourceEnumeratorFactory<?>> oldResourceEnumeratorFactories;
+
+	@Autowired
+	private Set<ResourceScanner> resourceEnumerators;
     
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
@@ -77,22 +85,37 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ResourceTypeIconManager resourceTypeIconManager;
     
-    private List<ResourceEnumeratorFactory<?>> availableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
-    private List<ResourceEnumeratorFactory<?>> unavailableResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
+    private List<ResourceEnumeratorFactory<?>> availableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
+    private List<ResourceEnumeratorFactory<?>> unavailableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
+    
+	private List<ResourceScanner> availableResourceScanners = new ArrayList<ResourceScanner>();
+	private List<ResourceScanner> unavailableResourceEnumerators = new ArrayList<ResourceScanner>();
+
     
     public void afterPropertiesSet() throws Exception {
-        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
+		for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : oldResourceEnumeratorFactories) {
             if (resourceEnumeratorFactory.isAvailable()) {
-                availableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+                availableOldResourceEnumeratorFactories.add(resourceEnumeratorFactory);
             } else {
-                unavailableResourceEnumeratorFactories.add(resourceEnumeratorFactory);
+                unavailableOldResourceEnumeratorFactories.add(resourceEnumeratorFactory);
             }
         }
+
+		for (ResourceScanner resourceScanner : resourceEnumerators) {
+			if (resourceScanner.isAvailable()) {
+				availableResourceScanners.add(resourceScanner);
+			} else {
+				unavailableResourceEnumerators.add(resourceScanner);
+			}
+		}
     }
     
     public void destroy() throws Exception {
-        availableResourceEnumeratorFactories.clear();
-        unavailableResourceEnumeratorFactories.clear();
+        availableOldResourceEnumeratorFactories.clear();
+        unavailableOldResourceEnumeratorFactories.clear();
+
+		availableResourceScanners.clear();
+		unavailableResourceEnumerators.clear();
     }
 
     public boolean isAvailable() {
@@ -124,9 +147,10 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     private Report internalGenerateReport(boolean leaksOnly) {
         List<Message> messages = new ArrayList<Message>();
         Logger logger = new SimpleLogger(messages);
-        List<Module> rootModules = new ArrayList<Module>();
         ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
-        ModuleHelper moduleHelper = new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager, moduleIdentityProvider);
+		final ModuleHelper moduleHelper =
+				new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager,
+						moduleIdentityProvider);
         
         // If the application server supports this, load the entire module list before starting
         // to inspect the resources.
@@ -137,45 +161,30 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
             }
         }
 
-        // A resource has class loader references to multiple class loaders and therefore to multiple
-        // modules. In this case the report contains several Resource instances for a single resource.
-        // This map is used to keep track of these instances.
-        Map<Module,Resource> resourceMap = new HashMap<Module,Resource>();
-        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableResourceEnumeratorFactories) {
+		// fetch all resources for the old type resource enumerators...
+        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableOldResourceEnumeratorFactories) {
             ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(logger);
             while (resourceEnumerator.nextResource()) {
-                resourceMap.clear();
-                String resourceDescription = null;
-                Integer resourceId = null;
-                while (resourceEnumerator.nextClassLoaderReference()) {
-                    ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
-                    if (classLoader != null) { // TODO: do we really need this check??
-                        ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
-                        if (moduleInfo != null) {
-                            Module module = moduleInfo.getModule();
-                            Resource resource = resourceMap.get(module);
-                            if (resource == null) {
-                                ResourceType resourceType = resourceEnumerator.getResourceType();
-                                if (resourceId == null) {
-                                    resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
-                                }
-                                if (resourceDescription == null) {
-                                    resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
-                                    if (resourceType.isShowResourceId()) {
-                                        resourceDescription = resourceDescription + " (" + resourceId + ")";
-                                    }
-                                }
-                                resource = new Resource(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
-                                module.getResources().add(resource);
-                                resourceMap.put(module, resource);
-                            }
-                            resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
-                        }
-                    }
-                }
+				linkResourceToModules(moduleHelper, resourceEnumerator);
             }
         }
-        for (Module module : moduleHelper.getModules()) {
+        //and the new type...
+		for (ResourceScanner resourceScanner : availableResourceScanners) {
+            resourceScanner.scanForResources(new ResourceListener() {
+				public void onResourceFound(Resource resource) {
+					linkResourceToModules(moduleHelper, resource);
+				}
+			});
+        }
+        
+
+		List<Module> rootModules = getSortedRootModules(moduleHelper.getModules(), leaksOnly);
+        return new Report(messages, rootModules);
+    }
+
+	private List<Module> getSortedRootModules(Set<Module> modules, boolean leaksOnly) {
+		List<Module> rootModules = new ArrayList<Module>();
+		for (Module module : modules) {
             if (module != null && module.getParent() == null && (!leaksOnly || module.isStopped())) {
                 rootModules.add(module);
             }
@@ -196,10 +205,92 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                 }
             }
         });
-        return new Report(messages, rootModules);
-    }
+		return rootModules;
+	}
 
-    public List<ResourceEnumeratorFactory<?>> getAvailableResourceEnumeratorFactories() {
-        return Collections.unmodifiableList(availableResourceEnumeratorFactories);
+	private void linkResourceToModules(ModuleHelper moduleHelper, Resource resource) {
+		// A resource has class loader references to multiple class loaders and therefore to multiple
+		// modules. In this case the report contains several Resource instances for a single resource.
+		// This map is used to keep track of these instances.
+		Map<Module, ResourceTypePresentation> resourceMap = new HashMap<Module, ResourceTypePresentation>();
+		String resourceDescription = null;
+		Integer resourceId = null;
+		Set<ClassLoaderReference> referencedClassLoaders = resource.getClassLoaderReferences();
+
+		for (ClassLoaderReference classLoaderReference : referencedClassLoaders) {
+			ClassLoader classLoader = classLoaderReference.getClassLoader();
+			if (classLoader != null) { // TODO: do we really need this check??
+				ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
+				if (moduleInfo != null) {
+					Module module = moduleInfo.getModule();
+					ResourceTypePresentation resourceTypePresentation = resourceMap.get(module);
+					if (resourceTypePresentation == null) {
+						ResourceType resourceType = resource.getResourceType();
+						if (resourceId == null) {
+							resourceId =
+									resourceIdProvider.getResourceId(resourceType.getIdentifier(),
+											resource.getResourceObject(), true);
+						}
+						if (resourceDescription == null) {
+							resourceDescription = resource.getDescription(moduleInfo);
+							if (resourceType.isShowResourceId()) {
+								resourceDescription = resourceDescription + " (" + resourceId + ")";
+							}
+						}
+						resourceTypePresentation =
+								new ResourceTypePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType)
+										.getIconImage("default").getFileName(), resourceType.getIdentifier(),
+										resourceDescription);
+						module.getResources().add(resourceTypePresentation);
+						resourceMap.put(module, resourceTypePresentation);
+					}
+					resourceTypePresentation.getLinks().add(
+							new ClassLoaderLink(classLoaderReference.getDescription(moduleInfo)));
+				}
+			}
+		}
+	}
+
+	private void linkResourceToModules(ModuleHelper moduleHelper, ResourceEnumerator resourceEnumerator) {
+		// A resource has class loader references to multiple class loaders and therefore to multiple
+		// modules. In this case the report contains several Resource instances for a single resource.
+		// This map is used to keep track of these instances.
+		Map<Module, ResourceTypePresentation> resourceMap = new HashMap<Module, ResourceTypePresentation>();
+		String resourceDescription = null;
+		Integer resourceId = null;
+		while (resourceEnumerator.nextClassLoaderReference()) {
+		    ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
+		    if (classLoader != null) { // TODO: do we really need this check??
+		        ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
+		        if (moduleInfo != null) {
+		            Module module = moduleInfo.getModule();
+					ResourceTypePresentation resource = resourceMap.get(module);
+		            if (resource == null) {
+		                ResourceType resourceType = resourceEnumerator.getResourceType();
+		                if (resourceId == null) {
+		                    resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
+		                }
+		                if (resourceDescription == null) {
+		                    resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
+		                    if (resourceType.isShowResourceId()) {
+		                        resourceDescription = resourceDescription + " (" + resourceId + ")";
+		                    }
+		                }
+		                resource = new ResourceTypePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
+		                module.getResources().add(resource);
+		                resourceMap.put(module, resource);
+		            }
+		            resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
+		        }
+		    }
+		}
+	}
+
+	public List<ResourceScannerFacet> getAvailableResourceEnumeratorFactories() {
+		List<ResourceScannerFacet> availableResourceEnumeratorFactories =
+				new ArrayList<ResourceScannerFacet>();
+		availableResourceEnumeratorFactories.addAll(this.availableResourceScanners);
+		availableResourceEnumeratorFactories.addAll(this.availableOldResourceEnumeratorFactories);
+		return Collections.unmodifiableList(availableResourceEnumeratorFactories);
     }
 }

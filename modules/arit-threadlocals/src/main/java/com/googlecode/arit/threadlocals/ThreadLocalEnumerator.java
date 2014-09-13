@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
 
 public class ThreadLocalEnumerator implements ResourceEnumerator {
     private final ResourceType resourceType;

@@ -18,8 +18,8 @@ package com.googlecode.arit.websphere.orb;
 import java.util.Enumeration;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class CachedServantObjectEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;

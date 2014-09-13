@@ -15,9 +15,6 @@
  */
 package com.googlecode.arit.threads;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-
 import java.net.ServerSocket;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,6 +24,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.googlecode.arit.resource.ClassLoaderReference;
+
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 public class ThreadInspectorTest {
     private static ClassPathXmlApplicationContext context;
@@ -43,7 +45,7 @@ public class ThreadInspectorTest {
     
     @Test
     public void testTimerThread() throws Exception {
-        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
+		ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Timer timer = new Timer();
         // java.util.Timer doesn't offer any method to get the timer thread; thus
@@ -66,23 +68,24 @@ public class ThreadInspectorTest {
             }
         }, 1000, 1000);
         Thread thread = exchanger.exchange(null);
-        ThreadDescription description = inspectorManager.getDescription(thread);
-        assertTrue(description.nextClassLoaderReference());
-        assertTrue(description.getClassLoaderReferenceDescription().contains(ThreadInspectorTest.class.getName() + "$"));
+		ThreadResource description = inspectorManager.getThreadResource(thread);
+		ClassLoaderReference classLoaderReference = description.getClassLoaderReferences().iterator().next();
+		assertNotNull(classLoaderReference);
+		assertTrue(classLoaderReference.getDescription(null).contains(ThreadInspectorTest.class.getName() + "$"));
         timer.cancel();
     }
     
     @Test
     public void testAcceptorThread1() throws Exception {
-        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
+		ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         ServerSocket serverSocket = new ServerSocket(0);
         try {
             Thread thread = new AcceptorThread(serverSocket);
             thread.start();
-            ThreadDescription description = inspectorManager.getDescription(thread);
-            assertNotNull(description);
-            assertTrue(description.getDescription().contains("port " + serverSocket.getLocalPort()));
+			ThreadResource threadResource = inspectorManager.getThreadResource(thread);
+			assertNotNull(threadResource);
+			assertTrue(threadResource.getDescription(null).contains("port " + serverSocket.getLocalPort()));
         } finally {
             serverSocket.close();
         }
@@ -90,14 +93,14 @@ public class ThreadInspectorTest {
 
     @Test
     public void testAcceptorThread2() throws Exception {
-        ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
+		ThreadInspector inspectorManager = context.getBean(ThreadInspector.class);
         assertTrue(inspectorManager.isAvailable());
         Server server = new Server();
         server.start();
         try {
-            ThreadDescription description = inspectorManager.getDescription(server.getThread());
-            assertNotNull(description);
-            assertTrue(description.getDescription().contains("port " + server.getPort()));
+			ThreadResource threadResource = inspectorManager.getThreadResource(server.getThread());
+			assertNotNull(threadResource);
+			assertTrue(threadResource.getDescription(null).contains("port " + server.getPort()));
         } finally {
             server.stop();
         }

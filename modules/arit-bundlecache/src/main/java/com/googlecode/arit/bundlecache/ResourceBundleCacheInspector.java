@@ -17,7 +17,7 @@ package com.googlecode.arit.bundlecache;
 
 import java.util.List;
 
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.plugin.SingletonPluginManager;
 
 public class ResourceBundleCacheInspector extends SingletonPluginManager<ResourceBundleCacheInspectorPlugin> {
     public ResourceBundleCacheInspector() {

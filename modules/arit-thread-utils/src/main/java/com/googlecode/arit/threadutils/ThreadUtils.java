@@ -15,6 +15,15 @@
  */
 package com.googlecode.arit.threadutils;
 
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.googlecode.arit.Formatter;
+import com.googlecode.arit.resource.ClassLoaderReference;
+import com.googlecode.arit.resource.SimpleClassLoaderReference;
+
 public class ThreadUtils {
     private ThreadUtils() {}
     
@@ -61,4 +70,50 @@ public class ThreadUtils {
         System.arraycopy(threadGroups, 0, result, 0, threadGroupCount);
         return result;
     }
+
+	/**
+	 * @return All class loaders referencing the thread directly or indirectly
+	 */
+	public static Set<ClassLoaderReference> getClassLoaderRefsOfThread(Thread threadObject, ThreadHelper threadHelper) {
+		ThreadRBean threadRBean = threadHelper.getThreadRBean(threadObject);
+		Set<ClassLoaderReference> clRefs = new HashSet<ClassLoaderReference>();
+
+		clRefs.add(new SimpleClassLoaderReference(threadObject.getContextClassLoader(), "Context class loader"));
+
+		Class<?> threadClass = threadObject.getClass();
+		if (threadClass != Thread.class) {
+			clRefs.add(new SimpleClassLoaderReference(threadClass.getClassLoader(), "Thread class: "
+					+ threadObject.getClass().getName()));
+		}
+
+		Runnable target = threadRBean.getTarget();
+		if (target != null) {
+			clRefs.add(new SimpleClassLoaderReference(target.getClass().getClassLoader(), "Target: "
+					+ threadRBean.getTarget().getClass()));
+		}
+
+		AccessControlContextRBean acc = threadRBean.getAccessControlContext();
+		// On some JREs the access control context is cleared when the thread is stopped.
+		// Therefore there is a slight probability that it is null.
+		if (acc != null) {
+			ProtectionDomain[] context = acc.getProtectionDomains();
+			if (context != null) {
+				for (final ProtectionDomain pd : context) {
+					clRefs.add(new ClassLoaderReference() {
+						public String getDescription(Formatter formatter) {
+							CodeSource codeSource = pd.getCodeSource();
+							return "Access control context; code base: "
+									+ (codeSource == null ? "<unknown>" : formatter.formatUrl(codeSource.getLocation()));
+						}
+
+						public ClassLoader getClassLoader() {
+							return pd.getClassLoader();
+						}
+					});
+				}
+			}
+		}
+
+		return clRefs;
+	}
 }

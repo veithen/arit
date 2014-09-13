@@ -34,13 +34,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleInspectorPlugin;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.mbeans.MBeanAccessor;
 import com.googlecode.arit.mbeans.MBeanServerInspector;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleInspectorPlugin;
+import com.googlecode.arit.module.ModuleStatus;
+import com.googlecode.arit.module.ModuleType;
 
 public class WASModuleInspectorPlugin implements ModuleInspectorPlugin, InitializingBean {
     @Autowired

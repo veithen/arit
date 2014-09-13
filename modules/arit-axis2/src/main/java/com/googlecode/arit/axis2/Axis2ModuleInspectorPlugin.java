@@ -24,11 +24,11 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleInspectorPlugin;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleInspectorPlugin;
+import com.googlecode.arit.module.ModuleStatus;
+import com.googlecode.arit.module.ModuleType;
 
 public class Axis2ModuleInspectorPlugin implements ModuleInspectorPlugin {
     static final Pattern tempArchivePattern = Pattern.compile("axis2[0-9]+(.*)");

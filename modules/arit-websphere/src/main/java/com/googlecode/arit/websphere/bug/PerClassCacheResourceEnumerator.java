@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public abstract class PerClassCacheResourceEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;

@@ -25,8 +25,8 @@
     <core:resource-type identifier="timerthread"/>
     <bean class="com.googlecode.arit.threads.AcceptorThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.threads.DefaultThreadInspectorPlugin"/>
-    <bean class="com.googlecode.arit.threads.ThreadEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.threads.ThreadGroupEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.threads.ThreadScanner"/>
+    <bean class="com.googlecode.arit.threads.ThreadGroupScanner"/>
     <bean class="com.googlecode.arit.threads.ThreadInspector"/>
     <bean class="com.googlecode.arit.threads.harmony.HarmonyTimerThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.threads.sun.SunTimerThreadInspectorPlugin"/>

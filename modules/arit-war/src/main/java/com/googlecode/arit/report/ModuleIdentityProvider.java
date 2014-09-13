@@ -19,10 +19,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.arit.ModuleIdentity;
-import com.googlecode.arit.ModuleIdentityProviderPlugin;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.PluginManager;
+import com.googlecode.arit.module.ModuleIdentity;
+import com.googlecode.arit.module.ModuleIdentityProviderPlugin;
+import com.googlecode.arit.module.ModuleStatus;
+import com.googlecode.arit.plugin.PluginManager;
 
 public class ModuleIdentityProvider extends PluginManager<ModuleIdentityProviderPlugin> {
     public ModuleIdentityProvider() {

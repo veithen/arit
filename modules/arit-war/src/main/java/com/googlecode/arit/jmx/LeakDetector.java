@@ -47,7 +47,7 @@ import com.googlecode.arit.report.ClassLoaderLink;
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
-import com.googlecode.arit.report.Resource;
+import com.googlecode.arit.report.ResourceTypePresentation;
 
 @ManagedResource(objectName="com.googlecode.arit:type=LeakDetector", description="Detects applications with memory leaks")
 @ManagedNotifications(
@@ -128,11 +128,11 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
         buffer.append(" (");
         buffer.append(module.getId());
         buffer.append(")\n");
-        List<Resource> resources = module.getResources();
+        List<ResourceTypePresentation> resources = module.getResources();
         if (!resources.isEmpty()) {
             addIndent(buffer, indent+1);
             buffer.append("Resources:\n");
-            for (Resource resource : resources) {
+            for (ResourceTypePresentation resource : resources) {
                 addIndent(buffer, indent+2);
                 buffer.append(resource.getDescription());
                 buffer.append('\n');

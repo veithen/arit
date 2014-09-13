@@ -17,7 +17,7 @@ package com.googlecode.arit.jdbc;
 
 import java.util.List;
 
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.plugin.SingletonPluginManager;
 
 public class DriverManagerInspector extends SingletonPluginManager<DriverManagerInspectorPlugin> {
     public DriverManagerInspector() {

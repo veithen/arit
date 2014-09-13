@@ -15,12 +15,16 @@
  */
 package com.googlecode.arit.threads;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ClassLoaderReference;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleClassLoaderReference;
 
 public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspectorPlugin {
     @Autowired
@@ -29,32 +33,20 @@ public abstract class AbstractTimerThreadInspectorPlugin implements ThreadInspec
     
     protected abstract TimerTask[] getTimerTasks(Thread thread);
     
-    public ThreadDescription getDescription(Thread thread) {
+	public ThreadResource getThreadResource(Thread thread) {
         final TimerTask[] timerTasks = getTimerTasks(thread);
         if (timerTasks != null) {
-            return new ThreadDescription(resourceType, "Timer thread") {
-                private int i = -1;
-                
-                @Override
-                public boolean nextClassLoaderReference() {
-                    while (i < timerTasks.length-1) {
-                        if (timerTasks[++i] != null) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                
-                @Override
-                public ClassLoader getReferencedClassLoader() {
-                    return timerTasks[i].getClass().getClassLoader();
-                }
-    
-                @Override
-                public String getClassLoaderReferenceDescription() {
-                    return "Task: " + timerTasks[i].getClass().getName();
-                }
-            };
+			ThreadResource threadResource = new ThreadResource(thread, resourceType, "Timer thread");
+			Set<ClassLoaderReference> classLoaders = new HashSet<ClassLoaderReference>();
+			for (final TimerTask timerTask : timerTasks) {
+				// the timerTasks array can contain many null values
+				if (timerTask != null) {
+					classLoaders.add(new SimpleClassLoaderReference(timerTask.getClass().getClassLoader(), "Task: "
+							+ timerTask.getClass().getName()));
+				}
+			}
+			threadResource.addReferencedClassLoaders(classLoaders);
+			return threadResource;
         } else {
             return null;
         }

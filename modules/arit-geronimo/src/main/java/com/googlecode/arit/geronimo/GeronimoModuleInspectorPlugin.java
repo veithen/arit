@@ -20,9 +20,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleInspectorPlugin;
-import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleInspectorPlugin;
+import com.googlecode.arit.module.ModuleType;
 
 public class GeronimoModuleInspectorPlugin implements ModuleInspectorPlugin {
     private final RBeanFactory rbf;

@@ -17,7 +17,7 @@ package com.googlecode.arit.mbeans;
 
 import javax.management.MBeanServer;
 
-import com.googlecode.arit.PluginManager;
+import com.googlecode.arit.plugin.PluginManager;
 
 public class MBeanServerInspector extends PluginManager<MBeanServerInspectorPlugin> {
     public MBeanServerInspector() {

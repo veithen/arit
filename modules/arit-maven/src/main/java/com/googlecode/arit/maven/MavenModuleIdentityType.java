@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.maven;
 
-import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.module.ModuleIdentityType;
 
 public class MavenModuleIdentityType extends ModuleIdentityType {
     public MavenModuleIdentityType() {

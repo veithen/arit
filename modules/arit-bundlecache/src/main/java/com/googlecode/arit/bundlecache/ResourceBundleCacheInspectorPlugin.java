@@ -17,7 +17,7 @@ package com.googlecode.arit.bundlecache;
 
 import java.util.List;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface ResourceBundleCacheInspectorPlugin extends Plugin {
     List<CachedResourceBundle> getCachedResourceBundles();

@@ -17,7 +17,7 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.Set;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface ThreadLocalValueInspectorPlugin extends Plugin {
     void identify(Set<ThreadLocalValueDescription> descriptions, Object object);

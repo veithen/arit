@@ -17,7 +17,7 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.Map;
 
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.plugin.SingletonPluginManager;
 
 public class ThreadLocalInspector extends SingletonPluginManager<ThreadLocalInspectorPlugin> {
     public ThreadLocalInspector() {

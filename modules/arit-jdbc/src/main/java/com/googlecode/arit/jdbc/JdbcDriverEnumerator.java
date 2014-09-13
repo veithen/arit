@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class JdbcDriverEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;

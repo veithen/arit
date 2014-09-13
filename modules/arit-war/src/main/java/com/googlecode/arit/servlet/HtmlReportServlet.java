@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.googlecode.arit.ServerContext;
 import com.googlecode.arit.report.ReportGenerator;
 
 public class HtmlReportServlet extends HttpServlet {

@@ -23,8 +23,8 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class MBeanEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;

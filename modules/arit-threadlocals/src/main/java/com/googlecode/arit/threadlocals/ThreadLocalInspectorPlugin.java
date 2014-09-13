@@ -17,7 +17,7 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.Map;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface ThreadLocalInspectorPlugin extends Plugin {
     Map<ThreadLocal<?>,Object> getThreadLocalMap(Thread thread);

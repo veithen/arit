@@ -15,7 +15,7 @@
  */
 package com.googlecode.arit.jcl;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface LogFactoryLoaderPlugin extends Plugin {
     String getDescription();

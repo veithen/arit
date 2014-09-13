@@ -23,8 +23,8 @@ import javax.xml.bind.JAXBContext;
 
 import com.googlecode.arit.Formatter;
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
 
 public class JAXBUtilsPoolResourceEnumerator implements ResourceEnumerator {
     private final JAXBUtilsPoolResourceEnumeratorFactory factory;

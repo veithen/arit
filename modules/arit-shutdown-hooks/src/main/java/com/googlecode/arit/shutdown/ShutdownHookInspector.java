@@ -17,7 +17,7 @@ package com.googlecode.arit.shutdown;
 
 import java.util.List;
 
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.plugin.SingletonPluginManager;
 
 public class ShutdownHookInspector extends SingletonPluginManager<ShutdownHookInspectorPlugin> {
     public ShutdownHookInspector() {

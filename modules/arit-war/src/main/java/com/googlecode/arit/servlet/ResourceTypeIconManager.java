@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.servlet;
 
-import com.googlecode.arit.ResourceType;
 import com.googlecode.arit.icon.IconManager;
+import com.googlecode.arit.resource.ResourceType;
 
 public class ResourceTypeIconManager extends IconManager<ResourceType> {
     public ResourceTypeIconManager() {

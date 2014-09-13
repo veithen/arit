@@ -25,14 +25,13 @@ import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-import com.googlecode.arit.CleanerPlugin;
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.PluginManager;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceEnumeratorFactory;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.plugin.PluginManager;
 import com.googlecode.arit.report.ClassLoaderIdProvider;
+import com.googlecode.arit.resource.CleanerPlugin;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 
 @ManagedResource(objectName="com.googlecode.arit:type=Cleaner", description="Cleans resources that cause memory leaks")

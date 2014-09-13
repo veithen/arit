@@ -18,8 +18,8 @@ package com.googlecode.arit.jce;
 import java.security.Provider;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class JceProviderEnumerator extends SimpleResourceEnumerator {
     private final Provider[] providers;

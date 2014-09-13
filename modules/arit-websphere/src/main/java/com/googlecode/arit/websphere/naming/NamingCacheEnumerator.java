@@ -22,8 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.websphere.orb.ClientDelegateRBean;
 import com.googlecode.arit.websphere.orb.DelegateRBean;
 import com.googlecode.arit.websphere.orb.ObjectImplRBean;

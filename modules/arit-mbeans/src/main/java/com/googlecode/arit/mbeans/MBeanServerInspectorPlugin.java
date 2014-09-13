@@ -17,7 +17,7 @@ package com.googlecode.arit.mbeans;
 
 import javax.management.MBeanServer;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface MBeanServerInspectorPlugin extends Plugin {
     MBeanAccessor inspect(MBeanServer mbs);

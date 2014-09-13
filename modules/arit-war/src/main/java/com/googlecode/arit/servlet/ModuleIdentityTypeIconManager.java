@@ -15,8 +15,8 @@
  */
 package com.googlecode.arit.servlet;
 
-import com.googlecode.arit.ModuleIdentityType;
 import com.googlecode.arit.icon.IconManager;
+import com.googlecode.arit.module.ModuleIdentityType;
 
 public class ModuleIdentityTypeIconManager extends IconManager<ModuleIdentityType> {
     public ModuleIdentityTypeIconManager() {

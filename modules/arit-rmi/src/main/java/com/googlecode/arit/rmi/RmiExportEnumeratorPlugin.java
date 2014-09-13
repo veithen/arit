@@ -17,7 +17,7 @@ package com.googlecode.arit.rmi;
 
 import java.util.List;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface RmiExportEnumeratorPlugin extends Plugin {
     List<Object> getExportedObjects();

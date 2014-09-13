@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceEnumerator;
 
 public class RmiExportEnumeratorTest {
     private static ClassPathXmlApplicationContext context;

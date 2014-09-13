@@ -23,11 +23,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.googlecode.arit.Formatter;
 import com.googlecode.arit.Logger;
-import com.googlecode.arit.ResourceEnumerator;
-import com.googlecode.arit.ResourceEnumeratorFactory;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
-import com.googlecode.arit.SingletonPluginManager;
+import com.googlecode.arit.plugin.SingletonPluginManager;
+import com.googlecode.arit.resource.ResourceEnumerator;
+import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class RmiExportEnumeratorFactory extends SingletonPluginManager<RmiExportEnumeratorPlugin> implements ResourceEnumeratorFactory<ResourceEnumerator> {
     private class RmiExportEnumeratorImpl extends SimpleResourceEnumerator {

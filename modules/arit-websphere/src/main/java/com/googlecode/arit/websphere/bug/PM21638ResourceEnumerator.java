@@ -17,7 +17,7 @@ package com.googlecode.arit.websphere.bug;
 
 import java.util.Map;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceType;
 
 public class PM21638ResourceEnumerator extends PerClassCacheResourceEnumerator {
     public PM21638ResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {

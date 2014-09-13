@@ -20,11 +20,11 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleIdentity;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleIdentity;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleStatus;
+import com.googlecode.arit.module.ModuleType;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 
 public class ModuleHelper {

@@ -18,10 +18,10 @@ package com.googlecode.arit.servlet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleInspectorPlugin;
-import com.googlecode.arit.PluginManager;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleInspectorPlugin;
+import com.googlecode.arit.plugin.PluginManager;
 
 public class ModuleInspectorFactory extends PluginManager<ModuleInspectorPlugin> {
     public ModuleInspectorFactory() {

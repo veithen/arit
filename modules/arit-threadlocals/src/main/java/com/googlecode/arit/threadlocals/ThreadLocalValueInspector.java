@@ -17,7 +17,7 @@ package com.googlecode.arit.threadlocals;
 
 import java.util.Set;
 
-import com.googlecode.arit.PluginManager;
+import com.googlecode.arit.plugin.PluginManager;
 
 public class ThreadLocalValueInspector extends PluginManager<ThreadLocalValueInspectorPlugin> {
     public ThreadLocalValueInspector() {

@@ -21,8 +21,8 @@ import java.net.URL;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.googlecode.arit.ModuleType;
 import com.googlecode.arit.icon.ImageFormat;
+import com.googlecode.arit.module.ModuleType;
 
 public class ModuleTypeFactory implements FactoryBean<ModuleType>, InitializingBean {
     private ImageFormat iconFormat;

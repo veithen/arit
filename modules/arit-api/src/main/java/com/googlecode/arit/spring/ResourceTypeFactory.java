@@ -20,7 +20,7 @@ import java.awt.Color;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.googlecode.arit.ResourceType;
+import com.googlecode.arit.resource.ResourceType;
 
 public class ResourceTypeFactory implements FactoryBean<ResourceType>, InitializingBean {
     private String identifier;

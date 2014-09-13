@@ -28,10 +28,10 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import com.googlecode.arit.ModuleIdentity;
-import com.googlecode.arit.ModuleIdentityProviderPlugin;
-import com.googlecode.arit.ModuleIdentityType;
-import com.googlecode.arit.ModuleStatus;
+import com.googlecode.arit.module.ModuleIdentity;
+import com.googlecode.arit.module.ModuleIdentityProviderPlugin;
+import com.googlecode.arit.module.ModuleIdentityType;
+import com.googlecode.arit.module.ModuleStatus;
 
 public class MavenModuleIdentityProviderPlugin implements ModuleIdentityProviderPlugin {
     @Resource(name="maven")

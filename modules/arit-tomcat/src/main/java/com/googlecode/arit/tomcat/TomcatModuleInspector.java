@@ -20,10 +20,10 @@ import java.util.List;
 import javax.naming.directory.DirContext;
 
 import com.github.veithen.rbeans.RBeanFactory;
-import com.googlecode.arit.ModuleDescription;
-import com.googlecode.arit.ModuleInspector;
-import com.googlecode.arit.ModuleStatus;
-import com.googlecode.arit.ModuleType;
+import com.googlecode.arit.module.ModuleDescription;
+import com.googlecode.arit.module.ModuleInspector;
+import com.googlecode.arit.module.ModuleStatus;
+import com.googlecode.arit.module.ModuleType;
 
 public class TomcatModuleInspector implements ModuleInspector {
     private final RBeanFactory rbf;

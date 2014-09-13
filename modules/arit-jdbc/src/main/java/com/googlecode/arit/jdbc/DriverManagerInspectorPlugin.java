@@ -17,7 +17,7 @@ package com.googlecode.arit.jdbc;
 
 import java.util.List;
 
-import com.googlecode.arit.Plugin;
+import com.googlecode.arit.plugin.Plugin;
 
 public interface DriverManagerInspectorPlugin extends Plugin {
     List<Class<?>> getDriverClasses();

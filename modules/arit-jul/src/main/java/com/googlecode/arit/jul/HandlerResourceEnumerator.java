@@ -19,8 +19,8 @@ import java.util.logging.Handler;
 import java.util.logging.LogManager;
 
 import com.googlecode.arit.Formatter;
-import com.googlecode.arit.ResourceType;
-import com.googlecode.arit.SimpleResourceEnumerator;
+import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResourceEnumerator;
 
 public class HandlerResourceEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
