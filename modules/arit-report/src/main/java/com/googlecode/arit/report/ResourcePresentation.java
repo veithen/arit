@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResourceTypePresentation implements Serializable {
+public class ResourcePresentation implements Serializable {
     private static final long serialVersionUID = -3572748920334331705L;
     
     private final Integer id;
@@ -28,7 +28,7 @@ public class ResourceTypePresentation implements Serializable {
     private final String description;
     private final List<ClassLoaderLink> links = new ArrayList<ClassLoaderLink>();
 
-    public ResourceTypePresentation(Integer id, String icon, String type, String description) {
+    public ResourcePresentation(Integer id, String icon, String type, String description) {
         this.id = id;
         this.icon = icon;
         this.type = type;

@@ -38,13 +38,13 @@ import com.googlecode.arit.module.ModuleDescription;
 import com.googlecode.arit.module.ModuleInspector;
 import com.googlecode.arit.module.ModuleType;
 import com.googlecode.arit.resource.ClassLoaderReference;
+import com.googlecode.arit.resource.Resource;
 import com.googlecode.arit.resource.ResourceEnumerator;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
-import com.googlecode.arit.resource.Resource;
 import com.googlecode.arit.resource.ResourceScanner;
+import com.googlecode.arit.resource.ResourceScanner.ResourceListener;
 import com.googlecode.arit.resource.ResourceScannerFacet;
 import com.googlecode.arit.resource.ResourceType;
-import com.googlecode.arit.resource.ResourceScanner.ResourceListener;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
@@ -171,7 +171,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         //and the new type...
 		for (ResourceScanner resourceScanner : availableResourceScanners) {
             resourceScanner.scanForResources(new ResourceListener() {
-				public void onResourceFound(Resource resource) {
+				public void onResourceFound(Resource<?> resource) {
 					linkResourceToModules(moduleHelper, resource);
 				}
 			});
@@ -208,23 +208,32 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		return rootModules;
 	}
 
-	private void linkResourceToModules(ModuleHelper moduleHelper, Resource resource) {
+	private void linkResourceToModules(ModuleHelper moduleHelper, Resource<?> resource) {
 		// A resource has class loader references to multiple class loaders and therefore to multiple
 		// modules. In this case the report contains several Resource instances for a single resource.
 		// This map is used to keep track of these instances.
-		Map<Module, ResourceTypePresentation> resourceMap = new HashMap<Module, ResourceTypePresentation>();
+		Map<Module, ResourcePresentation> resourceMap = new HashMap<Module, ResourcePresentation>();
 		String resourceDescription = null;
 		Integer resourceId = null;
-		Set<ClassLoaderReference> referencedClassLoaders = resource.getClassLoaderReferences();
+		Set<ClassLoaderReference> classLoaderReferences = resource.getClassLoaderReferences();
+		List<ClassLoaderReference> sortedClassLoaderReferences = new ArrayList<ClassLoaderReference>(classLoaderReferences);
+		Collections.sort(sortedClassLoaderReferences, new Comparator<ClassLoaderReference>() {
 
-		for (ClassLoaderReference classLoaderReference : referencedClassLoaders) {
+			public int compare(ClassLoaderReference o1, ClassLoaderReference o2) {
+				//
+				return 0;
+			}
+
+		});
+		
+		for (ClassLoaderReference classLoaderReference : classLoaderReferences) {
 			ClassLoader classLoader = classLoaderReference.getClassLoader();
 			if (classLoader != null) { // TODO: do we really need this check??
 				ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
 				if (moduleInfo != null) {
 					Module module = moduleInfo.getModule();
-					ResourceTypePresentation resourceTypePresentation = resourceMap.get(module);
-					if (resourceTypePresentation == null) {
+					ResourcePresentation resourcePresentation = resourceMap.get(module);
+					if (resourcePresentation == null) {
 						ResourceType resourceType = resource.getResourceType();
 						if (resourceId == null) {
 							resourceId =
@@ -237,14 +246,14 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 								resourceDescription = resourceDescription + " (" + resourceId + ")";
 							}
 						}
-						resourceTypePresentation =
-								new ResourceTypePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType)
+						resourcePresentation =
+								new ResourcePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType)
 										.getIconImage("default").getFileName(), resourceType.getIdentifier(),
 										resourceDescription);
-						module.getResources().add(resourceTypePresentation);
-						resourceMap.put(module, resourceTypePresentation);
+						module.getResources().add(resourcePresentation);
+						resourceMap.put(module, resourcePresentation);
 					}
-					resourceTypePresentation.getLinks().add(
+					resourcePresentation.getLinks().add(
 							new ClassLoaderLink(classLoaderReference.getDescription(moduleInfo)));
 				}
 			}
@@ -255,7 +264,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		// A resource has class loader references to multiple class loaders and therefore to multiple
 		// modules. In this case the report contains several Resource instances for a single resource.
 		// This map is used to keep track of these instances.
-		Map<Module, ResourceTypePresentation> resourceMap = new HashMap<Module, ResourceTypePresentation>();
+		Map<Module, ResourcePresentation> resourceMap = new HashMap<Module, ResourcePresentation>();
 		String resourceDescription = null;
 		Integer resourceId = null;
 		while (resourceEnumerator.nextClassLoaderReference()) {
@@ -264,7 +273,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		        ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
 		        if (moduleInfo != null) {
 		            Module module = moduleInfo.getModule();
-					ResourceTypePresentation resource = resourceMap.get(module);
+					ResourcePresentation resource = resourceMap.get(module);
 		            if (resource == null) {
 		                ResourceType resourceType = resourceEnumerator.getResourceType();
 		                if (resourceId == null) {
@@ -276,7 +285,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		                        resourceDescription = resourceDescription + " (" + resourceId + ")";
 		                    }
 		                }
-		                resource = new ResourceTypePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
+		                resource = new ResourcePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
 		                module.getResources().add(resource);
 		                resourceMap.put(module, resource);
 		            }

@@ -28,7 +28,7 @@ public class Module implements Serializable {
     private final boolean stopped;
     private String icon;
     private final List<Identity> identities = new ArrayList<Identity>();
-    private final List<ResourceTypePresentation> resources = new ArrayList<ResourceTypePresentation>();
+    private final List<ResourcePresentation> resources = new ArrayList<ResourcePresentation>();
     private Module parent;
     private final List<Module> children = new ArrayList<Module>();
     
@@ -71,7 +71,7 @@ public class Module implements Serializable {
         identities.add(identity);
     }
 
-    public List<ResourceTypePresentation> getResources() {
+    public List<ResourcePresentation> getResources() {
         return resources;
     }
     

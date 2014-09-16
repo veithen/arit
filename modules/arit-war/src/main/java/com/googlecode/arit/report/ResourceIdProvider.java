@@ -36,14 +36,14 @@ public class ResourceIdProvider {
     
     private final Map<String,Entry> entries = new HashMap<String,Entry>();
     
-    public Integer getResourceId(String type, Object object, boolean create) {
+    public Integer getResourceId(String resourceTypeId, Object object, boolean create) {
         Entry entry;
         synchronized (entries) {
-            entry = entries.get(type);
+            entry = entries.get(resourceTypeId);
             if (entry == null) {
                 entry = new Entry();
             }
-            entries.put(type, entry);
+            entries.put(resourceTypeId, entry);
         }
         return entry.getId(object, create);
     }

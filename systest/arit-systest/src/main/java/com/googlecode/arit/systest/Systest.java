@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 
 import com.googlecode.arit.report.Module;
 import com.googlecode.arit.report.Report;
-import com.googlecode.arit.report.ResourceTypePresentation;
+import com.googlecode.arit.report.ResourcePresentation;
 
 public abstract class Systest extends TestCase {
     private Container container;
@@ -68,7 +68,7 @@ public abstract class Systest extends TestCase {
             }
             assertNotNull(testAppModule);
             Set<String> icons = new HashSet<String>();
-            for (ResourceTypePresentation resource : testAppModule.getResources()) {
+            for (ResourcePresentation resource : testAppModule.getResources()) {
                 icons.add(resource.getIcon());
             }
             assertTrue(icons.contains("default/threadlocal.png"));
