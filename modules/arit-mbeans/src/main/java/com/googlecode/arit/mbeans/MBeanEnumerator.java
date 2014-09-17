@@ -30,14 +30,14 @@ public class MBeanEnumerator extends SimpleResourceEnumerator {
     private final ResourceType resourceType;
     private final MBeanServerInspector mbsInspector; 
     private final Iterator<MBeanServer> mbsIterator;
-//    private final Logger logger;
+//    private final Messages logger;
     private MBeanServer mbs;
     private MBeanAccessor mbeanAccessor;
     private Iterator<ObjectName> mbeanIterator;
     private ObjectName name;
     private Object mbean;
 
-    public MBeanEnumerator(ResourceType resourceType, MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator/*, Logger logger*/) {
+    public MBeanEnumerator(ResourceType resourceType, MBeanServerInspector mbsInspector, Iterator<MBeanServer> mbsIterator/*, Messages logger*/) {
         this.resourceType = resourceType;
         this.mbsInspector = mbsInspector;
         this.mbsIterator = mbsIterator;

@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
 import com.github.veithen.rbeans.collections.MapWrapper;
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.CleanerPlugin;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
@@ -58,7 +58,7 @@ public class WLMProxyEnumeratorFactory implements ResourceEnumeratorFactory<WLMP
         return "WLM Proxies";
     }
     
-    public WLMProxyEnumerator createEnumerator(Logger logger) {
+    public WLMProxyEnumerator createEnumerator(Messages logger) {
         return new WLMProxyEnumerator(resourceType, rbean.getProxies().values().iterator());
     }
 

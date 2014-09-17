@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -65,7 +65,7 @@ public class LoggingContextResourceEnumeratorFactory implements ResourceEnumerat
         return logManager != null;
     }
 
-    public LoggingContextResourceEnumerator createEnumerator(Logger logger) {
+    public LoggingContextResourceEnumerator createEnumerator(Messages logger) {
         return new LoggingContextResourceEnumerator(resourceType, rbf, logManager);
     }
 }

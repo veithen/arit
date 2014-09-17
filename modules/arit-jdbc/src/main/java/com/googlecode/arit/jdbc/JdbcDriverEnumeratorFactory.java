@@ -18,7 +18,7 @@ package com.googlecode.arit.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -38,7 +38,7 @@ public class JdbcDriverEnumeratorFactory implements ResourceEnumeratorFactory<Jd
         return "JDBC drivers";
     }
 
-    public JdbcDriverEnumerator createEnumerator(Logger logger) {
+    public JdbcDriverEnumerator createEnumerator(Messages logger) {
         return new JdbcDriverEnumerator(resourceType, inspector.getDriverClasses());
     }
 }

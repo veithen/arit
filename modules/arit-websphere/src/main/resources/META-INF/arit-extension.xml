@@ -39,7 +39,7 @@
     <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolScanner"/>
     <bean class="com.googlecode.arit.websphere.jaxws.JAXWSThreadLocalValueInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
     <bean class="com.googlecode.arit.websphere.orb.CachedServantObjectEnumeratorFactory"/>

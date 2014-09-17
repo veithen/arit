@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -49,7 +49,7 @@ public class ArtifactLoaderUtilityResourceEnumeratorFactory implements ResourceE
         return rbean != null;
     }
 
-    public PerClassLoaderCacheResourceEnumerator createEnumerator(Logger logger) {
+    public PerClassLoaderCacheResourceEnumerator createEnumerator(Messages logger) {
         return new PerClassLoaderCacheResourceEnumerator(resourceType, "ArtifactLoaderUtility#appNameCache entry (JR40014)", rbean.getAppNameCache());
     }
 }

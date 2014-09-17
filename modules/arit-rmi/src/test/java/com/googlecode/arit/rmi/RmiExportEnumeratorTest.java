@@ -24,7 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumerator;
 
 public class RmiExportEnumeratorTest {
@@ -47,7 +47,7 @@ public class RmiExportEnumeratorTest {
         HelloWorldServer server = new HelloWorldServer();
         UnicastRemoteObject.exportObject(server, 0);
         try {
-            ResourceEnumerator enumerator = enumeratorFactory.createEnumerator(Logger.NULL);
+            ResourceEnumerator enumerator = enumeratorFactory.createEnumerator(Messages.NULL);
             boolean found = false;
             while (enumerator.nextResource()) {
                 if (enumerator.getResourceObject() == server) {

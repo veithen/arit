@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -51,7 +51,7 @@ public class TieToStubInfoCacheEnumeratorFactory implements ResourceEnumeratorFa
         return rbean != null;
     }
 
-    public TieToStubInfoCacheEnumerator createEnumerator(Logger logger) {
+    public TieToStubInfoCacheEnumerator createEnumerator(Messages logger) {
         return new TieToStubInfoCacheEnumerator(resourceType, rbf, rbean.getMap().getMaps());
     }
 }

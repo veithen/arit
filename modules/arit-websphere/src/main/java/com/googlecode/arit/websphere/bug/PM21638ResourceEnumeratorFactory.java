@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -49,7 +49,7 @@ public class PM21638ResourceEnumeratorFactory implements ResourceEnumeratorFacto
         return rbean != null;
     }
 
-    public PM21638ResourceEnumerator createEnumerator(Logger logger) {
+    public PM21638ResourceEnumerator createEnumerator(Messages logger) {
         return new PM21638ResourceEnumerator(resourceType, rbean.getProperties());
     }
 }

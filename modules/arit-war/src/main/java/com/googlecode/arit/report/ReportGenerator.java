@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-import com.googlecode.arit.Logger;
 import com.googlecode.arit.module.ModuleDescription;
 import com.googlecode.arit.module.ModuleInspector;
 import com.googlecode.arit.module.ModuleType;
@@ -48,7 +47,7 @@ import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
 import com.googlecode.arit.servlet.ResourceTypeIconManager;
-import com.googlecode.arit.servlet.log.SimpleLogger;
+import com.googlecode.arit.servlet.log.MessagesImpl;
 
 @ManagedResource(objectName="com.googlecode.arit:type=ReportGenerator", description="Generates Arit reports")
 public class ReportGenerator implements InitializingBean, DisposableBean {
@@ -85,6 +84,9 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ResourceTypeIconManager resourceTypeIconManager;
     
+	@Autowired
+	private MessagesImpl messages;
+
     private List<ResourceEnumeratorFactory<?>> availableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
     private List<ResourceEnumeratorFactory<?>> unavailableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
     
@@ -145,8 +147,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     }
     
     private Report internalGenerateReport(boolean leaksOnly) {
-        List<Message> messages = new ArrayList<Message>();
-        Logger logger = new SimpleLogger(messages);
+		messages.reset();
         ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
 		final ModuleHelper moduleHelper =
 				new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager,
@@ -163,7 +164,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 
 		// fetch all resources for the old type resource enumerators...
         for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableOldResourceEnumeratorFactories) {
-            ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(logger);
+			ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(messages);
             while (resourceEnumerator.nextResource()) {
 				linkResourceToModules(moduleHelper, resourceEnumerator);
             }
@@ -179,7 +180,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         
 
 		List<Module> rootModules = getSortedRootModules(moduleHelper.getModules(), leaksOnly);
-        return new Report(messages, rootModules);
+		return new Report(messages.getMessages(), rootModules);
     }
 
 	private List<Module> getSortedRootModules(Set<Module> modules, boolean leaksOnly) {
@@ -189,7 +190,8 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                 rootModules.add(module);
             }
         }
-        Collections.sort(rootModules, new Comparator<Module>() {
+		
+		Comparator<Module> moduleComparator = new Comparator<Module>() {
             public int compare(Module o1, Module o2) {
                 String name1 = o1.getName();
                 String name2 = o2.getName();
@@ -204,7 +206,39 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
                     return c != 0 ? c : o1.getId().compareTo(o2.getId());
                 }
             }
-        });
+		};
+
+		Comparator<ClassLoaderLink> classloaderLinkComparator = new Comparator<ClassLoaderLink>() {
+			public int compare(ClassLoaderLink o1, ClassLoaderLink o2) {
+				String name1 = o1.getDescription();
+				String name2 = o2.getDescription();
+				if (name1 == null && name2 == null) {
+					return 0;
+				} else if (name1 == null) {
+					return -1;
+				} else if (name2 == null) {
+					return 1;
+				} else {
+					return name1.compareTo(name2);
+				}
+			}
+		};
+
+		// sort root modules on name
+		Collections.sort(rootModules, moduleComparator);
+        
+		// sort child module and class loader relations on name
+		for (Module module : modules) {
+			Collections.sort(module.getChildren(), moduleComparator);
+
+			// note: the resources' ordering remains between report generations, because the current program logic retrieves
+			// them in a fixed order. Ordering resources can become necessary if this changes in the future.
+
+			for (ResourcePresentation rp : module.getResources()) {
+				Collections.sort(rp.getLinks(), classloaderLinkComparator);
+			}
+		}
+        
 		return rootModules;
 	}
 
@@ -216,15 +250,6 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		String resourceDescription = null;
 		Integer resourceId = null;
 		Set<ClassLoaderReference> classLoaderReferences = resource.getClassLoaderReferences();
-		List<ClassLoaderReference> sortedClassLoaderReferences = new ArrayList<ClassLoaderReference>(classLoaderReferences);
-		Collections.sort(sortedClassLoaderReferences, new Comparator<ClassLoaderReference>() {
-
-			public int compare(ClassLoaderReference o1, ClassLoaderReference o2) {
-				//
-				return 0;
-			}
-
-		});
 		
 		for (ClassLoaderReference classLoaderReference : classLoaderReferences) {
 			ClassLoader classLoader = classLoaderReference.getClassLoader();

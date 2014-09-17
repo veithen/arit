@@ -23,7 +23,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.threadutils.ThreadUtils;
@@ -47,7 +47,7 @@ public class ThreadLocalEnumeratorFactory implements ResourceEnumeratorFactory<T
         return "Thread locals";
     }
 
-    public ThreadLocalEnumerator createEnumerator(Logger logger) {
+    public ThreadLocalEnumerator createEnumerator(Messages logger) {
         Map<ThreadLocal<?>,Set<ThreadLocalValueDescription>> threadLocals = new IdentityHashMap<ThreadLocal<?>,Set<ThreadLocalValueDescription>>();
         for (Thread thread : ThreadUtils.getAllThreads()) {
             for (Map.Entry<ThreadLocal<?>,Object> entry : threadLocalInspector.getThreadLocalMap(thread).entrySet()) {

@@ -32,7 +32,7 @@ public class HandlerEnumerator {
             if (handlers == null) {
                 if (loggerEnumerator.next()) {
                     Handler[] handlers = loggerEnumerator.getLogger().getHandlers();
-                    // Logger#getHandlers() never returns null
+                    // Messages#getHandlers() never returns null
                     if (handlers.length != 0) {
                         this.handlers = handlers;
                         handlerIndex = 0;

@@ -16,13 +16,16 @@
 package com.googlecode.arit;
 
 /**
- * Logger that is used during report generation.
+ * Messages to pass to report generation.
+ * 
+ * Where useful, an optional instance should be injected with <code>@AutoWired(required=false)</code>
  */
-public interface Logger {
-    Logger NULL = new Logger() {
-        public void log(String message) {
+public interface Messages {
+	@Deprecated
+    Messages NULL = new Messages() {
+        public void addMessage(String message) {
         }
     };
     
-    void log(String message);
+    void addMessage(String message);
 }

@@ -45,7 +45,7 @@ public class HandlerResourceEnumeratorTest {
         logger.addHandler(handler);
         boolean found = false;
         try {
-            HandlerResourceEnumerator enumerator = context.getBean(HandlerResourceEnumeratorFactory.class).createEnumerator(com.googlecode.arit.Logger.NULL);
+            HandlerResourceEnumerator enumerator = context.getBean(HandlerResourceEnumeratorFactory.class).createEnumerator(com.googlecode.arit.Messages.NULL);
             while (enumerator.nextResource()) {
                 if (enumerator.getHandler() == handler) {
                     found = true;
@@ -60,7 +60,7 @@ public class HandlerResourceEnumeratorTest {
     
     /**
      * Tests that {@link HandlerResourceEnumerator} works properly in situations where
-     * {@link Logger} instances may be garbage collected (which is possible with Sun JRE 1.6).
+     * {@link Messages} instances may be garbage collected (which is possible with Sun JRE 1.6).
      * 
      * @throws Exception
      */
@@ -71,7 +71,7 @@ public class HandlerResourceEnumeratorTest {
             Logger.getLogger("testlogger" + i);
         }
         for (int i=0; i<10; i++) {
-            HandlerResourceEnumerator enumerator = factory.createEnumerator(com.googlecode.arit.Logger.NULL);
+            HandlerResourceEnumerator enumerator = factory.createEnumerator(com.googlecode.arit.Messages.NULL);
             while (enumerator.nextResource()) {
                 // Just loop
             }

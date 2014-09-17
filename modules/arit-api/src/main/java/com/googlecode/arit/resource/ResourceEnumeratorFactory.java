@@ -17,7 +17,7 @@ package com.googlecode.arit.resource;
 
 import java.util.ConcurrentModificationException;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 
 
 // TODO: rename to ResourceType
@@ -32,5 +32,5 @@ public interface ResourceEnumeratorFactory<T extends ResourceEnumerator> extends
 	 * @throws ConcurrentModificationException
 	 *             if the underlying resources change while creating the enumerator
 	 */
-	T createEnumerator(Logger logger);
+	T createEnumerator(Messages logger);
 }

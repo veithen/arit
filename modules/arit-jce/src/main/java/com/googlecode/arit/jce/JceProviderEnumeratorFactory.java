@@ -20,7 +20,7 @@ import java.security.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -37,7 +37,7 @@ public class JceProviderEnumeratorFactory implements ResourceEnumeratorFactory<J
         return "JCE providers";
     }
 
-    public JceProviderEnumerator createEnumerator(Logger logger) {
+    public JceProviderEnumerator createEnumerator(Messages logger) {
         return new JceProviderEnumerator(Security.getProviders(), resourceType);
     }
 }

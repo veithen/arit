@@ -20,7 +20,7 @@ import javax.management.MBeanServerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -34,7 +34,7 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory<MBeanEn
     
     // TODO
 //    @Requirement
-//    private Logger logger;
+//    private Messages logger;
     
     public boolean isAvailable() {
         return mbsInspector.isAvailable();
@@ -44,7 +44,7 @@ public class MBeanEnumeratorFactory implements ResourceEnumeratorFactory<MBeanEn
         return "MBeans";
     }
 
-    public MBeanEnumerator createEnumerator(Logger logger) {
+    public MBeanEnumerator createEnumerator(Messages logger) {
         return new MBeanEnumerator(resourceType, mbsInspector, MBeanServerFactory.findMBeanServer(null).iterator()/*, logger*/);
     }
 }

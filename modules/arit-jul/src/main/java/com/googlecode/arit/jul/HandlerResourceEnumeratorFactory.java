@@ -20,7 +20,7 @@ import java.util.logging.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Logger;
+import com.googlecode.arit.Messages;
 import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceType;
 
@@ -58,7 +58,7 @@ public class HandlerResourceEnumeratorFactory implements ResourceEnumeratorFacto
         return logManager != null;
     }
 
-    public HandlerResourceEnumerator createEnumerator(Logger logger) {
+    public HandlerResourceEnumerator createEnumerator(Messages logger) {
         return new HandlerResourceEnumerator(resourceType, logManager);
     }
 }

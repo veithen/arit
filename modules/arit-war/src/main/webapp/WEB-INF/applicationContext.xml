@@ -26,6 +26,7 @@
     <bean class="com.googlecode.arit.report.ResourceIdProvider"/>
     <bean class="com.googlecode.arit.report.ModuleIdentityProvider"/>
     <bean class="com.googlecode.arit.report.ReportGenerator"/>
+    <bean class="com.googlecode.arit.servlet.log.MessagesImpl"/>
     <bean class="com.googlecode.arit.servlet.HtmlReportServlet" name="HtmlReportServlet"/>
     <bean class="com.googlecode.arit.servlet.ModuleIdentityTypeIconManager" name="identity"/>
     <bean class="com.googlecode.arit.servlet.ModuleInspectorFactory"/>
