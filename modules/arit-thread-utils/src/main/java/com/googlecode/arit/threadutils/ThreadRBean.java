@@ -26,7 +26,7 @@ public interface ThreadRBean extends RBean {
     @Accessor(name={"target", "runnable"})
     Runnable getTarget();
     
-    // "inheritedAccessControlContext" is used by Sun (1.5 and 1.6)
+	// "inheritedAccessControlContext" is used by Sun (1.5 and 1.6) and IBM JRE >= 7.0.7
     // "accessControlContext" is used by IBM
     @Accessor(name={"inheritedAccessControlContext", "accessControlContext"})
     AccessControlContextRBean getAccessControlContext();

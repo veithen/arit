@@ -101,9 +101,14 @@ public class ThreadUtils {
 				for (final ProtectionDomain pd : context) {
 					clRefs.add(new ClassLoaderReference() {
 						public String getDescription(Formatter formatter) {
+							String location;
 							CodeSource codeSource = pd.getCodeSource();
-							return "Access control context; code base: "
-									+ (codeSource == null ? "<unknown>" : formatter.formatUrl(codeSource.getLocation()));
+							if (codeSource == null || codeSource.getLocation() == null) {
+								location = "<unknown>";
+							} else {
+								location = formatter.formatUrl(codeSource.getLocation());
+							}
+							return "Access control context; code base: " + location;
 						}
 
 						public ClassLoader getClassLoader() {
