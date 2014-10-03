@@ -91,7 +91,7 @@ public class LeakDetector implements InitializingBean, DisposableBean, Notificat
     }
     
     private void runDetection() {
-        Report report = reportGenerator.generateReport();
+		Report report = reportGenerator.generateReport(false, false);
         Report previousReport = lastReport.getAndSet(report);
         if (previousReport != null) {
             Map<Integer,Module> reportedModules = new HashMap<Integer,Module>();

@@ -58,7 +58,7 @@ public class XmlReportServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Report report = reportGenerator.generateReport();
+		Report report = reportGenerator.generateReport(false, true);
         ReportElement element = new ReportElement();
         element.setRootModules(convert(report.getRootModules()));
         response.setContentType("text/xml");

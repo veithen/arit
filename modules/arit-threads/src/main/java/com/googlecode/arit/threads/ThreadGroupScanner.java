@@ -93,7 +93,7 @@ public class ThreadGroupScanner implements ResourceScanner {
 			return classLoaderReferences;
 		}
 
-		public boolean cleanup() {
+		public boolean isGarbageCollectable() {
 			return false;
 		}
 

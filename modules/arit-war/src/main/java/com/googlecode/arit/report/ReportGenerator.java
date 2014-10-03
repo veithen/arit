@@ -87,6 +87,9 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 	@Autowired
 	private MessagesImpl messages;
 
+	@Autowired
+	private ResourceScanningConfigImpl resourceScanningConfigImpl;
+
     private List<ResourceEnumeratorFactory<?>> availableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
     private List<ResourceEnumeratorFactory<?>> unavailableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
     
@@ -123,17 +126,17 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     public boolean isAvailable() {
         return moduleInspectorFactory.isAvailable();
     }
-    
+
     @ManagedOperation(description="Generate an Arit report")
     public Report generateReport() {
-        return generateReport(false);
+        return generateReport(false, true);
     }
-    
-    public Report generateReport(boolean leaksOnly) {
+
+	public Report generateReport(boolean leaksOnly, boolean includeGCables) {
         int failures = 0;
         while (true) {
             try {
-                return internalGenerateReport(leaksOnly);
+				return internalGenerateReport(leaksOnly, includeGCables);
             } catch (ConcurrentModificationException ex) {
                 if (++failures == 3) {
                     throw ex;
@@ -146,8 +149,10 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
         }
     }
     
-    private Report internalGenerateReport(boolean leaksOnly) {
+	private Report internalGenerateReport(boolean leaksOnly, boolean includeGCables) {
 		messages.reset();
+		resourceScanningConfigImpl.setIncludeGarbageCollectableResources(includeGCables);
+
         ModuleInspector moduleInspector = moduleInspectorFactory.createModuleInspector();
 		final ModuleHelper moduleHelper =
 				new ModuleHelper(moduleInspector, classLoaderIdProvider, unknownModuleType, moduleTypeIconManager,

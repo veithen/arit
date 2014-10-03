@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.googlecode.arit.report.Report;
 import com.googlecode.arit.report.ReportGenerator;
 
 public class HtmlReportServlet extends HttpServlet {
@@ -66,7 +67,10 @@ public class HtmlReportServlet extends HttpServlet {
             request.setAttribute("version", version);
             // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
             request.setAttribute("factories", reportGenerator.getAvailableResourceEnumeratorFactories());
-            request.setAttribute("report", reportGenerator.generateReport("true".equals(request.getParameter("leaksonly"))));
+            boolean leaksOnly = "true".equals(request.getParameter("leaksonly"));
+            boolean allresources = "true".equals(request.getParameter("allresources"));
+			Report report = reportGenerator.generateReport(leaksOnly, allresources);
+            request.setAttribute("report", report);
             request.getRequestDispatcher("/WEB-INF/view/resources.jspx").forward(request, response);
         }
     }

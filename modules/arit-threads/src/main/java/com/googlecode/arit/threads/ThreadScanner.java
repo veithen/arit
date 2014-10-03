@@ -25,7 +25,7 @@ import com.googlecode.arit.threadutils.ThreadHelper;
 import com.googlecode.arit.threadutils.ThreadUtils;
 
 public class ThreadScanner implements ResourceScanner, CleanerPlugin {
-	private static final Log log = LogFactory.getLog(ThreadScanner.class);
+	private static final Log LOG = LogFactory.getLog(ThreadScanner.class);
 
 	@Autowired
 	private ThreadHelper threadHelper;
@@ -54,7 +54,7 @@ public class ThreadScanner implements ResourceScanner, CleanerPlugin {
 		for (Thread thread : ThreadUtils.getAllThreads()) {
 			if (thread.getContextClassLoader() == classLoader) {
 				thread.setContextClassLoader(String.class.getClassLoader());
-				log.info("Unset context class loader for thread " + thread.getName());
+				LOG.info("Unset context class loader for thread " + thread.getName());
 			}
 		}
 	}

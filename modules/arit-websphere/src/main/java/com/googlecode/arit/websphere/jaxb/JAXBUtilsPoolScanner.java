@@ -41,21 +41,24 @@ import com.googlecode.arit.resource.ClassLoaderReference;
 import com.googlecode.arit.resource.CleanerPlugin;
 import com.googlecode.arit.resource.Resource;
 import com.googlecode.arit.resource.ResourceScanner;
+import com.googlecode.arit.resource.ResourceScanningConfig;
 import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.resource.SimpleClassLoaderReference;
 
 public class JAXBUtilsPoolScanner implements ResourceScanner, CleanerPlugin {
 
+	private static final Log LOG = LogFactory.getLog(JAXBUtilsPoolScanner.class);
+
 	@Autowired(required = false)
 	private Messages messages;
 
-	private static final Log LOG = LogFactory.getLog(JAXBUtilsPoolScanner.class);
+	@Autowired
+	private ResourceScanningConfig config;
 
 	@Autowired
 	@Qualifier("ws-cached-jaxb-object")
 	private ResourceType resourceType;
 
-	private final Log log = LogFactory.getLog(JAXBUtilsPoolScanner.class);
 	private final RBeanFactory rbf;
 	private final JAXBUtilsRBean jaxbUtils;
 
@@ -75,6 +78,9 @@ public class JAXBUtilsPoolScanner implements ResourceScanner, CleanerPlugin {
 	}
 
 	public void scanForResources(ResourceListener resourceListener) {
+		if (!config.includeGarbageCollectableResources()) {
+			return;
+		}
 		for (Entry<Class<?>, PoolRBean> poolEntry : getPools().entrySet()) {
 			Class<?> cachedObjectType = poolEntry.getKey();
 			Map<JAXBContext, List<?>> jaxbContextMap = poolEntry.getValue().getSoftMap().get();
@@ -129,7 +135,7 @@ public class JAXBUtilsPoolScanner implements ResourceScanner, CleanerPlugin {
 					Map.Entry<JAXBContext, List<?>> entry = it.next();
 					if (getClassLoaders(entry.getKey()).contains(classLoader)) {
 						it.remove();
-						log.info("Removed pooled " + pooledObjectType.getSimpleName() + "(s)");
+						LOG.info("Removed pooled " + pooledObjectType.getSimpleName() + "(s)");
 					}
 				}
 			}
@@ -167,8 +173,8 @@ public class JAXBUtilsPoolScanner implements ResourceScanner, CleanerPlugin {
 			return classLoaderReferences;
 		}
 
-		public boolean cleanup() {
-			return false;
+		public boolean isGarbageCollectable() {
+			return true;
 		}
 
 	}

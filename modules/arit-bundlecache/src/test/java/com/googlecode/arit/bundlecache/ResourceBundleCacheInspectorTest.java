@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.bundlecache;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -26,12 +24,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.googlecode.arit.resource.ResourceScanningConfig;
+
+import static org.junit.Assert.assertTrue;
+
 public class ResourceBundleCacheInspectorTest {
     private static ClassPathXmlApplicationContext context;
     
+	public static class ResourceScanningConfigImpl implements ResourceScanningConfig {
+		public boolean includeGarbageCollectableResources() {
+			return true;
+		}
+
+	}
+
     @BeforeClass
     public static void initContext() {
-        context = new ClassPathXmlApplicationContext("arit-appcontext.xml");
+        context = new ClassPathXmlApplicationContext("applicationContext-test.xml");
     }
     
     @AfterClass

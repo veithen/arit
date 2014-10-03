@@ -22,5 +22,5 @@
     <core:resource-type identifier="jcl-factory"/>
     <bean class="com.googlecode.arit.jcl.DefaultLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.jcl.LogFactoryLoader"/>
-    <bean class="com.googlecode.arit.jcl.LogFactoryResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.jcl.LogFactoryResourceScanner"/>
 </beans>

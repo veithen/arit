@@ -41,6 +41,7 @@
                 <configuration>
                     <displayName>Arit</displayName>
                     <description>J2EE Application Resource Inspection Tool [http://code.google.com/p/arit/]</description>
+					<version>1.4</version>
                     <modules>
                         <webModule>
                             <groupId>${project.groupId}</groupId>

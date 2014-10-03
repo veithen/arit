@@ -41,7 +41,7 @@ public class ThreadResource implements Resource<Thread> {
 		this.classLoaderReferences.addAll(classLoaderReferences);
 	}
 
-	public boolean cleanup() {
+	public boolean isGarbageCollectable() {
 		return false;
 	}
 	

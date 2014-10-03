@@ -42,6 +42,6 @@
     <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolScanner"/>
     <bean class="com.googlecode.arit.websphere.jaxws.JAXWSThreadLocalValueInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.orb.CachedServantObjectEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.orb.WLMProxyEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.orb.CachedServantObjectScanner"/>
+    <bean class="com.googlecode.arit.websphere.orb.WLMProxyScanner"/>
 </beans>

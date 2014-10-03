@@ -28,6 +28,11 @@
         </head>
         <body>
             <p>Powered by Arit version <c:out value="${version}"/></p>
+            <p>
+				<a href="report.html">default view</a>&#160;&#160;
+				<a href="report.html?allresources=true">all resources</a>&#160;&#160;
+				<a href="report.html?leaksonly=true">leaks only</a>
+			</p> 
             <h1>Supported resource types</h1>
             <ul>
                 <c:forEach items="${factories}" var="factory">

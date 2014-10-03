@@ -21,6 +21,6 @@
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
     <core:resource-type identifier="jul-handler"/>
     <core:resource-type identifier="juli-context"/>
-    <bean class="com.googlecode.arit.jul.HandlerResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.jul.juli.LoggingContextResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.jul.HandlerResourceScanner"/>
+    <bean class="com.googlecode.arit.jul.juli.LoggingContextResourceScanner"/>
 </beans>
