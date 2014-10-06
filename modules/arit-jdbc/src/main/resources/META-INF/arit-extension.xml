@@ -21,7 +21,7 @@
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
     <core:resource-type identifier="jdbc-driver"/>
     <bean class="com.googlecode.arit.jdbc.DriverManagerInspector"/>
-    <bean class="com.googlecode.arit.jdbc.JdbcDriverEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.jdbc.JdbcDriverScanner"/>
     <bean class="com.googlecode.arit.jdbc.harmony.HarmonyDriverManagerInspectorPlugin"/>
     <bean class="com.googlecode.arit.jdbc.sun.SunDriverManagerInspectorPlugin"/>
 </beans>

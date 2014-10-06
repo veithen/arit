@@ -15,8 +15,6 @@
  */
 package com.googlecode.arit.jmx;
 
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +23,15 @@ import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-import com.googlecode.arit.Messages;
 import com.googlecode.arit.module.ModuleDescription;
 import com.googlecode.arit.plugin.PluginManager;
 import com.googlecode.arit.report.ClassLoaderIdProvider;
 import com.googlecode.arit.resource.CleanerPlugin;
-import com.googlecode.arit.resource.ResourceEnumerator;
-import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 
 @ManagedResource(objectName="com.googlecode.arit:type=Cleaner", description="Cleans resources that cause memory leaks")
 public class Cleaner extends PluginManager<CleanerPlugin> {
     private static final Log log = LogFactory.getLog(Cleaner.class);
-    
-    @Autowired
-    private Set<ResourceEnumeratorFactory<?>> resourceEnumeratorFactories;
     
     @Autowired
     private ClassLoaderIdProvider classLoaderIdProvider;
@@ -68,21 +60,6 @@ public class Cleaner extends PluginManager<CleanerPlugin> {
                 } catch (RuntimeException ex) {
                     log.error("Caught runtime exception", ex);
                     throw ex;
-                }
-            }
-            
-            // TODO: this is the support for the old API; this will probably be removed
-            for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : resourceEnumeratorFactories) {
-                if (resourceEnumeratorFactory.isAvailable()) {
-                    ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(Messages.NULL);
-                    while (resourceEnumerator.nextResource()) {
-                        while (resourceEnumerator.nextClassLoaderReference()) {
-                            Integer id = classLoaderIdProvider.getClassLoaderId(resourceEnumerator.getReferencedClassLoader(), false);
-                            if (id != null && id.equals(classLoaderId)) {
-                                resourceEnumerator.cleanup();
-                            }
-                        }
-                    }
                 }
             }
         }

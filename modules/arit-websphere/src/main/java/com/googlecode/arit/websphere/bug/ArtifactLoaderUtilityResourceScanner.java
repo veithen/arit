@@ -20,38 +20,47 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Messages;
-import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.CleanerPlugin;
+import com.googlecode.arit.resource.ResourceScanner;
 import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResource;
 
-public class JavaReflectionAdapterResourceEnumeratorFactory implements ResourceEnumeratorFactory<JavaReflectionAdapterResourceEnumerator> {
-    private final RBeanFactory rbf;
-    private final JavaReflectionAdapterStaticRBean rbean;
+public class ArtifactLoaderUtilityResourceScanner implements ResourceScanner, CleanerPlugin {
+    private final ArtifactLoaderUtilityRBean rbean;
     
     @Autowired
     @Qualifier("websphere-bug")
     private ResourceType resourceType;
     
-    public JavaReflectionAdapterResourceEnumeratorFactory() {
-        RBeanFactory rbf;
+    public ArtifactLoaderUtilityResourceScanner() {
+        ArtifactLoaderUtilityRBean rbean;
         try {
-            rbf = new RBeanFactory(JavaReflectionAdapterStaticRBean.class, JavaReflectionAdapterRBean.class);
+            rbean = new RBeanFactory(ArtifactLoaderUtilityRBean.class).createRBean(ArtifactLoaderUtilityRBean.class);
         } catch (RBeanFactoryException ex) {
-            rbf = null;
+            rbean = null;
         }
-        this.rbf = rbf;
-        this.rbean = rbf == null ? null : rbf.createRBean(JavaReflectionAdapterStaticRBean.class);
+        this.rbean = rbean;
     }
 
     public String getDescription() {
-        return "Cached JavaReflectionAdapter instances (JR40617)";
+        return "ArtifactLoaderUtility#appNameCache entries (JR40014)";
     }
 
     public boolean isAvailable() {
         return rbean != null;
     }
 
-    public JavaReflectionAdapterResourceEnumerator createEnumerator(Messages logger) {
-        return new JavaReflectionAdapterResourceEnumerator(resourceType, rbf, rbean.getAdapters());
+	public void scanForResources(ResourceListener resourceEventListener) {
+		String description = "ArtifactLoaderUtility#appNameCache entry (JR40014)";
+        for (ClassLoader cl : rbean.getAppNameCache().keySet()) {
+			SimpleResource<ClassLoader> resource = new SimpleResource<ClassLoader>(resourceType, cl, description);
+			resource.addClassloaderReference(cl,"Cache key");
+			resourceEventListener.onResourceFound(resource);
+		}
     }
+
+	public void clean(ClassLoader classLoader) {
+		rbean.getAppNameCache().remove(classLoader);
+	}
+
 }

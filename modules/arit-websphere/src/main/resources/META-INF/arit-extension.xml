@@ -26,22 +26,22 @@
     <core:resource-type identifier="ws-naming-cache"/>
     <core:resource-type identifier="ws-cached-jaxb-object"/>
     <core:resource-type identifier="ws-wlm-proxy"/>
-    <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.InitialContextPropsCacheScanner"/>
     <bean class="com.googlecode.arit.websphere.JAXWSRuntimeLogFactoryLoaderPlugin"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityProvider"/>
     <bean class="com.googlecode.arit.websphere.VMRefModuleIdentityType" name="vmRef"/>
     <bean class="com.googlecode.arit.websphere.WASMBeanServerInspectorPlugin"/>
     <bean class="com.googlecode.arit.websphere.WASMBeanServerProvider"/>
     <bean class="com.googlecode.arit.websphere.WASModuleInspectorPlugin"/>
-    <bean class="com.googlecode.arit.websphere.bug.ArtifactLoaderUtilityResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.bug.IZ67457ResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.bug.JavaReflectionAdapterResourceEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.ArtifactLoaderUtilityResourceScanner"/>
+    <bean class="com.googlecode.arit.websphere.bug.IZ67457ResourceScanner"/>
+    <bean class="com.googlecode.arit.websphere.bug.JavaReflectionAdapterResourceScanner"/>
     <bean class="com.googlecode.arit.websphere.bug.PM04639ThreadInspectorPlugin"/>
-    <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceEnumeratorFactory"/>
-    <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.bug.PM21638ResourceScanner"/>
+    <bean class="com.googlecode.arit.websphere.bug.TieToStubInfoCacheScanner"/>
     <bean class="com.googlecode.arit.websphere.jaxb.JAXBUtilsPoolScanner"/>
     <bean class="com.googlecode.arit.websphere.jaxws.JAXWSThreadLocalValueInspectorPlugin"/>
-    <bean class="com.googlecode.arit.websphere.naming.NamingCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.websphere.naming.NamingCacheScanner"/>
     <bean class="com.googlecode.arit.websphere.orb.CachedServantObjectScanner"/>
     <bean class="com.googlecode.arit.websphere.orb.WLMProxyScanner"/>
 </beans>

@@ -20,21 +20,25 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.veithen.rbeans.RBeanFactory;
 import com.github.veithen.rbeans.RBeanFactoryException;
-import com.googlecode.arit.Messages;
-import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.CleanerPlugin;
+import com.googlecode.arit.resource.ResourceScanner;
+import com.googlecode.arit.resource.ResourceScanningConfig;
 import com.googlecode.arit.resource.ResourceType;
-import com.googlecode.arit.websphere.bug.PerClassLoaderCacheResourceEnumerator;
+import com.googlecode.arit.resource.SimpleResource;
 
 // TODO: this may apply to other JREs than WebSphere
 // Note: primarily useful to identify applications with leaks; the cache uses a WeakHashMap and will never cause a leak
-public class InitialContextPropsCacheEnumeratorFactory implements ResourceEnumeratorFactory<PerClassLoaderCacheResourceEnumerator> {
+public class InitialContextPropsCacheScanner implements ResourceScanner, CleanerPlugin {
     private final InitialContextRBean rbean;
     
     @Autowired
     @Qualifier("initial-context-props-cache")
     private ResourceType resourceType;
     
-    public InitialContextPropsCacheEnumeratorFactory() {
+	@Autowired
+	private ResourceScanningConfig config;
+
+    public InitialContextPropsCacheScanner() {
         InitialContextRBean rbean;
         try {
             rbean = new RBeanFactory(InitialContextRBean.class).createRBean(InitialContextRBean.class);
@@ -52,7 +56,20 @@ public class InitialContextPropsCacheEnumeratorFactory implements ResourceEnumer
         return rbean != null;
     }
 
-    public PerClassLoaderCacheResourceEnumerator createEnumerator(Messages logger) {
-        return new PerClassLoaderCacheResourceEnumerator(resourceType, "Cached initial context properties", rbean.getPropsCache());
-    }
+	public void scanForResources(ResourceListener resourceEventListener) {
+		if (!config.includeGarbageCollectableResources()) {
+			return;
+		}
+		String description = "Cached initial context property";
+		for (ClassLoader cl : rbean.getPropsCache().keySet()) {
+			SimpleResource<ClassLoader> resource = new SimpleResource<ClassLoader>(resourceType, cl, description);
+			resource.addClassloaderReference(cl, "Cache key");
+			resource.setGarbageCollectable(true);
+			resourceEventListener.onResourceFound(resource);
+		}
+	}
+
+	public void clean(ClassLoader classLoader) {
+		rbean.getPropsCache().remove(classLoader);
+	}
 }

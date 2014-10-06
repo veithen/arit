@@ -20,5 +20,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://code.google.com/p/arit/core https://arit.googlecode.com/svn/schemas/core.xsd">
     <core:resource-type identifier="env-cache-entry"/>
-    <bean class="com.googlecode.arit.discovery.EnvironmentCacheEnumeratorFactory"/>
+    <bean class="com.googlecode.arit.discovery.EnvironmentCacheScanner"/>
 </beans>

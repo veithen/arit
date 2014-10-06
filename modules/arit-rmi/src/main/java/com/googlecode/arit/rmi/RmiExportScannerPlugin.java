@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Andreas Veithen
+ * Copyright 2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.websphere.bug;
+package com.googlecode.arit.rmi;
 
-import java.util.Map;
+import java.util.List;
 
-import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.plugin.Plugin;
 
-public class IZ67457ResourceEnumerator extends PerClassCacheResourceEnumerator {
-    public IZ67457ResourceEnumerator(ResourceType resourceType, Map<Class<?>,?> cache) {
-        super(resourceType, cache);
-    }
-
-    protected String getDescription(Class<?> clazz) {
-        return "IZ67457: Cached MethodDescriptors for class " + clazz.getName();
-    }
+public interface RmiExportScannerPlugin extends Plugin {
+    List<Object> getExportedObjects();
 }

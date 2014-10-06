@@ -38,11 +38,8 @@ import com.googlecode.arit.module.ModuleInspector;
 import com.googlecode.arit.module.ModuleType;
 import com.googlecode.arit.resource.ClassLoaderReference;
 import com.googlecode.arit.resource.Resource;
-import com.googlecode.arit.resource.ResourceEnumerator;
-import com.googlecode.arit.resource.ResourceEnumeratorFactory;
 import com.googlecode.arit.resource.ResourceScanner;
 import com.googlecode.arit.resource.ResourceScanner.ResourceListener;
-import com.googlecode.arit.resource.ResourceScannerFacet;
 import com.googlecode.arit.resource.ResourceType;
 import com.googlecode.arit.servlet.ModuleInspectorFactory;
 import com.googlecode.arit.servlet.ModuleTypeIconManager;
@@ -56,9 +53,6 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     @Autowired
     private ModuleInspectorFactory moduleInspectorFactory;
     
-    @Autowired
-	private Set<ResourceEnumeratorFactory<?>> oldResourceEnumeratorFactories;
-
 	@Autowired
 	private Set<ResourceScanner> resourceEnumerators;
     
@@ -90,22 +84,11 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 	@Autowired
 	private ResourceScanningConfigImpl resourceScanningConfigImpl;
 
-    private List<ResourceEnumeratorFactory<?>> availableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
-    private List<ResourceEnumeratorFactory<?>> unavailableOldResourceEnumeratorFactories = new ArrayList<ResourceEnumeratorFactory<?>>();
-    
 	private List<ResourceScanner> availableResourceScanners = new ArrayList<ResourceScanner>();
 	private List<ResourceScanner> unavailableResourceEnumerators = new ArrayList<ResourceScanner>();
 
     
     public void afterPropertiesSet() throws Exception {
-		for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : oldResourceEnumeratorFactories) {
-            if (resourceEnumeratorFactory.isAvailable()) {
-                availableOldResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            } else {
-                unavailableOldResourceEnumeratorFactories.add(resourceEnumeratorFactory);
-            }
-        }
-
 		for (ResourceScanner resourceScanner : resourceEnumerators) {
 			if (resourceScanner.isAvailable()) {
 				availableResourceScanners.add(resourceScanner);
@@ -116,9 +99,6 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
     }
     
     public void destroy() throws Exception {
-        availableOldResourceEnumeratorFactories.clear();
-        unavailableOldResourceEnumeratorFactories.clear();
-
 		availableResourceScanners.clear();
 		unavailableResourceEnumerators.clear();
     }
@@ -167,14 +147,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
             }
         }
 
-		// fetch all resources for the old type resource enumerators...
-        for (ResourceEnumeratorFactory<?> resourceEnumeratorFactory : availableOldResourceEnumeratorFactories) {
-			ResourceEnumerator resourceEnumerator = resourceEnumeratorFactory.createEnumerator(messages);
-            while (resourceEnumerator.nextResource()) {
-				linkResourceToModules(moduleHelper, resourceEnumerator);
-            }
-        }
-        //and the new type...
+		// fetch all resources
 		for (ResourceScanner resourceScanner : availableResourceScanners) {
             resourceScanner.scanForResources(new ResourceListener() {
 				public void onResourceFound(Resource<?> resource) {
@@ -290,46 +263,7 @@ public class ReportGenerator implements InitializingBean, DisposableBean {
 		}
 	}
 
-	private void linkResourceToModules(ModuleHelper moduleHelper, ResourceEnumerator resourceEnumerator) {
-		// A resource has class loader references to multiple class loaders and therefore to multiple
-		// modules. In this case the report contains several Resource instances for a single resource.
-		// This map is used to keep track of these instances.
-		Map<Module, ResourcePresentation> resourceMap = new HashMap<Module, ResourcePresentation>();
-		String resourceDescription = null;
-		Integer resourceId = null;
-		while (resourceEnumerator.nextClassLoaderReference()) {
-		    ClassLoader classLoader = resourceEnumerator.getReferencedClassLoader();
-		    if (classLoader != null) { // TODO: do we really need this check??
-		        ModuleInfo moduleInfo = moduleHelper.getModule(classLoader);
-		        if (moduleInfo != null) {
-		            Module module = moduleInfo.getModule();
-					ResourcePresentation resource = resourceMap.get(module);
-		            if (resource == null) {
-		                ResourceType resourceType = resourceEnumerator.getResourceType();
-		                if (resourceId == null) {
-		                    resourceId = resourceIdProvider.getResourceId(resourceType.getIdentifier(), resourceEnumerator.getResourceObject(), true);
-		                }
-		                if (resourceDescription == null) {
-		                    resourceDescription = resourceEnumerator.getResourceDescription(moduleInfo);
-		                    if (resourceType.isShowResourceId()) {
-		                        resourceDescription = resourceDescription + " (" + resourceId + ")";
-		                    }
-		                }
-		                resource = new ResourcePresentation(resourceId, resourceTypeIconManager.getIcon(resourceType).getIconImage("default").getFileName(), resourceType.getIdentifier(), resourceDescription);
-		                module.getResources().add(resource);
-		                resourceMap.put(module, resource);
-		            }
-		            resource.getLinks().add(new ClassLoaderLink(resourceEnumerator.getClassLoaderReferenceDescription(moduleInfo)));
-		        }
-		    }
-		}
-	}
-
-	public List<ResourceScannerFacet> getAvailableResourceEnumeratorFactories() {
-		List<ResourceScannerFacet> availableResourceEnumeratorFactories =
-				new ArrayList<ResourceScannerFacet>();
-		availableResourceEnumeratorFactories.addAll(this.availableResourceScanners);
-		availableResourceEnumeratorFactories.addAll(this.availableOldResourceEnumeratorFactories);
-		return Collections.unmodifiableList(availableResourceEnumeratorFactories);
+	public List<ResourceScanner> getAvailableResourceScanners() {
+		return Collections.unmodifiableList(this.availableResourceScanners);
     }
 }

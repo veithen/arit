@@ -13,43 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.arit.jvm;
+package com.googlecode.arit.jce;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Provider;
+import java.security.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.googlecode.arit.Messages;
-import com.googlecode.arit.resource.ResourceEnumeratorFactory;
+import com.googlecode.arit.resource.ResourceScanner;
 import com.googlecode.arit.resource.ResourceType;
+import com.googlecode.arit.resource.SimpleResource;
 
-public class JVMSingletonEnumeratorFactory implements ResourceEnumeratorFactory<JVMSingletonEnumerator> {
+public class JceProviderScanner implements ResourceScanner {
     @Autowired
-    @Qualifier("jvm-singleton")
+    @Qualifier("jce-provider")
     private ResourceType resourceType;
-
-    private final List<JVMSingleton> singletons = new ArrayList<JVMSingleton>();
-    
-    public JVMSingletonEnumeratorFactory() {
-        singletons.add(new JVMSingleton("SecurityManager") {
-            @Override
-            public Object getInstance() {
-                return System.getSecurityManager();
-            }
-        });
-    }
     
     public boolean isAvailable() {
         return true;
     }
 
     public String getDescription() {
-        return "JVM singletons";
+        return "JCE providers";
+    }
+    
+    public void scanForResources(ResourceListener resourceEventListener) {
+    	Provider[] providers = Security.getProviders();
+    	for (Provider provider : providers) {
+			SimpleResource<Provider> resource = new SimpleResource<Provider>(resourceType,  provider, "JCE provider: " + provider.getName());
+			resource.addClassloaderReference(provider.getClass().getClassLoader(), "Implementation class: " + provider.getClass().getName());
+			resourceEventListener.onResourceFound(resource);
+		}
     }
 
-    public JVMSingletonEnumerator createEnumerator(Messages logger) {
-        return new JVMSingletonEnumerator(resourceType, singletons);
-    }
+    
 }

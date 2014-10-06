@@ -17,7 +17,11 @@ package com.googlecode.arit.resource;
 
 import java.util.ConcurrentModificationException;
 
-public interface ResourceScanner extends ResourceScannerFacet {
+public interface ResourceScanner {
+
+	boolean isAvailable();
+
+	String getDescription();
 
 	/**
 	 * @throws ConcurrentModificationException

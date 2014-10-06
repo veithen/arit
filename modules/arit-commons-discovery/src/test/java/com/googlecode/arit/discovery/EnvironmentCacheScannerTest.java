@@ -15,18 +15,19 @@
  */
 package com.googlecode.arit.discovery;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.commons.discovery.tools.DiscoverSingleton;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.googlecode.arit.Messages;
+import com.googlecode.arit.resource.Resource;
+import com.googlecode.arit.resource.ResourceScanner.ResourceListener;
 
-public class EnvironmentCacheEnumeratorTest {
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+public class EnvironmentCacheScannerTest {
     private static ClassPathXmlApplicationContext context;
     
     @BeforeClass
@@ -42,11 +43,18 @@ public class EnvironmentCacheEnumeratorTest {
     @Test
     public void test() throws Exception {
         System.setProperty(DummyProvider.class.getName(), DummyProviderImpl.class.getName());
-        Object instance = DiscoverSingleton.find(DummyProvider.class);
-        EnvironmentCacheEnumeratorFactory enumeratorFactory = context.getBean(EnvironmentCacheEnumeratorFactory.class);
+		final Object instance = DiscoverSingleton.find(DummyProvider.class);
+		EnvironmentCacheScanner enumeratorFactory = context.getBean(EnvironmentCacheScanner.class);
         assertTrue(enumeratorFactory.isAvailable());
-        EnvironmentCacheEnumerator enumerator = enumeratorFactory.createEnumerator(Messages.NULL);
-        assertTrue(enumerator.nextResource());
-        assertSame(instance, enumerator.getResourceObject());
+
+		final boolean[] found = { false };
+		enumeratorFactory.scanForResources(new ResourceListener() {
+
+			public void onResourceFound(Resource<?> resource) {
+				assertSame(instance, resource.getResourceObject());
+				found[0] = true;
+			}
+		});
+		assertTrue(found[0]);
     }
 }

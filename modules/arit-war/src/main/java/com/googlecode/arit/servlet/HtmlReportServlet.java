@@ -65,8 +65,8 @@ public class HtmlReportServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/noprofile.jspx").forward(request, response);
         } else {
             request.setAttribute("version", version);
-            // TODO: we should also display the unavailable ResourceEnumeratorFactory instances
-            request.setAttribute("factories", reportGenerator.getAvailableResourceEnumeratorFactories());
+			// TODO: we should also display the unavailable ResourceScanner instances
+			request.setAttribute("scanners", reportGenerator.getAvailableResourceScanners());
             boolean leaksOnly = "true".equals(request.getParameter("leaksonly"));
             boolean allresources = "true".equals(request.getParameter("allresources"));
 			Report report = reportGenerator.generateReport(leaksOnly, allresources);
