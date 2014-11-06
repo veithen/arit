@@ -39,6 +39,14 @@
                 <role>Despot</role>
             </roles>
         </developer>
+		<developer>
+            <name>Peter Van den Bosch</name>
+            <id>peter.vandenbosch</id>
+            <email>peter.vandenbosch (at) gmail.com</email>
+            <roles>
+                <role>Usurper</role>
+            </roles>
+        </developer>
     </developers>
     <issueManagement>
         <system>Google Code</system>
@@ -49,6 +57,16 @@
         <connection>scm:svn:http://arit.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://arit.googlecode.com/svn/trunk</developerConnection>
     </scm>
+	<prerequisites>
+		<maven>3.2.1</maven>
+	</prerequisites>
+	<distributionManagement>
+		<repository>
+			<id>bintray-pvdbosch-maven-arit</id>
+			<name>pvdbosch-maven-arit</name>
+			<url>https://api.bintray.com/maven/pvdbosch/maven/arit</url>
+		</repository>
+	</distributionManagement>
     <repositories>
         <repository>
             <id>bintray</id>
@@ -115,11 +133,11 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>1.1</version>                    
+                    <version>1.5</version>                    
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.9</version>
+                    <version>2.18</version>
                     <configuration>
                         <systemPropertyVariables>
                             <java.awt.headless>true</java.awt.headless>
@@ -131,7 +149,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
@@ -145,7 +163,7 @@
                     $ mvn release:clean
                 -->
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.0</version>
+                <version>2.5.1</version>
                 <inherited>false</inherited>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
