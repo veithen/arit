@@ -67,18 +67,6 @@
 			<url>https://api.bintray.com/maven/pvdbosch/maven/arit</url>
 		</repository>
 	</distributionManagement>
-    <repositories>
-        <repository>
-            <id>bintray</id>
-            <url>http://dl.bintray.com/veithen/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -114,7 +102,7 @@
             <dependency>
                 <groupId>com.github.veithen.rbeans</groupId>
                 <artifactId>rbeans</artifactId>
-                <version>0.1.0</version>
+                <version>0.1.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
